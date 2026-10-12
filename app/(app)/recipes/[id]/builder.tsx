@@ -249,9 +249,9 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                   <button
                     type="button"
                     onClick={() => addLine({ ingredientId: null, subRecipeId: r.id, unit: UNITS[r.yieldUnit!].base })}
-                    className="flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-left font-semibold hover:bg-mazcina-bg active:bg-mazcina-sage/20"
+                    className="flex min-h-11 w-full items-center justify-between rounded-sm px-3 text-left font-semibold hover:bg-mazcina-wood/10 active:bg-mazcina-wood/20"
                   >
-                    {r.name} <span aria-hidden="true" className="text-xl text-mazcina-green">+</span>
+                    {r.name} <span aria-hidden="true" className="text-xl text-mazcina-wood">+</span>
                   </button>
                 </li>
               ))}
@@ -261,7 +261,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         <p className={`mt-3 ${muted} font-semibold uppercase tracking-wide`}>Ingredients</p>
         {pool.ingredients.length === 0 ? (
           <p className={`mt-1 ${muted}`}>
-            Nothing found. <Link href="/ingredients" className="font-semibold underline">Add an ingredient</Link>
+            Nothing found. <Link href="/ingredients" className="font-semibold text-mazcina-wood underline">Add an ingredient</Link>
           </p>
         ) : (
           <ul className="mt-1 space-y-1">
@@ -270,9 +270,9 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                 <button
                   type="button"
                   onClick={() => addLine({ ingredientId: i.id, subRecipeId: null, unit: i.baseUnit })}
-                  className="flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-left font-semibold hover:bg-mazcina-bg active:bg-mazcina-sage/20"
+                  className="flex min-h-11 w-full items-center justify-between rounded-sm px-3 text-left font-semibold hover:bg-mazcina-wood/10 active:bg-mazcina-wood/20"
                 >
-                  {i.name} <span aria-hidden="true" className="text-xl text-mazcina-green">+</span>
+                  {i.name} <span aria-hidden="true" className="text-xl text-mazcina-wood">+</span>
                 </button>
               </li>
             ))}
@@ -322,7 +322,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
           {draft.lines.length === 0 ? (
             <p className={`mt-2 ${muted}`}>Empty. Tap an ingredient in “Add to recipe”.</p>
           ) : (
-            <ul className="mt-2 divide-y divide-mazcina-sage/30">
+            <ul className="mt-2 divide-y divide-gray-100">
               {draft.lines.map((line, index) => {
                 const ingredient = line.ingredientId ? ingredientById.get(line.ingredientId) : undefined;
                 const sub = line.subRecipeId ? recipeById.get(line.subRecipeId) : undefined;

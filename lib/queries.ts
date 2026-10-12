@@ -1,10 +1,10 @@
 import 'server-only';
-import { asc } from 'drizzle-orm';
+import { asc, isNull } from 'drizzle-orm';
 import { cache } from 'react';
 import { db, schema } from '@/db';
 import { createContext, type CostingContext } from './costing';
 import { todaySydney } from './format';
-import type { CostingData, RecipeDto } from './types';
+import type { CostingData, MenuDto, RecipeDto } from './types';
 
 /**
  * Everything the costing engine needs, in one round of queries. The data set is
@@ -87,3 +87,29 @@ export const loadCostingData = cache(async (): Promise<CostingData> => {
 export function contextFrom(data: CostingData): CostingContext {
   return createContext({ ingredients: data.ingredients, recipes: data.recipes, prices: data.prices, asOf: data.asOf });
 }
+
+export const loadMenus = cache(async (): Promise<MenuDto[]> => {
+  const [menus, items] = await Promise.all([
+    db.select().from(schema.menus).where(isNull(schema.menus.archivedAt)).orderBy(asc(schema.menus.createdAt)),
+    db.select().from(schema.menuItems).orderBy(asc(schema.menuItems.sortOrder), asc(schema.menuItems.name)),
+  ]);
+  return menus.map((m) => ({
+    id: m.id,
+    name: m.name,
+    kind: m.kind,
+    status: m.status,
+    items: items
+      .filter((i) => i.menuId === m.id)
+      .map((i) => ({
+        id: i.id,
+        menuId: i.menuId,
+        recipeId: i.recipeId,
+        name: i.name,
+        category: i.category,
+        sellPriceCents: i.sellPriceCents,
+        sortOrder: i.sortOrder,
+        version: i.version,
+        archived: !!i.archivedAt,
+      })),
+  }));
+});

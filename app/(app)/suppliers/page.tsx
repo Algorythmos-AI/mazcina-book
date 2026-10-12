@@ -39,7 +39,7 @@ export default async function SuppliersPage() {
         {active.length === 0 ? (
           <p className={`mt-2 ${muted}`}>None yet. Add the first one above, then add prices on each ingredient.</p>
         ) : (
-          <ul className="mt-2 divide-y divide-mazcina-sage/30">
+          <ul className="mt-2 divide-y divide-gray-100">
             {active.map((s) => (
               <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <div>
@@ -56,7 +56,7 @@ export default async function SuppliersPage() {
       {trashed.length > 0 && (
         <section className={card}>
           <h2 className={h2}>Trash</h2>
-          <ul className="mt-2 divide-y divide-mazcina-sage/30">
+          <ul className="mt-2 divide-y divide-gray-100">
             {trashed.map((s) => (
               <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <p className="font-semibold">{s.name}</p>

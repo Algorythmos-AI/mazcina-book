@@ -32,7 +32,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/ingredients" className={`${muted} font-semibold`}>← Ingredients</Link>
+        <Link href="/ingredients" className={`${muted} font-semibold hover:text-mazcina-wood`}>← Ingredients</Link>
         <h1 className={`mt-1 ${h1}`}>{ingredient.name}</h1>
         <p className="mt-1 text-lg font-semibold">
           {ingredient.archived ? (
@@ -50,7 +50,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
           <h2 className={h2}>New price</h2>
           {suppliers.length === 0 ? (
             <p className={`mt-2 ${muted}`}>
-              Add a supplier first on the <Link href="/suppliers" className="font-semibold underline">Suppliers</Link> page.
+              Add a supplier first on the <Link href="/suppliers" className="font-semibold text-mazcina-wood underline">Suppliers</Link> page.
             </p>
           ) : (
             <ActionForm action={addPrice} submitLabel="Save price" savedLabel="Price saved" resetOnSuccess className="mt-3">
@@ -104,13 +104,13 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
         {history.length === 0 ? (
           <p className={`mt-2 ${muted}`}>No prices yet.</p>
         ) : (
-          <ul className="mt-2 divide-y divide-mazcina-sage/30">
+          <ul className="mt-2 divide-y divide-gray-100">
             {[...history].reverse().map((p) => (
               <li key={p.id} className="flex flex-wrap items-baseline justify-between gap-x-4 py-2.5">
                 <span>
                   <span className="font-semibold tabular-nums">{money(p.packPrice)}</span> for {plain(p.packSize)} {p.packUnit}
                   {p.gstApplicable && <span className={muted}> ({p.priceIncludesGst ? 'inc' : 'ex'} GST)</span>}
-                  {p === current && <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-900">In use</span>}
+                  {p === current && <span className="ml-2 rounded-sm bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-900">In use</span>}
                   {p.effectiveDate > data.asOf && <span className={`ml-2 ${badgeWarn}`}>Starts later</span>}
                 </span>
                 <span className={muted}>
@@ -141,7 +141,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
           <ul className="mt-2 flex flex-wrap gap-2">
             {usedIn.map((r) => (
               <li key={r.id}>
-                <Link href={`/recipes/${r.id}`} className="inline-flex min-h-11 items-center rounded-full border border-mazcina-sage/60 px-3 text-sm font-semibold">
+                <Link href={`/recipes/${r.id}`} className="inline-flex min-h-11 items-center rounded-sm border border-mazcina-wood/40 px-3 text-sm font-semibold text-mazcina-wood">
                   {r.name}
                 </Link>
               </li>

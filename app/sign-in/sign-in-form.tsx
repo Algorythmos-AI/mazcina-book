@@ -2,12 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
+import { input as field, primary } from '@/components/ui';
 import { authClient } from '@/lib/auth-client';
 
-const input =
-  'mt-2 block w-full rounded-xl border border-mazcina-sage/60 bg-white px-4 py-3 text-lg outline-none focus:border-mazcina-green focus:ring-2 focus:ring-mazcina-sage/40';
-const button =
-  'mt-5 block w-full rounded-xl bg-mazcina-emerald px-4 py-3.5 text-base font-semibold text-white disabled:opacity-60';
+const input = `${field} mt-2 text-lg`;
+const button = `${primary} mt-5 w-full`;
 
 export function SignInForm() {
   const router = useRouter();
@@ -105,7 +104,7 @@ export function SignInForm() {
           setStep('email');
           setError(null);
         }}
-        className="mt-3 block w-full py-2 text-sm font-semibold text-mazcina-green"
+        className="mt-3 block min-h-11 w-full text-sm font-semibold text-mazcina-wood underline-offset-4 hover:underline"
       >
         Use a different email or get a new code
       </button>

@@ -21,7 +21,7 @@ export default async function RecipePage({ params }: PageProps<'/recipes/[id]'>)
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <Link href="/recipes" className={`${muted} font-semibold`}>← Recipes</Link>
+          <Link href="/recipes" className={`${muted} font-semibold hover:text-mazcina-wood`}>← Recipes</Link>
           <h1 className={`mt-1 ${h1}`}>{recipe.name}</h1>
         </div>
         <ArchiveButton action={setRecipeArchived.bind(null, recipe.id)} archived={recipe.archived} redirectTo="/recipes" />

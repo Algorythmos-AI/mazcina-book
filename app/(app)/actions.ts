@@ -430,3 +430,105 @@ export async function setRecipeArchived(id: string, archived: boolean): Promise<
   if (result.ok) revalidatePath('/', 'layout');
   return result;
 }
+
+// --------------------------------------------------------------------- menu
+
+function menuItemValues(form: FormData) {
+  const recipeId = text(form, 'recipeId');
+  const dollars = decimal(text(form, 'sellPrice'), 'Menu price', { min: 0, max: 100000, places: 2 })!;
+  return {
+    name: required(text(form, 'name'), 'Name'),
+    category: required(text(form, 'category'), 'Section', 60),
+    sellPriceCents: new DecimalJs(dollars).times(100).toNumber(),
+    recipeId: recipeId ? parse(uuid, recipeId, 'Recipe') : null,
+  };
+}
+
+async function assertRecipeUsable(tx: Tx, recipeId: string | null) {
+  if (!recipeId) return;
+  const [recipe] = await tx.select().from(schema.recipes).where(eq(schema.recipes.id, recipeId));
+  if (!recipe || recipe.archivedAt) throw new Invalid('That recipe no longer exists');
+}
+
+export async function createMenuItem(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const menuId = parse(uuid, text(form, 'menuId'), 'Menu');
+    const values = menuItemValues(form);
+    await db.transaction(async (tx) => {
+      const [menu] = await tx.select().from(schema.menus).where(eq(schema.menus.id, menuId));
+      if (!menu || menu.archivedAt) throw new Invalid('Menu not found');
+      await assertRecipeUsable(tx, values.recipeId);
+      const [{ next }] = await tx
+        .select({ next: sql<number>`coalesce(max(${schema.menuItems.sortOrder}), -1)::int + 1` })
+        .from(schema.menuItems)
+        .where(eq(schema.menuItems.menuId, menuId));
+      const [row] = await tx
+        .insert(schema.menuItems)
+        .values({ ...values, menuId, sortOrder: next })
+        .returning({ id: schema.menuItems.id });
+      await audit(tx, user, 'create', 'menu_item', row.id, { after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function updateMenuItem(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const id = parse(uuid, text(form, 'id'), 'Menu item');
+    const version = parse(z.coerce.number().int().positive(), text(form, 'version'), 'Version');
+    const values = menuItemValues(form);
+    await db.transaction(async (tx) => {
+      const [before] = await tx.select().from(schema.menuItems).where(eq(schema.menuItems.id, id)).for('update');
+      if (!before || before.archivedAt) throw new Invalid('Menu item not found');
+      if (before.version !== version) throw new Invalid('Someone else changed this item. Reload the page and try again.');
+      await assertRecipeUsable(tx, values.recipeId);
+      await tx
+        .update(schema.menuItems)
+        .set({ ...values, updatedAt: new Date(), version: version + 1 })
+        .where(eq(schema.menuItems.id, id));
+      await audit(tx, user, 'update', 'menu_item', id, {
+        before: { name: before.name, category: before.category, sellPriceCents: before.sellPriceCents, recipeId: before.recipeId },
+        after: values,
+      });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function setMenuItemArchived(id: string, archived: boolean): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    parse(uuid, id, 'Menu item');
+    await db.transaction(async (tx) => {
+      const updated = await tx
+        .update(schema.menuItems)
+        .set({ archivedAt: archived ? new Date() : null, updatedAt: new Date(), version: sql`${schema.menuItems.version} + 1` })
+        .where(eq(schema.menuItems.id, id))
+        .returning({ id: schema.menuItems.id });
+      if (updated.length === 0) throw new Invalid('Menu item not found');
+      await audit(tx, user, archived ? 'archive' : 'restore', 'menu_item', id);
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function updateSettings(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  await requireRole('owner');
+  const result = await mutate(async (user) => {
+    const values = {
+      targetFoodCostPct: decimal(text(form, 'targetFoodCostPct'), 'Target food cost %', { min: 0, minExclusive: true, max: 100, places: 2 })!,
+      gstRegistered: form.get('gstRegistered') === 'on',
+    };
+    await db.transaction(async (tx) => {
+      await tx
+        .insert(schema.settings)
+        .values({ id: 1, ...values })
+        .onConflictDoUpdate({ target: schema.settings.id, set: { ...values, updatedAt: new Date() } });
+      await audit(tx, user, 'update', 'settings', '1', { after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}

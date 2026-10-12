@@ -29,7 +29,7 @@ export default async function IngredientsPage() {
         {active.length === 0 ? (
           <p className={`mt-2 ${muted}`}>None yet. Add your first ingredient below.</p>
         ) : (
-          <ul className="mt-2 divide-y divide-mazcina-sage/30">
+          <ul className="mt-2 divide-y divide-gray-100">
             {active.map((i) => {
               const cost = ingredientUnitCost(i.id, ctx);
               return (
@@ -64,7 +64,7 @@ export default async function IngredientsPage() {
       {trashed.length > 0 && (
         <section className={card}>
           <h2 className={h2}>Trash</h2>
-          <ul className="mt-2 divide-y divide-mazcina-sage/30">
+          <ul className="mt-2 divide-y divide-gray-100">
             {trashed.map((i) => (
               <li key={i.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <p className="font-semibold">{i.name}</p>

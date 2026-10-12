@@ -52,3 +52,36 @@ export interface CostingData {
 
 export const UNIT_OPTIONS: Unit[] = ['g', 'kg', 'ml', 'l', 'each'];
 export const BASE_UNIT_LABEL: Record<BaseUnit, string> = { g: 'Weight (g / kg)', ml: 'Volume (ml / l)', each: 'Count (each)' };
+
+export interface MenuItemDto {
+  id: string;
+  menuId: string;
+  recipeId: string | null;
+  name: string;
+  category: string;
+  sellPriceCents: number;
+  sortOrder: number;
+  version: number;
+  archived: boolean;
+}
+
+export interface MenuDto {
+  id: string;
+  name: string;
+  kind: 'seasonal' | 'special';
+  status: 'draft' | 'live' | 'archived';
+  items: MenuItemDto[];
+}
+
+/** Menu sections in the order they are printed. Anything else sorts after these. */
+export const MENU_CATEGORIES = [
+  'Starters',
+  'Chef Suggestions for Sharing',
+  'Mains',
+  'Sandwiches',
+  'Salads',
+  'Sides',
+  'Kids Menu',
+  'Desserts',
+  'Add-ons',
+] as const;

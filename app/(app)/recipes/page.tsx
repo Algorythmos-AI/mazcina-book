@@ -25,7 +25,7 @@ export default async function RecipesPage() {
       {recipes.length === 0 ? (
         <p className={`mt-2 ${muted}`}>{empty}</p>
       ) : (
-        <ul className="mt-2 divide-y divide-mazcina-sage/30">
+        <ul className="mt-2 divide-y divide-gray-100">
           {recipes.map((r) => {
             const cost = costRecipe(r.id, ctx);
             return (
@@ -78,7 +78,7 @@ export default async function RecipesPage() {
       {trashed.length > 0 && (
         <section className={card}>
           <h2 className={h2}>Trash</h2>
-          <ul className="mt-2 divide-y divide-mazcina-sage/30">
+          <ul className="mt-2 divide-y divide-gray-100">
             {trashed.map((r) => (
               <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <p className="font-semibold">{r.name}</p>

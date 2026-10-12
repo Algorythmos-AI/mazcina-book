@@ -4,25 +4,29 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const LINKS = [
+  { href: '/menu', label: 'Menu' },
   { href: '/recipes', label: 'Recipes' },
   { href: '/ingredients', label: 'Ingredients' },
   { href: '/suppliers', label: 'Suppliers' },
 ];
 
+/** Same treatment as the public site's nav: emerald links, the current one in wood with an underline. */
 export function Nav() {
   const pathname = usePathname();
   return (
-    <nav aria-label="Main" className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-2 pb-2">
-      {LINKS.map((link) => {
-        const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+    <nav aria-label="Main" className="-mb-px flex gap-5 overflow-x-auto text-[15px] font-medium sm:gap-8">
+      {LINKS.map((item) => {
+        const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
           <Link
-            key={link.href}
-            href={link.href}
+            key={item.href}
+            href={item.href}
             aria-current={active ? 'page' : undefined}
-            className={`min-h-11 rounded-lg px-3 py-2.5 text-sm font-semibold ${active ? 'bg-white/15 text-white' : 'text-white/75'}`}
+            className={`flex min-h-11 shrink-0 items-center border-b-2 transition-colors ${
+              active ? 'border-mazcina-wood text-mazcina-wood' : 'border-transparent hover:text-mazcina-wood'
+            }`}
           >
-            {link.label}
+            {item.label}
           </Link>
         );
       })}
