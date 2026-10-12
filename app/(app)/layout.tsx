@@ -8,7 +8,7 @@ export default async function AppLayout({ children }: LayoutProps<'/'>) {
       <header className="bg-mazcina-emerald text-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <p className="font-serif text-2xl font-bold italic leading-none">
-            Mazcina <span className="font-sans text-[10px] font-bold uppercase not-italic tracking-[0.3em] text-mazcina-gold">Book</span>
+            Mazcina <span className="font-sans text-[10px] font-bold uppercase not-italic tracking-[0.3em] text-mazcina-gold">Kitchen</span>
           </p>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden text-white/70 sm:inline">{user.name ?? user.email}</span>

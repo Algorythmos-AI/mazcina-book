@@ -11,7 +11,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'Mazcina Book', template: '%s | Mazcina Book' },
+  title: { default: 'Mazcina Kitchen', template: '%s | Mazcina Kitchen' },
   description: 'Recipe costing for Mazcina Resto - Bar.',
   robots: { index: false, follow: false },
 };

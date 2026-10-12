@@ -55,7 +55,7 @@ export const auth = betterAuth({
             if (!(await findAllowedUser(email))) return;
             await sendEmail({
               to: email,
-              subject: `${otp} is your Mazcina Book code`,
+              subject: `${otp} is your Mazcina Kitchen code`,
               text: `Your sign-in code is ${otp}\n\nIt expires in 10 minutes. If you did not ask for it, ignore this email.`,
             });
           } catch (error) {

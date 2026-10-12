@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 const domain = process.env.RESEND_EMAIL_DOMAIN ?? 'mazcinarestobar.com.au';
-const FROM = `Mazcina Book <book@${domain}>`;
+const FROM = `Mazcina Kitchen <kitchen@${domain}>`;
 
 export interface Email {
   to: string;
