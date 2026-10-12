@@ -233,3 +233,114 @@ export const auditLog = pgTable(
   },
   (t) => [index('audit_log_at').on(t.at), index('audit_log_entity').on(t.entity, t.entityId)],
 );
+
+// ---------------------------------------------------------------- gift cards
+
+export const giftOrderStatusEnum = pgEnum('gift_order_status', ['pending', 'paid', 'failed', 'expired']);
+export const giftCardStatusEnum = pgEnum('gift_card_status', ['active', 'void']);
+export const giftLedgerKindEnum = pgEnum('gift_ledger_kind', ['issue', 'redeem', 'reverse', 'void']);
+export const outboxStatusEnum = pgEnum('outbox_status', ['pending', 'sent', 'failed']);
+
+/** What the buyer asked for, saved before they are sent to Stripe. The card is only created once Stripe says it is paid. */
+export const giftCardOrders = pgTable(
+  'gift_card_orders',
+  {
+    id: id(),
+    amountCents: integer('amount_cents').notNull(),
+    buyerName: text('buyer_name').notNull(),
+    buyerEmail: text('buyer_email').notNull(),
+    recipientName: text('recipient_name').notNull(),
+    recipientEmail: text('recipient_email').notNull(),
+    message: text('message'),
+    status: giftOrderStatusEnum('status').notNull().default('pending'),
+    stripeSessionId: text('stripe_session_id').unique(),
+    stripePaymentIntentId: text('stripe_payment_intent_id'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    paidAt: timestamp('paid_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('gift_card_orders_payment_intent').on(t.stripePaymentIntentId),
+    check('gift_card_orders_amount_range', sql`${t.amountCents} >= 2500 AND ${t.amountCents} <= 50000 AND ${t.amountCents} % 100 = 0`),
+  ],
+);
+
+export const giftCards = pgTable(
+  'gift_cards',
+  {
+    id: id(),
+    /** One card per paid order: the second line of defence against issuing twice. */
+    orderId: uuid('order_id').notNull().unique().references(() => giftCardOrders.id, { onDelete: 'restrict' }),
+    /** Keyed hash of the code, for lookup. The code itself is never stored in the clear. */
+    codeHash: text('code_hash').notNull().unique(),
+    /** The code encrypted with a key held outside the database, so the email can be re-sent. */
+    codeEncrypted: text('code_encrypted').notNull(),
+    codeLast4: text('code_last4').notNull(),
+    initialCents: integer('initial_cents').notNull(),
+    /** Kept in step with the ledger inside the same transaction; the constraint makes overspending impossible. */
+    balanceCents: integer('balance_cents').notNull(),
+    status: giftCardStatusEnum('status').notNull().default('active'),
+    /** Last day the card can be used, Australia/Sydney. Three years from purchase. */
+    expiresOn: date('expires_on').notNull(),
+    /** Set when a refund or dispute arrives after the card was partly used. */
+    flaggedReason: text('flagged_reason'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    voidedAt: timestamp('voided_at', { withTimezone: true }),
+  },
+  (t) => [
+    check('gift_cards_initial_positive', sql`${t.initialCents} > 0`),
+    check('gift_cards_balance_range', sql`${t.balanceCents} >= 0 AND ${t.balanceCents} <= ${t.initialCents}`),
+  ],
+);
+
+/** Every movement of value on a card. Rows are only ever added; a mistake is corrected with a `reverse` row. */
+export const giftCardLedger = pgTable(
+  'gift_card_ledger',
+  {
+    id: id(),
+    cardId: uuid('card_id').notNull().references(() => giftCards.id, { onDelete: 'restrict' }),
+    kind: giftLedgerKindEnum('kind').notNull(),
+    /** Positive adds value (issue, reverse), negative takes it (redeem, void). */
+    amountCents: integer('amount_cents').notNull(),
+    actorEmail: text('actor_email').notNull(),
+    note: text('note'),
+    /** For a `reverse` row: the redemption it undoes. Unique, so a redemption can be reversed once. */
+    reversesId: uuid('reverses_id').unique(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('gift_card_ledger_card').on(t.cardId, t.createdAt),
+    check('gift_card_ledger_nonzero', sql`${t.amountCents} <> 0`),
+    check(
+      'gift_card_ledger_sign',
+      sql`(${t.kind} IN ('issue', 'reverse') AND ${t.amountCents} > 0) OR (${t.kind} IN ('redeem', 'void') AND ${t.amountCents} < 0)`,
+    ),
+    check('gift_card_ledger_reverse_target', sql`(${t.kind} = 'reverse') = (${t.reversesId} IS NOT NULL)`),
+  ],
+);
+
+/** Stripe event ids already handled, so a retried or replayed webhook does nothing the second time. */
+export const stripeEvents = pgTable('stripe_events', {
+  id: text('id').primaryKey(),
+  type: text('type').notNull(),
+  receivedAt: timestamp('received_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * Emails owed to customers. Written in the same transaction as the card, sent
+ * afterwards with retries, so a mail outage can never lose a paid card. The
+ * body is built at send time; no code is stored here.
+ */
+export const emailOutbox = pgTable(
+  'email_outbox',
+  {
+    id: id(),
+    kind: text('kind').notNull(),
+    giftCardId: uuid('gift_card_id').notNull().references(() => giftCards.id, { onDelete: 'cascade' }),
+    status: outboxStatusEnum('status').notNull().default('pending'),
+    attempts: integer('attempts').notNull().default(0),
+    lastError: text('last_error'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+  },
+  (t) => [index('email_outbox_pending').on(t.status, t.createdAt)],
+);

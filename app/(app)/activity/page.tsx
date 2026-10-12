@@ -14,6 +14,7 @@ const ENTITY: Record<string, string> = {
   settings: 'costing settings',
   team: 'team member',
   prices: 'price list',
+  gift_card: 'gift card',
 };
 
 const VERB: Record<string, string> = {
@@ -27,6 +28,10 @@ const VERB: Record<string, string> = {
   role: 'changed the role of a',
   remove: 'removed a',
   import: 'imported a',
+  redeem: 'took an amount off a',
+  reverse: 'undid a redemption on a',
+  resend: 're-sent a',
+  lookup_failed: 'typed a wrong code for a',
 };
 
 function subject(row: { before: unknown; after: unknown }): string {

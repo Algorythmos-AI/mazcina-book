@@ -35,6 +35,7 @@ Sign in with the email you seeded; the code is printed in the terminal.
 
 ```bash
 npm run lint && npm run typecheck && npm test
+npm run test:db   # needs .env.local; runs against the dev database
 ```
 
 ## Database changes
@@ -43,6 +44,29 @@ Edit `db/schema.ts`, run `npm run db:generate`, commit the migration. It is
 applied by the Vercel build (`scripts/deploy-migrate.mjs`): preview builds
 migrate the dev database, production builds migrate the live one. Keep each
 migration compatible with the previous deployment (add first, remove later).
+
+## Gift cards
+
+Sold at `/gift-cards` (public), redeemed by staff at `/cards`. Money rules live
+in `lib/gift-cards/core.ts`; `npm run test:db` proves them against the dev
+database (no double issue, no overspend under 20 simultaneous redemptions,
+refund handling, webhook replays).
+
+Needed per environment: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+`GIFT_CODE_KEY` (64 hex characters; losing it makes every unsent code
+unreadable, changing it breaks lookups for existing cards). The Stripe webhook
+endpoint is `/api/stripe/webhook` with events `checkout.session.completed`,
+`checkout.session.async_payment_succeeded`,
+`checkout.session.async_payment_failed`, `checkout.session.expired`,
+`charge.refunded`, `charge.dispute.created`.
+
+Production stays off until it has live keys **and** `GIFT_CARDS_LIVE=true`.
+Test keys are refused in production and live keys are refused everywhere else.
+
+Before going live: the restaurant's own Stripe account with a restricted live
+key; `EMAIL_REPLY_TO` set to a monitored inbox; a "Gift card" payment type in
+the POS; the privacy page on the public site updated; `PUBLIC_GIFT_CARDS_URL`
+on the public site pointed at `/gift-cards` here.
 
 ## Backups
 

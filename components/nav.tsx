@@ -16,11 +16,15 @@ const OWNER_LINKS = [
 ];
 
 /** Same treatment as the public site's nav: emerald links, the current one in wood with an underline. */
-export function Nav({ owner }: { owner: boolean }) {
+const STAFF_LINKS = [{ href: '/cards', label: 'Gift cards' }];
+
+export function Nav({ role, giftCards }: { role: 'owner' | 'chef' | 'staff'; giftCards: boolean }) {
+  const cards = giftCards ? STAFF_LINKS : [];
+  const links = role === 'staff' ? cards : role === 'owner' ? [...LINKS, ...cards, ...OWNER_LINKS] : [...LINKS, ...cards];
   const pathname = usePathname();
   return (
     <nav aria-label="Main" className="-mb-px flex gap-5 overflow-x-auto text-[15px] font-medium sm:gap-8">
-      {(owner ? [...LINKS, ...OWNER_LINKS] : LINKS).map((item) => {
+      {links.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
           <Link
