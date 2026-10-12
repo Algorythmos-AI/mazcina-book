@@ -4,7 +4,7 @@ import DecimalJs from 'decimal.js';
 import { ActionButton } from '@/components/action-button';
 import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
-import { badgeBad, badgeOk, badgeWarn, card, eyebrow, h1, h2, input, label, muted, primary } from '@/components/ui';
+import { badgeBad, badgeOk, badgeWarn, card, eyebrow, h1, h2, input, label, muted, primary, secondary } from '@/components/ui';
 import { displayDate, moneyFromCents, money, percent, plain } from '@/lib/format';
 import { costMenuItem, groupByCategory, type ItemCosting } from '@/lib/menu';
 import { contextFrom, loadCostingData, loadMenus, loadSnapshot } from '@/lib/queries';
@@ -154,6 +154,7 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
           <h1 className={h1}>{menu.name}</h1>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Link href={`/menu/sheet?m=${menu.id}`} className={secondary}>Costing sheet</Link>
           {menu.status === 'draft' && (
             <ActionButton
               action={setMenuStatus.bind(null, menu.id, 'live')}

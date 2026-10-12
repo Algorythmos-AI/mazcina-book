@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
-import { badgeWarn, card, h1, h2, muted } from '@/components/ui';
+import { badgeWarn, card, h1, h2, muted, secondary } from '@/components/ui';
 import { ingredientUnitCost } from '@/lib/costing';
 import { issueText, unitPrice } from '@/lib/format';
 import { contextFrom, loadCostingData } from '@/lib/queries';
@@ -22,7 +22,13 @@ export default async function IngredientsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className={h1}>Ingredients</h1>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h1 className={h1}>Ingredients</h1>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/ingredients/import" className={secondary}>Import prices</Link>
+          <Link href="/changes" className={secondary}>Price changes</Link>
+        </div>
+      </div>
 
       <section className={card}>
         <h2 className={h2}>All ingredients ({active.length})</h2>

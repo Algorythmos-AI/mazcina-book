@@ -13,6 +13,7 @@ const ENTITY: Record<string, string> = {
   menu_item: 'menu item',
   settings: 'costing settings',
   team: 'team member',
+  prices: 'price list',
 };
 
 const VERB: Record<string, string> = {
@@ -25,6 +26,7 @@ const VERB: Record<string, string> = {
   status: 'set the status of a',
   role: 'changed the role of a',
   remove: 'removed a',
+  import: 'imported a',
 };
 
 function subject(row: { before: unknown; after: unknown }): string {

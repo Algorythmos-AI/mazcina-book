@@ -44,6 +44,15 @@ applied by the Vercel build (`scripts/deploy-migrate.mjs`): preview builds
 migrate the dev database, production builds migrate the live one. Keep each
 migration compatible with the previous deployment (add first, remove later).
 
+## Backups
+
+A Vercel Cron job (`/api/cron/backup`, 16:00 UTC, which is 2am or 3am in Sydney depending on
+daylight saving; see `vercel.json`) writes a full JSON export to the private
+Blob store `mazcina-kitchen-backups` as `backups/YYYY-MM-DD.json` and deletes
+files older than 30 days. Owners can download the same export any time from
+the Team page. To restore, load the JSON back table by table into a fresh
+database; rehearse this before relying on it.
+
 ## Deploying
 
 Push to `main`. If a git deployment fails with "Git information retrieval

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ActionButton } from '@/components/action-button';
 import { ActionForm } from '@/components/action-form';
-import { badgeWarn, card, h1, h2, input, label, muted } from '@/components/ui';
+import { badgeWarn, card, h1, h2, input, label, muted, secondary } from '@/components/ui';
 import { loadTeam } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
 import { addTeamMember, removeTeamMember } from '../actions';
@@ -80,6 +80,14 @@ export default async function TeamPage() {
           </div>
           <p className={`mt-2 ${muted}`}>They sign in with a 6-digit code sent to this email. No password to set up.</p>
         </ActionForm>
+      </section>
+
+      <section className={card}>
+        <h2 className={h2}>Your data</h2>
+        <p className={`mt-1 ${muted}`}>
+          A full copy is saved automatically every night and kept for 30 days. You can also download everything now as one file.
+        </p>
+        <a href="/api/export" className={`mt-3 ${secondary}`}>Download all data</a>
       </section>
     </div>
   );

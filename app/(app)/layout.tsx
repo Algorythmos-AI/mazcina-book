@@ -9,17 +9,24 @@ export default async function AppLayout({ children }: LayoutProps<'/'>) {
   return (
     <>
       {process.env.VERCEL_ENV !== 'production' && (
-        <p className="bg-amber-300 px-4 py-1 text-center text-xs font-bold uppercase tracking-wide text-amber-950">
+        <p className="bg-amber-300 px-4 print:hidden py-1 text-center text-xs font-bold uppercase tracking-wide text-amber-950">
           Test copy: changes here do not touch the real kitchen data
         </p>
       )}
-      <div className="bg-mazcina-ink text-white">
+      <div className="bg-mazcina-ink text-white print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <span className="truncate text-[13px] font-medium text-mazcina-gold">{user.name ?? user.email}</span>
-          <SignOutButton />
+          <div className="flex items-center gap-4">
+            {user.role !== 'staff' && (
+              <Link href="/help" className="flex min-h-11 items-center text-sm font-semibold text-white/85 hover:text-white">
+                How it works
+              </Link>
+            )}
+            <SignOutButton />
+          </div>
         </div>
       </div>
-      <header className="sticky top-0 z-40 border-b border-gray-100 bg-white shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-gray-100 bg-white shadow-sm print:hidden">
         <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-x-8 gap-y-2 px-4 pt-3 sm:px-6">
           <Link href="/" aria-label="Mazcina Kitchen home" className="pb-3">
             <Logo />
