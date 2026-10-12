@@ -20,7 +20,7 @@ const MAX_DEPTH = 8;
 export type Unit = 'g' | 'kg' | 'ml' | 'l' | 'each';
 export type BaseUnit = 'g' | 'ml' | 'each';
 
-const UNITS: Record<Unit, { base: BaseUnit; factor: Decimal }> = {
+export const UNITS: Record<Unit, { base: BaseUnit; factor: Decimal }> = {
   g: { base: 'g', factor: new D(1) },
   kg: { base: 'g', factor: new D(1000) },
   ml: { base: 'ml', factor: new D(1) },
@@ -345,6 +345,16 @@ function costRecipeInner(recipe: Recipe, ctx: CostingContext, path: string[]): R
   const pathDependent = issues.some((i) => i.code === 'cycle' || i.code === 'too_deep' || i.code === 'sub_recipe_incomplete');
   if (!pathDependent || path.length === 0) ctx.memo.set(recipe.id, result);
   return result;
+}
+
+/** Current cost ex GST of one base unit of an ingredient, or the reason it has none. */
+export function ingredientUnitCost(
+  ingredientId: string,
+  ctx: CostingContext,
+): { ok: true; value: Decimal } | { ok: false; issue: Issue } {
+  const ingredient = ctx.ingredients.get(ingredientId);
+  if (!ingredient) return { ok: false, issue: { code: 'missing_ingredient' } };
+  return unitCost(ingredient, ctx);
 }
 
 export function costRecipe(recipeId: string, ctx: CostingContext): RecipeCost {

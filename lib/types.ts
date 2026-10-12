@@ -1,0 +1,54 @@
+/** Plain, serialisable shapes shared by server queries and client screens. */
+import type { BaseUnit, Ingredient, IngredientPrice, Recipe, Unit } from './costing';
+
+export type ActionResult<T = void> = { ok: true; data?: T } | { ok: false; error: string };
+
+export interface SupplierDto {
+  id: string;
+  name: string;
+  contact: string | null;
+  archived: boolean;
+}
+
+export interface IngredientDto extends Ingredient {
+  category: string | null;
+  yieldPct: string;
+  gramsPerEach: string | null;
+  gramsPerMl: string | null;
+  version: number;
+  archived: boolean;
+}
+
+export interface PriceDto extends IngredientPrice {
+  id: string;
+  packSize: string;
+  packPrice: string;
+  createdBy: string | null;
+}
+
+export interface RecipeDto extends Recipe {
+  type: 'dish' | 'prep';
+  yieldQuantity: string | null;
+  yieldUnit: Unit | null;
+  portions: string;
+  notes: string | null;
+  version: number;
+  archived: boolean;
+}
+
+export interface SettingsDto {
+  gstRegistered: boolean;
+  targetFoodCostPct: string;
+}
+
+export interface CostingData {
+  suppliers: SupplierDto[];
+  ingredients: IngredientDto[];
+  prices: PriceDto[];
+  recipes: RecipeDto[];
+  settings: SettingsDto;
+  asOf: string;
+}
+
+export const UNIT_OPTIONS: Unit[] = ['g', 'kg', 'ml', 'l', 'each'];
+export const BASE_UNIT_LABEL: Record<BaseUnit, string> = { g: 'Weight (g / kg)', ml: 'Volume (ml / l)', each: 'Count (each)' };

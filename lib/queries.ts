@@ -1,0 +1,89 @@
+import 'server-only';
+import { asc } from 'drizzle-orm';
+import { cache } from 'react';
+import { db, schema } from '@/db';
+import { createContext, type CostingContext } from './costing';
+import { todaySydney } from './format';
+import type { CostingData, RecipeDto } from './types';
+
+/**
+ * Everything the costing engine needs, in one round of queries. The data set is
+ * small (hundreds of rows), so every screen loads it whole and costs in memory.
+ * Archived rows are included so a recipe still pointing at one is flagged, not
+ * silently costed.
+ */
+export const loadCostingData = cache(async (): Promise<CostingData> => {
+  const [suppliers, ingredients, prices, recipes, lines, settingsRows] = await Promise.all([
+    db.select().from(schema.suppliers).orderBy(asc(schema.suppliers.name)),
+    db.select().from(schema.ingredients).orderBy(asc(schema.ingredients.name)),
+    db
+      .select()
+      .from(schema.ingredientPrices)
+      .orderBy(asc(schema.ingredientPrices.effectiveDate), asc(schema.ingredientPrices.createdAt)),
+    db.select().from(schema.recipes).orderBy(asc(schema.recipes.name)),
+    db.select().from(schema.recipeLines).orderBy(asc(schema.recipeLines.sortOrder), asc(schema.recipeLines.createdAt)),
+    db.select().from(schema.settings).limit(1),
+  ]);
+
+  const linesByRecipe = new Map<string, RecipeDto['lines']>();
+  for (const line of lines) {
+    const list = linesByRecipe.get(line.recipeId) ?? [];
+    list.push({
+      id: line.id,
+      ingredientId: line.ingredientId,
+      subRecipeId: line.subRecipeId,
+      quantity: line.quantity,
+      unit: line.unit,
+    });
+    linesByRecipe.set(line.recipeId, list);
+  }
+
+  return {
+    asOf: todaySydney(),
+    settings: {
+      gstRegistered: settingsRows[0]?.gstRegistered ?? true,
+      targetFoodCostPct: settingsRows[0]?.targetFoodCostPct ?? '30',
+    },
+    suppliers: suppliers.map((s) => ({ id: s.id, name: s.name, contact: s.contact, archived: !!s.archivedAt })),
+    ingredients: ingredients.map((i) => ({
+      id: i.id,
+      name: i.name,
+      category: i.category,
+      baseUnit: i.baseUnit,
+      yieldPct: i.yieldPct,
+      preferredSupplierId: i.preferredSupplierId,
+      gramsPerEach: i.gramsPerEach,
+      gramsPerMl: i.gramsPerMl,
+      version: i.version,
+      archived: !!i.archivedAt,
+    })),
+    prices: prices.map((p) => ({
+      id: p.id,
+      ingredientId: p.ingredientId,
+      supplierId: p.supplierId,
+      packSize: p.packSize,
+      packUnit: p.packUnit,
+      packPrice: p.packPrice,
+      priceIncludesGst: p.priceIncludesGst,
+      gstApplicable: p.gstApplicable,
+      effectiveDate: p.effectiveDate,
+      createdBy: p.createdBy,
+    })),
+    recipes: recipes.map((r) => ({
+      id: r.id,
+      name: r.name,
+      type: r.type,
+      yieldQuantity: r.yieldQuantity,
+      yieldUnit: r.yieldUnit,
+      portions: r.portions,
+      notes: r.notes,
+      version: r.version,
+      archived: !!r.archivedAt,
+      lines: linesByRecipe.get(r.id) ?? [],
+    })),
+  };
+});
+
+export function contextFrom(data: CostingData): CostingContext {
+  return createContext({ ingredients: data.ingredients, recipes: data.recipes, prices: data.prices, asOf: data.asOf });
+}

@@ -1,0 +1,432 @@
+'use server';
+
+import DecimalJs from 'decimal.js';
+import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+import { db, schema } from '@/db';
+import { convertToBase, parseDecimalInput, wouldCreateCycle, UNITS, type Unit } from '@/lib/costing';
+import { todaySydney } from '@/lib/format';
+import { requireRole, type CurrentUser } from '@/lib/session';
+import type { ActionResult } from '@/lib/types';
+
+type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
+class Invalid extends Error {}
+
+const uuid = z.uuid();
+const unit = z.enum(['g', 'kg', 'ml', 'l', 'each']);
+const baseUnit = z.enum(['g', 'ml', 'each']);
+const isoDate = z.iso.date();
+
+function text(form: FormData, key: string): string {
+  const value = form.get(key);
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function required(value: string, label: string, max = 120): string {
+  if (!value) throw new Invalid(`${label} is required`);
+  if (value.length > max) throw new Invalid(`${label} is too long`);
+  return value;
+}
+
+function parse<T>(schema: z.ZodType<T>, value: unknown, label: string): T {
+  const result = schema.safeParse(value);
+  if (!result.success) throw new Invalid(`${label} is not valid`);
+  return result.data;
+}
+
+/** A typed number: dot or comma decimals, never a guess. Returns a normalised string or null when empty. */
+function decimal(
+  raw: string,
+  label: string,
+  opts: { min?: number; max?: number; minExclusive?: boolean; optional?: boolean; places?: number } = {},
+): string | null {
+  if (!raw) {
+    if (opts.optional) return null;
+    throw new Invalid(`${label} is required`);
+  }
+  const parsed = parseDecimalInput(raw);
+  if (parsed === null) throw new Invalid(`${label}: type a number like 1500 or 1.5`);
+  const d = new DecimalJs(parsed);
+  const min = opts.min ?? 0;
+  if (opts.minExclusive ? d.lte(min) : d.lt(min)) {
+    throw new Invalid(`${label} must be ${opts.minExclusive ? 'more than' : 'at least'} ${min}`);
+  }
+  if (opts.max !== undefined && d.gt(opts.max)) throw new Invalid(`${label} must be at most ${opts.max}`);
+  if (d.decimalPlaces() > (opts.places ?? 4)) throw new Invalid(`${label} has too many decimal places`);
+  if (d.gte(1e9)) throw new Invalid(`${label} is too large`);
+  return d.toString();
+}
+
+function pgCode(error: unknown): string | undefined {
+  for (let e = error as { code?: unknown; cause?: unknown } | undefined, i = 0; e && i < 4; e = e.cause as typeof e, i++) {
+    if (typeof e.code === 'string' && /^[0-9A-Z]{5}$/.test(e.code)) return e.code;
+  }
+  return undefined;
+}
+
+/** Runs a mutation for a chef or owner and turns expected failures into a message for the form. */
+async function mutate<T>(fn: (user: CurrentUser) => Promise<T>): Promise<ActionResult<T>> {
+  const user = await requireRole('owner', 'chef');
+  try {
+    return { ok: true, data: await fn(user) };
+  } catch (error) {
+    if (error instanceof Invalid) return { ok: false, error: error.message };
+    const code = pgCode(error);
+    if (code === '23505') return { ok: false, error: 'That name is already used' };
+    if (code === '23503') return { ok: false, error: 'This is still used somewhere else' };
+    if (code === '23514') return { ok: false, error: 'One of the values is out of range' };
+    console.error('[action] unexpected failure', error);
+    return { ok: false, error: 'Something went wrong. Nothing was saved, please try again.' };
+  }
+}
+
+async function audit(
+  tx: Tx,
+  user: CurrentUser,
+  action: string,
+  entity: string,
+  entityId: string,
+  change: { before?: unknown; after?: unknown } = {},
+) {
+  await tx.insert(schema.auditLog).values({
+    actorEmail: user.email,
+    action,
+    entity,
+    entityId,
+    before: change.before ?? null,
+    after: change.after ?? null,
+  });
+}
+
+// ---------------------------------------------------------------- suppliers
+
+export async function createSupplier(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const values = {
+      name: required(text(form, 'name'), 'Name'),
+      contact: text(form, 'contact').slice(0, 200) || null,
+    };
+    await db.transaction(async (tx) => {
+      const [row] = await tx.insert(schema.suppliers).values(values).returning({ id: schema.suppliers.id });
+      await audit(tx, user, 'create', 'supplier', row.id, { after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function setSupplierArchived(id: string, archived: boolean): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    parse(uuid, id, 'Supplier');
+    await db.transaction(async (tx) => {
+      if (archived) {
+        const preferredBy = await tx
+          .select({ name: schema.ingredients.name })
+          .from(schema.ingredients)
+          .where(and(eq(schema.ingredients.preferredSupplierId, id), isNull(schema.ingredients.archivedAt)));
+        if (preferredBy.length > 0) {
+          throw new Invalid(`Still the preferred supplier for: ${preferredBy.map((i) => i.name).slice(0, 5).join(', ')}`);
+        }
+      }
+      const updated = await tx
+        .update(schema.suppliers)
+        .set({ archivedAt: archived ? new Date() : null, updatedAt: new Date(), version: sql`${schema.suppliers.version} + 1` })
+        .where(eq(schema.suppliers.id, id))
+        .returning({ id: schema.suppliers.id });
+      if (updated.length === 0) throw new Invalid('Supplier not found');
+      await audit(tx, user, archived ? 'archive' : 'restore', 'supplier', id);
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+// -------------------------------------------------------------- ingredients
+
+function ingredientValues(form: FormData) {
+  const preferred = text(form, 'preferredSupplierId');
+  return {
+    name: required(text(form, 'name'), 'Name'),
+    category: text(form, 'category').slice(0, 60) || null,
+    baseUnit: parse(baseUnit, text(form, 'baseUnit'), 'Measured in'),
+    yieldPct: decimal(text(form, 'yieldPct') || '100', 'Usable %', { min: 0, minExclusive: true, max: 100, places: 2 })!,
+    preferredSupplierId: preferred ? parse(uuid, preferred, 'Preferred supplier') : null,
+    gramsPerEach: decimal(text(form, 'gramsPerEach'), 'Grams per each', { min: 0, minExclusive: true, optional: true }),
+    gramsPerMl: decimal(text(form, 'gramsPerMl'), 'Grams per ml', { min: 0, minExclusive: true, optional: true }),
+  };
+}
+
+export async function createIngredient(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const values = ingredientValues(form);
+    return db.transaction(async (tx) => {
+      const [row] = await tx.insert(schema.ingredients).values(values).returning({ id: schema.ingredients.id });
+      await audit(tx, user, 'create', 'ingredient', row.id, { after: values });
+      return row.id;
+    });
+  });
+  if (!result.ok) return result;
+  revalidatePath('/', 'layout');
+  redirect(`/ingredients/${result.data}`);
+}
+
+export async function updateIngredient(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const id = parse(uuid, text(form, 'id'), 'Ingredient');
+    const version = parse(z.coerce.number().int().positive(), text(form, 'version'), 'Version');
+    const values = ingredientValues(form);
+    await db.transaction(async (tx) => {
+      const [before] = await tx.select().from(schema.ingredients).where(eq(schema.ingredients.id, id)).for('update');
+      if (!before) throw new Invalid('Ingredient not found');
+      if (before.version !== version) throw new Invalid('Someone else changed this ingredient. Reload the page and try again.');
+      if (before.baseUnit !== values.baseUnit) {
+        const [{ count }] = await tx
+          .select({ count: sql<number>`count(*)::int` })
+          .from(schema.recipeLines)
+          .where(eq(schema.recipeLines.ingredientId, id));
+        if (count > 0) throw new Invalid('This ingredient is used in recipes, so how it is measured cannot change. Add a conversion instead.');
+      }
+      await tx
+        .update(schema.ingredients)
+        .set({ ...values, updatedAt: new Date(), version: version + 1 })
+        .where(eq(schema.ingredients.id, id));
+      await audit(tx, user, 'update', 'ingredient', id, { before, after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function setIngredientArchived(id: string, archived: boolean): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    parse(uuid, id, 'Ingredient');
+    await db.transaction(async (tx) => {
+      if (archived) {
+        const usedIn = await tx
+          .selectDistinct({ name: schema.recipes.name })
+          .from(schema.recipeLines)
+          .innerJoin(schema.recipes, eq(schema.recipes.id, schema.recipeLines.recipeId))
+          .where(and(eq(schema.recipeLines.ingredientId, id), isNull(schema.recipes.archivedAt)));
+        if (usedIn.length > 0) {
+          throw new Invalid(`Still used in: ${usedIn.map((r) => r.name).slice(0, 5).join(', ')}${usedIn.length > 5 ? '…' : ''}`);
+        }
+      }
+      const updated = await tx
+        .update(schema.ingredients)
+        .set({ archivedAt: archived ? new Date() : null, updatedAt: new Date(), version: sql`${schema.ingredients.version} + 1` })
+        .where(eq(schema.ingredients.id, id))
+        .returning({ id: schema.ingredients.id });
+      if (updated.length === 0) throw new Invalid('Ingredient not found');
+      await audit(tx, user, archived ? 'archive' : 'restore', 'ingredient', id);
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function addPrice(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const today = todaySydney();
+    const values = {
+      ingredientId: parse(uuid, text(form, 'ingredientId'), 'Ingredient'),
+      supplierId: parse(uuid, text(form, 'supplierId'), 'Supplier'),
+      packSize: decimal(text(form, 'packSize'), 'Pack size', { min: 0, minExclusive: true })!,
+      packUnit: parse(unit, text(form, 'packUnit'), 'Pack unit'),
+      packPrice: decimal(text(form, 'packPrice'), 'Pack price', { min: 0 })!,
+      gstApplicable: form.get('gstApplicable') === 'on',
+      priceIncludesGst: form.get('priceIncludesGst') === 'on',
+      effectiveDate: parse(isoDate, text(form, 'effectiveDate') || today, 'Date'),
+      createdBy: user.email,
+    };
+    await db.transaction(async (tx) => {
+      const [ingredient] = await tx.select().from(schema.ingredients).where(eq(schema.ingredients.id, values.ingredientId));
+      if (!ingredient || ingredient.archivedAt) throw new Invalid('Ingredient not found');
+      const [supplier] = await tx.select().from(schema.suppliers).where(eq(schema.suppliers.id, values.supplierId));
+      if (!supplier || supplier.archivedAt) throw new Invalid('Supplier not found');
+      if (convertToBase(values.packSize, values.packUnit, ingredient.baseUnit, ingredient) === null) {
+        throw new Invalid(
+          `${ingredient.name} is measured in ${ingredient.baseUnit}. To price it per ${values.packUnit}, first add its conversion (grams per each / per ml).`,
+        );
+      }
+      const [row] = await tx.insert(schema.ingredientPrices).values(values).returning({ id: schema.ingredientPrices.id });
+      if (!ingredient.preferredSupplierId) {
+        await tx
+          .update(schema.ingredients)
+          .set({ preferredSupplierId: values.supplierId, updatedAt: new Date(), version: ingredient.version + 1 })
+          .where(eq(schema.ingredients.id, ingredient.id));
+      }
+      await audit(tx, user, 'price', 'ingredient', ingredient.id, { after: { ...values, priceId: row.id } });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+// ------------------------------------------------------------------ recipes
+
+export async function createRecipe(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const type = parse(z.enum(['dish', 'prep']), text(form, 'type') || 'dish', 'Type');
+    const values = {
+      name: required(text(form, 'name'), 'Name'),
+      type,
+      // A prep must say how much it makes; start with a placeholder the chef then corrects.
+      ...(type === 'prep' ? { yieldQuantity: '1', yieldUnit: 'kg' as const } : {}),
+    };
+    return db.transaction(async (tx) => {
+      const [row] = await tx.insert(schema.recipes).values(values).returning({ id: schema.recipes.id });
+      await audit(tx, user, 'create', 'recipe', row.id, { after: values });
+      return row.id;
+    });
+  });
+  if (!result.ok) return result;
+  revalidatePath('/', 'layout');
+  redirect(`/recipes/${result.data}`);
+}
+
+const recipePayload = z.object({
+  id: uuid,
+  version: z.number().int().positive(),
+  name: z.string(),
+  type: z.enum(['dish', 'prep']),
+  yieldQuantity: z.string(),
+  yieldUnit: unit.nullable(),
+  portions: z.string(),
+  notes: z.string().max(4000),
+  lines: z
+    .array(
+      z.object({
+        ingredientId: uuid.nullable(),
+        subRecipeId: uuid.nullable(),
+        quantity: z.string(),
+        unit,
+      }),
+    )
+    .max(200),
+});
+
+export type RecipePayload = z.infer<typeof recipePayload>;
+
+/** Saves the whole recipe at once. Returns the new version, or an error (including "someone else changed it"). */
+export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ version: number }>> {
+  const result = await mutate(async (user) => {
+    const payload = parse(recipePayload, input, 'Recipe');
+    const name = required(payload.name.trim(), 'Name');
+    const portions = decimal(payload.portions.trim(), 'Portions', { min: 0, minExclusive: true })!;
+    const yieldQuantity = decimal(payload.yieldQuantity.trim(), 'Batch yield', { min: 0, minExclusive: true, optional: true });
+    if (payload.type === 'prep' && !yieldQuantity) throw new Invalid('A prep needs a batch yield, for example 2 l');
+    const yieldUnit = yieldQuantity ? payload.yieldUnit : null;
+    if (yieldQuantity && !yieldUnit) throw new Invalid('Choose a unit for the batch yield');
+
+    const lines = payload.lines.map((line, index) => {
+      if (!!line.ingredientId === !!line.subRecipeId) throw new Invalid(`Line ${index + 1} is broken, remove it and add it again`);
+      return {
+        recipeId: payload.id,
+        ingredientId: line.ingredientId,
+        subRecipeId: line.subRecipeId,
+        quantity: decimal(line.quantity.trim(), `Line ${index + 1} quantity`, { min: 0, minExclusive: true })!,
+        unit: line.unit,
+        sortOrder: index,
+      };
+    });
+
+    return db.transaction(async (tx) => {
+      const [before] = await tx.select().from(schema.recipes).where(eq(schema.recipes.id, payload.id)).for('update');
+      if (!before || before.archivedAt) throw new Invalid('Recipe not found');
+      if (before.version !== payload.version) {
+        throw new Invalid('Someone else changed this recipe. Reload the page to see their version.');
+      }
+
+      const ingredientIds = [...new Set(lines.flatMap((l) => (l.ingredientId ? [l.ingredientId] : [])))];
+      if (ingredientIds.length > 0) {
+        const found = await tx
+          .select({ id: schema.ingredients.id })
+          .from(schema.ingredients)
+          .where(and(inArray(schema.ingredients.id, ingredientIds), isNull(schema.ingredients.archivedAt)));
+        if (found.length !== ingredientIds.length) throw new Invalid('An ingredient in this recipe no longer exists');
+      }
+
+      const subIds = [...new Set(lines.flatMap((l) => (l.subRecipeId ? [l.subRecipeId] : [])))];
+      if (subIds.length > 0) {
+        const all = await tx
+          .select({ recipeId: schema.recipeLines.recipeId, subRecipeId: schema.recipeLines.subRecipeId })
+          .from(schema.recipeLines);
+        const graph = new Map<string, { lines: { id: string; subRecipeId: string | null; quantity: string; unit: Unit }[] }>();
+        for (const edge of all) {
+          if (edge.recipeId === payload.id) continue;
+          const node = graph.get(edge.recipeId) ?? { lines: [] };
+          node.lines.push({ id: '', subRecipeId: edge.subRecipeId, quantity: '1', unit: 'g' });
+          graph.set(edge.recipeId, node);
+        }
+        const subs = await tx
+          .select()
+          .from(schema.recipes)
+          .where(and(inArray(schema.recipes.id, subIds), isNull(schema.recipes.archivedAt)));
+        if (subs.length !== subIds.length) throw new Invalid('A prep in this recipe no longer exists');
+        for (const sub of subs) {
+          if (wouldCreateCycle(graph, payload.id, sub.id)) throw new Invalid(`${sub.name} already contains this recipe, so it cannot go inside it`);
+          if (!sub.yieldUnit) throw new Invalid(`${sub.name} needs a batch yield before it can be used`);
+          for (const line of lines.filter((l) => l.subRecipeId === sub.id)) {
+            if (UNITS[line.unit].base !== UNITS[sub.yieldUnit].base) {
+              throw new Invalid(`${sub.name} is made in ${sub.yieldUnit}, so use a matching unit`);
+            }
+          }
+        }
+      }
+
+      // If this recipe is used as a prep, the lines that use it must still match its yield unit.
+      if (yieldUnit !== before.yieldUnit || !yieldQuantity) {
+        const users = await tx
+          .select({ name: schema.recipes.name, unit: schema.recipeLines.unit })
+          .from(schema.recipeLines)
+          .innerJoin(schema.recipes, eq(schema.recipes.id, schema.recipeLines.recipeId))
+          .where(eq(schema.recipeLines.subRecipeId, payload.id));
+        const clash = users.find((u) => !yieldUnit || UNITS[u.unit].base !== UNITS[yieldUnit].base);
+        if (clash) throw new Invalid(`${clash.name} uses this in ${clash.unit}, so the batch yield must stay in a matching unit`);
+      }
+
+      const version = before.version + 1;
+      const values = { name, type: payload.type, yieldQuantity, yieldUnit, portions, notes: payload.notes.trim() || null };
+      await tx.update(schema.recipes).set({ ...values, updatedAt: new Date(), version }).where(eq(schema.recipes.id, payload.id));
+      await tx.delete(schema.recipeLines).where(eq(schema.recipeLines.recipeId, payload.id));
+      if (lines.length > 0) await tx.insert(schema.recipeLines).values(lines);
+      await audit(tx, user, 'update', 'recipe', payload.id, { after: { ...values, lines: lines.length } });
+      return { version };
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function setRecipeArchived(id: string, archived: boolean): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    parse(uuid, id, 'Recipe');
+    await db.transaction(async (tx) => {
+      if (archived) {
+        const usedIn = await tx
+          .selectDistinct({ name: schema.recipes.name })
+          .from(schema.recipeLines)
+          .innerJoin(schema.recipes, eq(schema.recipes.id, schema.recipeLines.recipeId))
+          .where(and(eq(schema.recipeLines.subRecipeId, id), isNull(schema.recipes.archivedAt)));
+        if (usedIn.length > 0) throw new Invalid(`Still used in: ${usedIn.map((r) => r.name).slice(0, 5).join(', ')}`);
+        const onMenu = await tx
+          .select({ name: schema.menuItems.name })
+          .from(schema.menuItems)
+          .where(and(eq(schema.menuItems.recipeId, id), isNull(schema.menuItems.archivedAt)));
+        if (onMenu.length > 0) throw new Invalid(`Still on the menu as: ${onMenu.map((m) => m.name).slice(0, 5).join(', ')}`);
+      }
+      const updated = await tx
+        .update(schema.recipes)
+        .set({ archivedAt: archived ? new Date() : null, updatedAt: new Date(), version: sql`${schema.recipes.version} + 1` })
+        .where(eq(schema.recipes.id, id))
+        .returning({ id: schema.recipes.id });
+      if (updated.length === 0) throw new Invalid('Recipe not found');
+      await audit(tx, user, archived ? 'archive' : 'restore', 'recipe', id);
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
