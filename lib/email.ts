@@ -1,13 +1,18 @@
 import { Resend } from 'resend';
 
 const domain = process.env.RESEND_EMAIL_DOMAIN ?? 'mazcinarestobar.com.au';
-const FROM = `Mazcina Kitchen <kitchen@${domain}>`;
+const SENDERS = {
+  kitchen: `Mazcina Kitchen <kitchen@${domain}>`,
+  giftCards: `Mazcina Resto - Bar <giftcards@${domain}>`,
+} as const;
 
 export interface Email {
   to: string;
   subject: string;
   text: string;
   html?: string;
+  /** Which address it comes from. Sign-in codes are `kitchen`; anything a customer receives is `giftCards`. */
+  from?: keyof typeof SENDERS;
 }
 
 /**
@@ -33,7 +38,7 @@ export async function sendEmail(email: Email): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) throw new Error('RESEND_API_KEY is not set');
   const { error } = await new Resend(apiKey).emails.send({
-    from: FROM,
+    from: SENDERS[email.from ?? 'kitchen'],
     to,
     subject: email.subject,
     text: email.text,

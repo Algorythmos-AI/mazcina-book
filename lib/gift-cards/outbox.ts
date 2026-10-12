@@ -48,11 +48,11 @@ export async function sendPendingEmails(limit = 20): Promise<{ sent: number; fai
         message: order.message,
       };
       if (row.kind === 'gift_card_recipient') {
-        await sendEmail({ to: order.recipientEmail, ...recipientEmail(details) });
+        await sendEmail({ to: order.recipientEmail, from: 'giftCards', ...recipientEmail(details) });
       } else if (row.kind === 'gift_card_receipt') {
         // Buying for yourself: the card email is the confirmation, so skip the second one.
         if (order.buyerEmail.toLowerCase() !== order.recipientEmail.toLowerCase()) {
-          await sendEmail({ to: order.buyerEmail, ...receiptEmail({ ...details, recipientEmail: order.recipientEmail }) });
+          await sendEmail({ to: order.buyerEmail, from: 'giftCards', ...receiptEmail({ ...details, recipientEmail: order.recipientEmail }) });
         }
       } else {
         throw new Error(`unknown email kind ${row.kind}`);

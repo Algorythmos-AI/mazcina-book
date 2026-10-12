@@ -47,7 +47,7 @@ migration compatible with the previous deployment (add first, remove later).
 
 ## Gift cards
 
-Sold at `/gift-cards` (public), redeemed by staff at `/cards`. Money rules live
+Customers buy on the public website (`mazcinarestobar.com.au/gift-cards`), which calls this app's small public API under `/api/gift-cards/` (config, checkout, order status). Only the website's own origins may call it (`lib/gift-cards/site.ts`; add more with `GIFT_SITE_ORIGINS`). Staff redeem at `/cards`. Money rules live
 in `lib/gift-cards/core.ts`; `npm run test:db` proves them against the dev
 database (no double issue, no overspend under 20 simultaneous redemptions,
 refund handling, webhook replays).
@@ -65,8 +65,7 @@ Test keys are refused in production and live keys are refused everywhere else.
 
 Before going live: the restaurant's own Stripe account with a restricted live
 key; `EMAIL_REPLY_TO` set to a monitored inbox; a "Gift card" payment type in
-the POS; the privacy page on the public site updated; `PUBLIC_GIFT_CARDS_URL`
-on the public site pointed at `/gift-cards` here.
+the POS; the website change that adds the order form merged and deployed.
 
 ## Backups
 
