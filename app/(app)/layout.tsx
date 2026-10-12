@@ -8,6 +8,11 @@ export default async function AppLayout({ children }: LayoutProps<'/'>) {
   const user = await requireRole();
   return (
     <>
+      {process.env.VERCEL_ENV !== 'production' && (
+        <p className="bg-amber-300 px-4 py-1 text-center text-xs font-bold uppercase tracking-wide text-amber-950">
+          Test copy: changes here do not touch the real kitchen data
+        </p>
+      )}
       <div className="bg-mazcina-ink text-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <span className="truncate text-[13px] font-medium text-mazcina-gold">{user.name ?? user.email}</span>

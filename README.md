@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mazcina Kitchen
 
-## Getting Started
+Back office for Mazcina Resto - Bar: recipe costing, menus and (later) gift
+cards and inventory. Live at https://kitchen.mazcinarestobar.com.au.
 
-First, run the development server:
+Next.js App Router, Neon Postgres with Drizzle, Better Auth (email code,
+allow-list), Resend. Hosted on Vercel in Sydney.
+
+## Environments
+
+| | Database | Email | Banner |
+|---|---|---|---|
+| Production | `mazcina-book-db` | sent for real | none |
+| Preview | `mazcina-book-db-dev` | only to `EMAIL_OVERRIDE_TO`, otherwise not sent | "Test copy" |
+| Local | `mazcina-book-db-dev` | printed to the terminal | "Test copy" |
+
+The two databases are separate Neon projects connected through the Vercel
+Marketplace, so nothing done locally or in a preview can reach live data.
+Local and preview share one dev database.
+
+## Local setup
 
 ```bash
+npm install
+vercel env pull .env.local   # development variables, dev database
+npm run db:migrate
+npx tsx scripts/seed.ts you@example.com
+npx tsx scripts/seed-menu.ts
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sign in with the email you seeded; the code is printed in the terminal.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint && npm run typecheck && npm test
+```
 
-## Learn More
+## Database changes
 
-To learn more about Next.js, take a look at the following resources:
+Edit `db/schema.ts`, run `npm run db:generate`, commit the migration. It is
+applied by the Vercel build (`scripts/deploy-migrate.mjs`): preview builds
+migrate the dev database, production builds migrate the live one. Keep each
+migration compatible with the previous deployment (add first, remove later).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploying
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Push to `main`. If a git deployment fails with "Git information retrieval
+failed", reconnect the repository (`vercel git disconnect`, then
+`vercel git connect`) and push again; `vercel deploy --prod` from a clean
+checkout is the fallback.
