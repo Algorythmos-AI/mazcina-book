@@ -10,12 +10,17 @@ const LINKS = [
   { href: '/suppliers', label: 'Suppliers' },
 ];
 
+const OWNER_LINKS = [
+  { href: '/team', label: 'Team' },
+  { href: '/activity', label: 'Activity' },
+];
+
 /** Same treatment as the public site's nav: emerald links, the current one in wood with an underline. */
-export function Nav() {
+export function Nav({ owner }: { owner: boolean }) {
   const pathname = usePathname();
   return (
     <nav aria-label="Main" className="-mb-px flex gap-5 overflow-x-auto text-[15px] font-medium sm:gap-8">
-      {LINKS.map((item) => {
+      {(owner ? [...LINKS, ...OWNER_LINKS] : LINKS).map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
           <Link

@@ -19,7 +19,7 @@ export default async function AppLayout({ children }: LayoutProps<'/'>) {
           <Link href="/" aria-label="Mazcina Kitchen home" className="pb-3">
             <Logo />
           </Link>
-          {user.role !== 'staff' && <Nav />}
+          {user.role !== 'staff' && <Nav owner={user.role === 'owner'} />}
         </div>
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">{children}</main>

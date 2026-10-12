@@ -444,6 +444,11 @@ function menuItemValues(form: FormData) {
   };
 }
 
+async function assertMenuOpen(tx: Tx, menuId: string) {
+  const [menu] = await tx.select({ status: schema.menus.status }).from(schema.menus).where(eq(schema.menus.id, menuId));
+  if (!menu || menu.status === 'archived') throw new Invalid('This menu is archived and can no longer be changed');
+}
+
 async function assertRecipeUsable(tx: Tx, recipeId: string | null) {
   if (!recipeId) return;
   const [recipe] = await tx.select().from(schema.recipes).where(eq(schema.recipes.id, recipeId));
@@ -457,6 +462,7 @@ export async function createMenuItem(_prev: ActionResult | null, form: FormData)
     await db.transaction(async (tx) => {
       const [menu] = await tx.select().from(schema.menus).where(eq(schema.menus.id, menuId));
       if (!menu || menu.archivedAt) throw new Invalid('Menu not found');
+      if (menu.status === 'archived') throw new Invalid('This menu is archived and can no longer be changed');
       await assertRecipeUsable(tx, values.recipeId);
       const [{ next }] = await tx
         .select({ next: sql<number>`coalesce(max(${schema.menuItems.sortOrder}), -1)::int + 1` })
@@ -482,6 +488,7 @@ export async function updateMenuItem(_prev: ActionResult | null, form: FormData)
       const [before] = await tx.select().from(schema.menuItems).where(eq(schema.menuItems.id, id)).for('update');
       if (!before || before.archivedAt) throw new Invalid('Menu item not found');
       if (before.version !== version) throw new Invalid('Someone else changed this item. Reload the page and try again.');
+      await assertMenuOpen(tx, before.menuId);
       await assertRecipeUsable(tx, values.recipeId);
       await tx
         .update(schema.menuItems)
@@ -501,6 +508,9 @@ export async function setMenuItemArchived(id: string, archived: boolean): Promis
   const result = await mutate(async (user) => {
     parse(uuid, id, 'Menu item');
     await db.transaction(async (tx) => {
+      const [item] = await tx.select({ menuId: schema.menuItems.menuId }).from(schema.menuItems).where(eq(schema.menuItems.id, id));
+      if (!item) throw new Invalid('Menu item not found');
+      await assertMenuOpen(tx, item.menuId);
       const updated = await tx
         .update(schema.menuItems)
         .set({ archivedAt: archived ? new Date() : null, updatedAt: new Date(), version: sql`${schema.menuItems.version} + 1` })
@@ -527,6 +537,190 @@ export async function updateSettings(_prev: ActionResult | null, form: FormData)
         .values({ id: 1, ...values })
         .onConflictDoUpdate({ target: schema.settings.id, set: { ...values, updatedAt: new Date() } });
       await audit(tx, user, 'update', 'settings', '1', { after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+// -------------------------------------------------------------------- menus
+
+/** Copies a menu and its items into a new draft, for the next season or a special. */
+export async function cloneMenu(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const sourceId = parse(uuid, text(form, 'sourceId'), 'Menu');
+    const values = {
+      name: required(text(form, 'name'), 'Name'),
+      kind: parse(z.enum(['seasonal', 'special']), text(form, 'kind'), 'Kind'),
+    };
+    return db.transaction(async (tx) => {
+      const [source] = await tx.select().from(schema.menus).where(eq(schema.menus.id, sourceId));
+      if (!source) throw new Invalid('Menu not found');
+      const clash = await tx
+        .select({ id: schema.menus.id })
+        .from(schema.menus)
+        .where(sql`lower(${schema.menus.name}) = ${values.name.toLowerCase()}`);
+      if (clash.length > 0) throw new Invalid('A menu with that name already exists');
+      const [menu] = await tx.insert(schema.menus).values({ ...values, status: 'draft' }).returning({ id: schema.menus.id });
+      const items = await tx
+        .select()
+        .from(schema.menuItems)
+        .where(and(eq(schema.menuItems.menuId, sourceId), isNull(schema.menuItems.archivedAt)));
+      if (items.length > 0) {
+        await tx.insert(schema.menuItems).values(
+          items.map((i) => ({
+            menuId: menu.id,
+            recipeId: i.recipeId,
+            name: i.name,
+            category: i.category,
+            sellPriceCents: i.sellPriceCents,
+            sortOrder: i.sortOrder,
+          })),
+        );
+      }
+      await audit(tx, user, 'clone', 'menu', menu.id, { after: { ...values, from: source.name, items: items.length } });
+      return menu.id;
+    });
+  });
+  if (!result.ok) return result;
+  revalidatePath('/', 'layout');
+  redirect(`/menu?m=${result.data}`);
+}
+
+/**
+ * Moves a menu between draft, live and archived. Only one seasonal menu is
+ * live at a time: making another one live archives the old one. Archiving
+ * freezes that day's costs so the record does not move with later prices.
+ */
+export async function setMenuStatus(id: string, status: 'draft' | 'live' | 'archived'): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    parse(uuid, id, 'Menu');
+    parse(z.enum(['draft', 'live', 'archived']), status, 'Status');
+    const { costMenuItem } = await import('@/lib/menu');
+    const { contextFrom, loadCostingData } = await import('@/lib/queries');
+    const data = await loadCostingData();
+    const ctx = contextFrom(data);
+
+    await db.transaction(async (tx) => {
+      const snapshot = async (menuId: string) => {
+        const items = await tx
+          .select()
+          .from(schema.menuItems)
+          .where(and(eq(schema.menuItems.menuId, menuId), isNull(schema.menuItems.archivedAt)))
+          .orderBy(schema.menuItems.sortOrder);
+        await tx.insert(schema.menuCostSnapshots).values({
+          menuId,
+          asOf: data.asOf,
+          items: items.map((i) => {
+            const costing = costMenuItem(
+              { ...i, archived: false },
+              ctx,
+              data.settings,
+            );
+            return {
+              name: i.name,
+              category: i.category,
+              sellPriceCents: i.sellPriceCents,
+              cost: costing.status === 'ok' ? costing.cost.toFixed(4) : null,
+              foodCostPct: costing.status === 'ok' && costing.foodCostPct ? costing.foodCostPct.toFixed(2) : null,
+            };
+          }),
+        });
+      };
+
+      const [menu] = await tx.select().from(schema.menus).where(eq(schema.menus.id, id)).for('update');
+      if (!menu) throw new Invalid('Menu not found');
+      if (menu.status === status) return;
+
+      if (status === 'live' && menu.kind === 'seasonal') {
+        const current = await tx
+          .select()
+          .from(schema.menus)
+          .where(and(eq(schema.menus.status, 'live'), eq(schema.menus.kind, 'seasonal')));
+        for (const old of current) {
+          await snapshot(old.id);
+          await tx.update(schema.menus).set({ status: 'archived', updatedAt: new Date(), version: old.version + 1 }).where(eq(schema.menus.id, old.id));
+          await audit(tx, user, 'status', 'menu', old.id, { before: { status: 'live' }, after: { name: old.name, status: 'archived', replacedBy: menu.name } });
+        }
+      }
+      if (status === 'archived') await snapshot(id);
+      await tx.update(schema.menus).set({ status, updatedAt: new Date(), version: menu.version + 1 }).where(eq(schema.menus.id, id));
+      await audit(tx, user, 'status', 'menu', id, { before: { status: menu.status }, after: { name: menu.name, status } });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+// --------------------------------------------------------------------- team
+
+/** Once there are two owners, there must always be two, so nobody can lock the business out. */
+async function assertOwnersRemain(tx: Tx, losingOwnerId: string) {
+  const owners = await tx.select({ id: schema.allowedUsers.id }).from(schema.allowedUsers).where(eq(schema.allowedUsers.role, 'owner')).for('update');
+  const remaining = owners.filter((o) => o.id !== losingOwnerId).length;
+  if (remaining < Math.min(2, owners.length)) {
+    throw new Invalid(remaining === 0 ? 'There must always be an owner' : 'Keep at least two owners. Add another owner first.');
+  }
+}
+
+async function endSessions(tx: Tx, email: string) {
+  await tx.execute(sql`delete from "session" where user_id in (select id from "user" where lower(email) = ${email.toLowerCase()})`);
+}
+
+async function ownerMutate<T>(fn: (user: CurrentUser) => Promise<T>): Promise<ActionResult<T>> {
+  await requireRole('owner');
+  return mutate(fn);
+}
+
+export async function addTeamMember(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await ownerMutate(async (user) => {
+    const email = parse(z.email(), text(form, 'email').toLowerCase(), 'Email');
+    const values = {
+      email,
+      name: text(form, 'name').slice(0, 80) || null,
+      role: parse(z.enum(['owner', 'chef', 'staff']), text(form, 'role'), 'Role'),
+    };
+    await db.transaction(async (tx) => {
+      const existing = await tx.select().from(schema.allowedUsers).where(sql`lower(${schema.allowedUsers.email}) = ${email}`);
+      if (existing.length > 0) throw new Invalid('That email already has access');
+      const [row] = await tx.insert(schema.allowedUsers).values(values).returning({ id: schema.allowedUsers.id });
+      await audit(tx, user, 'create', 'team', row.id, { after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function setTeamRole(id: string, role: 'owner' | 'chef' | 'staff'): Promise<ActionResult> {
+  const result = await ownerMutate(async (user) => {
+    parse(uuid, id, 'Person');
+    parse(z.enum(['owner', 'chef', 'staff']), role, 'Role');
+    await db.transaction(async (tx) => {
+      const [member] = await tx.select().from(schema.allowedUsers).where(eq(schema.allowedUsers.id, id)).for('update');
+      if (!member) throw new Invalid('Person not found');
+      if (member.role === role) return;
+      if (member.email.toLowerCase() === user.email.toLowerCase()) throw new Invalid('You cannot change your own role. Ask another owner.');
+      if (member.role === 'owner') await assertOwnersRemain(tx, id);
+      await tx.update(schema.allowedUsers).set({ role }).where(eq(schema.allowedUsers.id, id));
+      await audit(tx, user, 'role', 'team', id, { before: { role: member.role }, after: { email: member.email, role } });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+/** Removes access and signs the person out everywhere straight away. */
+export async function removeTeamMember(id: string): Promise<ActionResult> {
+  const result = await ownerMutate(async (user) => {
+    parse(uuid, id, 'Person');
+    await db.transaction(async (tx) => {
+      const [member] = await tx.select().from(schema.allowedUsers).where(eq(schema.allowedUsers.id, id)).for('update');
+      if (!member) throw new Invalid('Person not found');
+      if (member.email.toLowerCase() === user.email.toLowerCase()) throw new Invalid('You cannot remove yourself. Ask another owner.');
+      if (member.role === 'owner') await assertOwnersRemain(tx, id);
+      await tx.delete(schema.allowedUsers).where(eq(schema.allowedUsers.id, id));
+      await endSessions(tx, member.email);
+      await audit(tx, user, 'remove', 'team', id, { before: { email: member.email, role: member.role } });
     });
   });
   if (result.ok) revalidatePath('/', 'layout');

@@ -1,14 +1,16 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import DecimalJs from 'decimal.js';
+import { ActionButton } from '@/components/action-button';
 import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
-import { badgeBad, badgeOk, badgeWarn, card, eyebrow, h1, h2, input, label, muted } from '@/components/ui';
-import { moneyFromCents, money, percent, plain } from '@/lib/format';
+import { badgeBad, badgeOk, badgeWarn, card, eyebrow, h1, h2, input, label, muted, primary } from '@/components/ui';
+import { displayDate, moneyFromCents, money, percent, plain } from '@/lib/format';
 import { costMenuItem, groupByCategory, type ItemCosting } from '@/lib/menu';
-import { contextFrom, loadCostingData, loadMenus } from '@/lib/queries';
+import { contextFrom, loadCostingData, loadMenus, loadSnapshot } from '@/lib/queries';
+import type { MenuDto } from '@/lib/types';
 import { requireRole } from '@/lib/session';
-import { createMenuItem, setMenuItemArchived, updateSettings } from '../actions';
+import { cloneMenu, createMenuItem, setMenuItemArchived, setMenuStatus, updateSettings } from '../actions';
 import { ItemFields } from './item-fields';
 
 export const metadata: Metadata = { title: 'Menu' };
@@ -26,16 +28,110 @@ function Costing({ costing }: { costing: ItemCosting }) {
   );
 }
 
-export default async function MenuPage() {
+const STATUS_LABEL = { live: 'Live menu', draft: 'Draft menu', archived: 'Archived menu' } as const;
+
+function MenuSwitcher({ menus, current }: { menus: MenuDto[]; current: string }) {
+  if (menus.length < 2) return null;
+  const rank = { live: 0, draft: 1, archived: 2 } as const;
+  return (
+    <nav aria-label="Menus" className="flex flex-wrap gap-2">
+      {[...menus].sort((a, b) => rank[a.status] - rank[b.status]).map((m) => (
+        <Link
+          key={m.id}
+          href={`/menu?m=${m.id}`}
+          aria-current={m.id === current ? 'page' : undefined}
+          className={`inline-flex min-h-11 items-center gap-2 rounded-sm border-2 px-3 text-sm font-bold ${
+            m.id === current ? 'border-mazcina-wood bg-mazcina-wood text-white' : 'border-mazcina-wood/40 bg-white text-mazcina-wood hover:border-mazcina-wood'
+          }`}
+        >
+          {m.name}
+          <span className="text-xs font-semibold uppercase tracking-wide opacity-80">{m.status}</span>
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+function CloneForm({ menu }: { menu: MenuDto }) {
+  return (
+    <ActionForm action={cloneMenu} submitLabel="Copy to a new draft" className="mt-3">
+      <input type="hidden" name="sourceId" value={menu.id} />
+      <div className="grid gap-3 sm:grid-cols-[1fr_14rem]">
+        <div>
+          <label htmlFor="clone-name" className={label}>Name of the new menu</label>
+          <input id="clone-name" name="name" required maxLength={120} placeholder="Summer 2026, Mother's Day…" className={input} />
+        </div>
+        <div>
+          <label htmlFor="clone-kind" className={label}>Kind</label>
+          <select id="clone-kind" name="kind" defaultValue="seasonal" className={input}>
+            <option value="seasonal">Seasonal (replaces the live menu)</option>
+            <option value="special">Special (runs alongside)</option>
+          </select>
+        </div>
+      </div>
+      <p className={`mt-2 ${muted}`}>Copies every item, price and recipe link. Change it freely; the live menu is not touched.</p>
+    </ActionForm>
+  );
+}
+
+export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
   const user = await requireRole('owner', 'chef');
+  const { m: requested } = await searchParams;
   const [data, menus] = await Promise.all([loadCostingData(), loadMenus()]);
-  const menu = menus.find((m) => m.status === 'live') ?? menus[0];
+  const menu =
+    menus.find((m) => m.id === requested) ??
+    menus.find((m) => m.status === 'live' && m.kind === 'seasonal') ??
+    menus.find((m) => m.status !== 'archived') ??
+    menus[0];
 
   if (!menu) {
     return (
       <div className="space-y-4">
         <h1 className={h1}>Menu</h1>
         <p className={muted}>No menu has been loaded yet.</p>
+      </div>
+    );
+  }
+
+  if (menu.status === 'archived') {
+    const snapshot = await loadSnapshot(menu.id);
+    return (
+      <div className="space-y-6">
+        <MenuSwitcher menus={menus} current={menu.id} />
+        <div>
+          <p className={eyebrow}>{STATUS_LABEL.archived}</p>
+          <h1 className={h1}>{menu.name}</h1>
+        </div>
+        <section className={card}>
+          <h2 className={h2}>Costs when it was archived{snapshot ? ` (${displayDate(snapshot.asOf)})` : ''}</h2>
+          {!snapshot ? (
+            <p className={`mt-2 ${muted}`}>No record was kept for this menu.</p>
+          ) : (
+            <ul className="mt-2 divide-y divide-gray-100">
+              {snapshot.items.map((item) => (
+                <li key={`${item.category}-${item.name}`} className="flex items-center justify-between gap-3 py-2.5">
+                  <span>
+                    <span className="font-semibold">{item.name}</span>
+                    <span className={`block ${muted} tabular-nums`}>{item.category} · {moneyFromCents(item.sellPriceCents)}</span>
+                  </span>
+                  <span className="text-right tabular-nums">
+                    {item.foodCostPct ? <span className="font-semibold">{percent(item.foodCostPct)}</span> : <span className={muted}>Not costed</span>}
+                    {item.cost && <span className={`block ${muted}`}>cost {money(item.cost)}</span>}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className={`mt-3 ${muted}`}>These figures are frozen and do not change with later prices.</p>
+        </section>
+        <section className={card}>
+          <h2 className={h2}>Use it again</h2>
+          <CloneForm menu={menu} />
+          <div className="mt-5 border-t border-gray-100 pt-4">
+            <p className={`mb-2 ${muted}`}>Archived by mistake? Reopen it as a draft. The record above is kept.</p>
+            <ActionButton action={setMenuStatus.bind(null, menu.id, 'draft')} label="Reopen as draft" />
+          </div>
+        </section>
       </div>
     );
   }
@@ -51,9 +147,32 @@ export default async function MenuPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className={eyebrow}>{menu.status === 'live' ? 'Live menu' : 'Draft menu'}</p>
-        <h1 className={h1}>{menu.name}</h1>
+      <MenuSwitcher menus={menus} current={menu.id} />
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className={eyebrow}>{STATUS_LABEL[menu.status]}{menu.kind === 'special' ? ' · special' : ''}</p>
+          <h1 className={h1}>{menu.name}</h1>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {menu.status === 'draft' && (
+            <ActionButton
+              action={setMenuStatus.bind(null, menu.id, 'live')}
+              label="Make live"
+              className={primary}
+              confirm={
+                menu.kind === 'seasonal'
+                  ? `Make "${menu.name}" the live menu? The current live menu is archived with today's costs.`
+                  : `Make "${menu.name}" live?`
+              }
+            />
+          )}
+          {menu.status === 'live' && <ActionButton action={setMenuStatus.bind(null, menu.id, 'draft')} label="Back to draft" />}
+          <ActionButton
+            action={setMenuStatus.bind(null, menu.id, 'archived')}
+            label="Archive"
+            confirm={`Archive "${menu.name}"? Today's costs are kept as a record and the menu can no longer be edited.`}
+          />
+        </div>
       </div>
 
       <section className={card} aria-label="Summary">
@@ -106,6 +225,11 @@ export default async function MenuPage() {
           <input type="hidden" name="menuId" value={menu.id} />
           <ItemFields recipes={data.recipes} categories={active.map((i) => i.category)} />
         </ActionForm>
+      </section>
+
+      <section className={card}>
+        <h2 className={h2}>New season or special</h2>
+        <CloneForm menu={menu} />
       </section>
 
       {user.role === 'owner' && (

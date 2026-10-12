@@ -1,5 +1,5 @@
 import 'server-only';
-import { asc, isNull } from 'drizzle-orm';
+import { asc, desc, eq, isNull } from 'drizzle-orm';
 import { cache } from 'react';
 import { db, schema } from '@/db';
 import { createContext, type CostingContext } from './costing';
@@ -113,3 +113,30 @@ export const loadMenus = cache(async (): Promise<MenuDto[]> => {
       })),
   }));
 });
+
+export interface SnapshotItem {
+  name: string;
+  category: string;
+  sellPriceCents: number;
+  cost: string | null;
+  foodCostPct: string | null;
+}
+
+/** The costs frozen when a menu was archived, newest first. */
+export async function loadSnapshot(menuId: string): Promise<{ asOf: string; items: SnapshotItem[] } | null> {
+  const [row] = await db
+    .select()
+    .from(schema.menuCostSnapshots)
+    .where(eq(schema.menuCostSnapshots.menuId, menuId))
+    .orderBy(desc(schema.menuCostSnapshots.takenAt))
+    .limit(1);
+  return row ? { asOf: row.asOf, items: row.items as SnapshotItem[] } : null;
+}
+
+export async function loadTeam() {
+  return db.select().from(schema.allowedUsers).orderBy(asc(schema.allowedUsers.createdAt));
+}
+
+export async function loadActivity(limit = 100) {
+  return db.select().from(schema.auditLog).orderBy(desc(schema.auditLog.at)).limit(limit);
+}

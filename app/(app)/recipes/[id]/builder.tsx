@@ -1,7 +1,24 @@
 'use client';
 
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  MouseSensor,
+  pointerWithin,
+  TouchSensor,
+  useDraggable,
+  useDroppable,
+  useSensor,
+  useSensors,
+  type CollisionDetection,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { badgeOk, badgeWarn, card, h2, input, label, muted, secondary } from '@/components/ui';
 import {
   costRecipe,
@@ -42,6 +59,19 @@ type SaveState =
   | { kind: 'error'; message: string };
 
 const AUTOSAVE_MS = 900;
+const LINES_ZONE = 'lines';
+const POOL_PREFIX = 'pool:';
+
+/**
+ * A pool item dropped on a line goes in at that line; dropped anywhere else in
+ * the recipe it goes to the end; dropped outside it is ignored. Lines being
+ * reordered snap to the nearest line.
+ */
+const collisions: CollisionDetection = (args) => {
+  const hits = pointerWithin(args);
+  if (hits.length > 0) return [...hits.filter((h) => h.id !== LINES_ZONE), ...hits.filter((h) => h.id === LINES_ZONE)];
+  return String(args.active.id).startsWith(POOL_PREFIX) ? [] : closestCenter(args);
+};
 
 function toDraft(recipe: RecipeDto): Draft {
   return {
@@ -221,16 +251,70 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
     };
   }, [search, data, recipe.id]);
 
-  const addLine = (line: Omit<DraftLine, 'key' | 'quantity'>) =>
-    change((d) => ({ ...d, lines: [...d.lines, { ...line, key: crypto.randomUUID(), quantity: '' }] }));
+  const addLine = (line: Omit<DraftLine, 'key' | 'quantity'>, at?: number) =>
+    change((d) => {
+      const lines = [...d.lines];
+      lines.splice(at ?? lines.length, 0, { ...line, key: crypto.randomUUID(), quantity: '' });
+      return { ...d, lines };
+    });
   const editLine = (key: string, patch: Partial<DraftLine>) =>
     change((d) => ({ ...d, lines: d.lines.map((l) => (l.key === key ? { ...l, ...patch } : l)) }));
   const removeLine = (key: string) => change((d) => ({ ...d, lines: d.lines.filter((l) => l.key !== key) }));
 
+  // Everything the pool can offer, keyed by its drag id, so a tap and a drop add the same line.
+  const poolItems = useMemo(() => {
+    const items = new Map<string, { name: string; line: Omit<DraftLine, 'key' | 'quantity'> }>();
+    for (const r of pool.preps) {
+      items.set(`${POOL_PREFIX}prep:${r.id}`, { name: r.name, line: { ingredientId: null, subRecipeId: r.id, unit: UNITS[r.yieldUnit!].base } });
+    }
+    for (const i of pool.ingredients) {
+      items.set(`${POOL_PREFIX}ing:${i.id}`, { name: i.name, line: { ingredientId: i.id, subRecipeId: null, unit: i.baseUnit } });
+    }
+    return items;
+  }, [pool]);
+
+  const [dragging, setDragging] = useState<string | null>(null);
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+    // Press and hold to pick up on a touch screen, so a normal swipe still scrolls the page.
+    useSensor(TouchSensor, { activationConstraint: { delay: 220, tolerance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+    setDragging(null);
+    if (!over) return;
+    const activeId = String(active.id);
+    const overIndex = latest.current.lines.findIndex((l) => l.key === over.id);
+    const fromPool = poolItems.get(activeId);
+    if (fromPool) return addLine(fromPool.line, overIndex >= 0 ? overIndex : undefined);
+    const from = latest.current.lines.findIndex((l) => l.key === activeId);
+    if (from >= 0 && overIndex >= 0 && from !== overIndex) {
+      change((d) => ({ ...d, lines: arrayMove(d.lines, from, overIndex) }));
+    }
+  };
+
+  const draggingName = dragging
+    ? (poolItems.get(dragging)?.name ??
+      (() => {
+        const line = draft.lines.find((l) => l.key === dragging);
+        return (line?.ingredientId && ingredientById.get(line.ingredientId)?.name) || (line?.subRecipeId && recipeById.get(line.subRecipeId)?.name) || '';
+      })())
+    : '';
+
   return (
+    <DndContext
+      id="recipe-builder"
+      sensors={sensors}
+      collisionDetection={collisions}
+      onDragStart={({ active }) => setDragging(String(active.id))}
+      onDragCancel={() => setDragging(null)}
+      onDragEnd={onDragEnd}
+    >
     <div className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
       <section className={`${card} order-2 lg:order-1 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:self-start lg:overflow-y-auto`} aria-label="Ingredient pool">
         <h2 className={h2}>Add to recipe</h2>
+        <p className={`mt-1 ${muted}`}>Tap to add, or drag into the recipe.</p>
         <label htmlFor="pool-search" className="sr-only">Search ingredients</label>
         <input
           id="pool-search"
@@ -245,15 +329,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
             <p className={`mt-3 ${muted} font-semibold uppercase tracking-wide`}>Preps</p>
             <ul className="mt-1 space-y-1">
               {pool.preps.map((r) => (
-                <li key={r.id}>
-                  <button
-                    type="button"
-                    onClick={() => addLine({ ingredientId: null, subRecipeId: r.id, unit: UNITS[r.yieldUnit!].base })}
-                    className="flex min-h-11 w-full items-center justify-between rounded-sm px-3 text-left font-semibold hover:bg-mazcina-wood/10 active:bg-mazcina-wood/20"
-                  >
-                    {r.name} <span aria-hidden="true" className="text-xl text-mazcina-wood">+</span>
-                  </button>
-                </li>
+                <PoolItem key={r.id} id={`${POOL_PREFIX}prep:${r.id}`} name={r.name} onAdd={() => addLine(poolItems.get(`${POOL_PREFIX}prep:${r.id}`)!.line)} />
               ))}
             </ul>
           </>
@@ -266,15 +342,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         ) : (
           <ul className="mt-1 space-y-1">
             {pool.ingredients.map((i) => (
-              <li key={i.id}>
-                <button
-                  type="button"
-                  onClick={() => addLine({ ingredientId: i.id, subRecipeId: null, unit: i.baseUnit })}
-                  className="flex min-h-11 w-full items-center justify-between rounded-sm px-3 text-left font-semibold hover:bg-mazcina-wood/10 active:bg-mazcina-wood/20"
-                >
-                  {i.name} <span aria-hidden="true" className="text-xl text-mazcina-wood">+</span>
-                </button>
-              </li>
+              <PoolItem key={i.id} id={`${POOL_PREFIX}ing:${i.id}`} name={i.name} onAdd={() => addLine(poolItems.get(`${POOL_PREFIX}ing:${i.id}`)!.line)} />
             ))}
           </ul>
         )}
@@ -317,11 +385,12 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
           </div>
         </section>
 
-        <section className={card}>
+        <LinesZone active={!!dragging && dragging.startsWith(POOL_PREFIX)}>
           <h2 className={h2}>Ingredients in this recipe</h2>
           {draft.lines.length === 0 ? (
-            <p className={`mt-2 ${muted}`}>Empty. Tap an ingredient in “Add to recipe”.</p>
+            <p className={`mt-2 ${muted}`}>Empty. Tap an ingredient in “Add to recipe”, or drag it here.</p>
           ) : (
+            <SortableContext items={draft.lines.map((l) => l.key)} strategy={verticalListSortingStrategy}>
             <ul className="mt-2 divide-y divide-gray-100">
               {draft.lines.map((line, index) => {
                 const ingredient = line.ingredientId ? ingredientById.get(line.ingredientId) : undefined;
@@ -335,7 +404,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                 const value = lineCost.get(line.key);
                 const issue = lineIssue.get(line.key);
                 return (
-                  <li key={line.key} className="py-3">
+                  <SortableLine key={line.key} id={line.key} name={name}>
                     <div className="flex items-center justify-between gap-2">
                       <p className="font-semibold">
                         {name}
@@ -369,12 +438,13 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                       </button>
                     </div>
                     {issue && line.quantity.trim() !== '' && <p className={`mt-2 ${badgeWarn}`}>{issueText(issue)}</p>}
-                  </li>
+                  </SortableLine>
                 );
               })}
             </ul>
+            </SortableContext>
           )}
-        </section>
+        </LinesZone>
 
         <section className={card} aria-live="polite">
           <h2 className={h2}>Cost</h2>
@@ -421,8 +491,76 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         </section>
       </div>
     </div>
+    <DragOverlay dropAnimation={null}>
+      {dragging && draggingName ? (
+        <div className="rounded-sm border-2 border-mazcina-wood bg-white px-3 py-2.5 font-semibold text-mazcina-wood shadow-xl">{draggingName}</div>
+      ) : null}
+    </DragOverlay>
+    </DndContext>
   );
 }
+
+function PoolItem({ id, name, onAdd }: { id: string; name: string; onAdd: () => void }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id });
+  // Keyboard users add with Enter or Space (a normal button press), so the drag
+  // keyboard handler is left off here; it is on the line handles instead.
+  const pointer = { ...listeners };
+  delete pointer.onKeyDown;
+  return (
+    <li>
+      <button
+        ref={setNodeRef}
+        type="button"
+        onClick={onAdd}
+        {...pointer}
+        aria-roledescription={attributes['aria-roledescription']}
+        className={`flex min-h-11 w-full touch-manipulation select-none items-center justify-between rounded-sm px-3 text-left font-semibold hover:bg-mazcina-wood/10 active:bg-mazcina-wood/20 ${isDragging ? 'opacity-40' : ''}`}
+      >
+        {name} <span aria-hidden="true" className="text-xl text-mazcina-wood">+</span>
+      </button>
+    </li>
+  );
+}
+
+function LinesZone({ active, children }: { active: boolean; children: ReactNode }) {
+  const { setNodeRef, isOver } = useDroppable({ id: LINES_ZONE });
+  return (
+    <section
+      ref={setNodeRef}
+      className={`${card} transition-shadow ${active ? (isOver ? 'ring-2 ring-mazcina-wood' : 'outline-2 outline-dashed outline-mazcina-wood/40') : ''}`}
+    >
+      {children}
+    </section>
+  );
+}
+
+function SortableLine({ id, name, children }: { id: string; name: string; children: ReactNode }) {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging, isOver } = useSortable({ id });
+  return (
+    <li
+      ref={setNodeRef}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      className={`flex gap-2 bg-white py-3 ${isDragging ? 'relative z-10 opacity-60 shadow-lg' : ''} ${isOver && !isDragging ? 'border-t-2 border-t-mazcina-wood' : ''}`}
+    >
+      <button
+        ref={setActivatorNodeRef}
+        type="button"
+        {...attributes}
+        {...listeners}
+        aria-label={`Move ${name}`}
+        className="grid min-h-11 w-9 shrink-0 cursor-grab touch-none place-items-center self-start rounded-sm text-mazcina-sage hover:bg-mazcina-wood/10 hover:text-mazcina-wood active:cursor-grabbing"
+      >
+        <svg aria-hidden="true" viewBox="0 0 16 24" className="h-6 w-4 fill-current">
+          <circle cx="4" cy="5" r="2" /><circle cx="12" cy="5" r="2" />
+          <circle cx="4" cy="12" r="2" /><circle cx="12" cy="12" r="2" />
+          <circle cx="4" cy="19" r="2" /><circle cx="12" cy="19" r="2" />
+        </svg>
+      </button>
+      <div className="min-w-0 flex-1">{children}</div>
+    </li>
+  );
+}
+
 
 function SaveBadge({ state, onRetry }: { state: SaveState; onRetry: () => void }) {
   if (state.kind === 'saved') return <p role="status" className={badgeOk}>Saved</p>;
