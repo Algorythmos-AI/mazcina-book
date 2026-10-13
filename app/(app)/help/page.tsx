@@ -52,7 +52,18 @@ export default async function HelpPage() {
       ),
     },
     {
-      title: '6. New season or a special',
+      title: '6. Keep track of stock',
+      body: (
+        <>
+          <Link href="/stock" className={link}>Stock</Link> shows what you have, what it is worth and what to order. When a delivery arrives,
+          use Receive a delivery (and type what you paid if the price changed). Once a week, or whenever you like, do a Stocktake on your phone:
+          type what is on the shelf and leave blank what you did not check. Set a minimum on an ingredient and it appears on the order list when
+          it runs low. Stock does not go down by itself as dishes are sold; the stocktake is what keeps it right.
+        </>
+      ),
+    },
+    {
+      title: '7. New season or a special',
       body: (
         <>
           On the Menu page, copy the menu to a new draft, change items and prices there, then press Make live when it starts. The old menu is

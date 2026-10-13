@@ -91,6 +91,8 @@ export const ingredients = pgTable(
     preferredSupplierId: uuid('preferred_supplier_id').references(() => suppliers.id, { onDelete: 'restrict' }),
     gramsPerEach: quantity('grams_per_each'),
     gramsPerMl: quantity('grams_per_ml'),
+    /** Reorder point in base units: below this the ingredient shows as low. */
+    parLevel: quantity('par_level'),
     ...tracked,
   },
   (t) => [
@@ -99,6 +101,7 @@ export const ingredients = pgTable(
     check('ingredients_yield_range', sql`${t.yieldPct} > 0 AND ${t.yieldPct} <= 100`),
     check('ingredients_grams_per_each_positive', sql`${t.gramsPerEach} IS NULL OR ${t.gramsPerEach} > 0`),
     check('ingredients_grams_per_ml_positive', sql`${t.gramsPerMl} IS NULL OR ${t.gramsPerMl} > 0`),
+    check('ingredients_par_level_valid', sql`${t.parLevel} IS NULL OR ${t.parLevel} >= 0`),
   ],
 );
 
@@ -345,4 +348,38 @@ export const emailOutbox = pgTable(
     sentAt: timestamp('sent_at', { withTimezone: true }),
   },
   (t) => [index('email_outbox_pending').on(t.status, t.createdAt)],
+);
+
+// --------------------------------------------------------------------- stock
+
+export const stockMovementKindEnum = pgEnum('stock_movement_kind', ['count', 'receive', 'waste', 'adjust']);
+
+/**
+ * Every change to stock on hand, in the ingredient's base unit. Rows are only
+ * ever added; on hand is the sum of `quantity_delta`. A stocktake is stored as
+ * the difference it made, with the counted figure kept alongside.
+ */
+export const stockMovements = pgTable(
+  'stock_movements',
+  {
+    id: id(),
+    ingredientId: uuid('ingredient_id').notNull().references(() => ingredients.id, { onDelete: 'restrict' }),
+    kind: stockMovementKindEnum('kind').notNull(),
+    quantityDelta: quantity('quantity_delta').notNull(),
+    /** For a `count`: what was physically counted. */
+    countedQuantity: quantity('counted_quantity'),
+    /** Groups the lines of one stocktake or one delivery. */
+    batchId: uuid('batch_id'),
+    note: text('note'),
+    actorEmail: text('actor_email').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('stock_movements_ingredient').on(t.ingredientId, t.createdAt),
+    index('stock_movements_batch').on(t.batchId),
+    check('stock_movements_count_has_figure', sql`(${t.kind} = 'count') = (${t.countedQuantity} IS NOT NULL)`),
+    check('stock_movements_counted_valid', sql`${t.countedQuantity} IS NULL OR ${t.countedQuantity} >= 0`),
+    check('stock_movements_receive_positive', sql`${t.kind} <> 'receive' OR ${t.quantityDelta} > 0`),
+    check('stock_movements_waste_negative', sql`${t.kind} <> 'waste' OR ${t.quantityDelta} < 0`),
+  ],
 );

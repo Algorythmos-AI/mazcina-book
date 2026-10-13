@@ -1,5 +1,5 @@
 import 'server-only';
-import { asc, desc, eq, isNull } from 'drizzle-orm';
+import { asc, desc, eq, isNull, sql } from 'drizzle-orm';
 import { cache } from 'react';
 import { db, schema } from '@/db';
 import { createContext, type CostingContext } from './costing';
@@ -54,6 +54,7 @@ export const loadCostingData = cache(async (): Promise<CostingData> => {
       preferredSupplierId: i.preferredSupplierId,
       gramsPerEach: i.gramsPerEach,
       gramsPerMl: i.gramsPerMl,
+      parLevel: i.parLevel,
       version: i.version,
       archived: !!i.archivedAt,
     })),
@@ -139,4 +140,32 @@ export async function loadTeam() {
 
 export async function loadActivity(limit = 100) {
   return db.select().from(schema.auditLog).orderBy(desc(schema.auditLog.at)).limit(limit);
+}
+
+export interface StockLevel {
+  /** Sum of every movement, in base units. */
+  onHand: string;
+  lastCountedAt: Date | null;
+}
+
+/** Stock on hand for every ingredient that has ever had a movement. */
+export const loadStock = cache(async (): Promise<Map<string, StockLevel>> => {
+  const rows = await db
+    .select({
+      ingredientId: schema.stockMovements.ingredientId,
+      onHand: sql<string>`sum(${schema.stockMovements.quantityDelta})`,
+      lastCountedAt: sql<Date | null>`max(${schema.stockMovements.createdAt}) filter (where ${schema.stockMovements.kind} = 'count')`,
+    })
+    .from(schema.stockMovements)
+    .groupBy(schema.stockMovements.ingredientId);
+  return new Map(rows.map((r) => [r.ingredientId, { onHand: r.onHand, lastCountedAt: r.lastCountedAt ? new Date(r.lastCountedAt) : null }]));
+});
+
+export async function loadMovements(ingredientId: string, limit = 20) {
+  return db
+    .select()
+    .from(schema.stockMovements)
+    .where(eq(schema.stockMovements.ingredientId, ingredientId))
+    .orderBy(desc(schema.stockMovements.createdAt))
+    .limit(limit);
 }

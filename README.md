@@ -45,6 +45,15 @@ applied by the Vercel build (`scripts/deploy-migrate.mjs`): preview builds
 migrate the dev database, production builds migrate the live one. Keep each
 migration compatible with the previous deployment (add first, remove later).
 
+## Stock
+
+`/stock` shows what is on hand, its value and what to order. Stock is the sum
+of `stock_movements` (deliveries, waste, stocktake counts) in each ingredient's
+base unit, as bought. Nothing is deducted when dishes are sold: there is no POS
+link, so the figure is as fresh as the last stocktake. The rules are in
+`lib/stock.ts`; the actions in `app/(app)/stock/actions.ts` lock the ingredient
+row so simultaneous entries are applied one after the other.
+
 ## Gift cards
 
 Customers buy on the public website (`mazcinarestobar.com.au/gift-cards`), which calls this app's small public API under `/api/gift-cards/` (config, checkout, order status). Only the website's own origins may call it (`lib/gift-cards/site.ts`; add more with `GIFT_SITE_ORIGINS`). Staff redeem at `/cards`. Money rules live
