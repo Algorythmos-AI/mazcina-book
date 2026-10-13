@@ -16,6 +16,8 @@ export interface Payment {
   paymentIntentId: string | null;
   amountTotal: number | null;
   currency: string | null;
+  /** The connected Stripe account the payment was taken on. */
+  account?: string | null;
 }
 
 /** Creates the card for a paid order. Safe to call any number of times: only the first call creates anything. */
@@ -31,6 +33,10 @@ export async function fulfilOrder(orderId: string, payment: Payment): Promise<{ 
       throw new GiftCardError(
         `Payment for order ${orderId} does not match: paid ${payment.amountTotal} ${payment.currency}, expected ${order.amountCents} aud`,
       );
+    }
+
+    if ((payment.account ?? null) !== order.stripeAccountId) {
+      throw new GiftCardError(`Payment for order ${orderId} came from Stripe account ${payment.account ?? 'none'}, expected ${order.stripeAccountId ?? 'none'}`);
     }
 
     const key = codeKey();

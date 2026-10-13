@@ -1,0 +1,1 @@
+ALTER TABLE "gift_card_orders" ADD COLUMN "stripe_account_id" text;
