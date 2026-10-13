@@ -14,6 +14,7 @@ const ENTITY: Record<string, string> = {
   settings: 'costing settings',
   team: 'team member',
   prices: 'price list',
+  stock: 'stock record',
   gift_card: 'gift card',
 };
 
@@ -28,6 +29,9 @@ const VERB: Record<string, string> = {
   role: 'changed the role of a',
   remove: 'removed a',
   import: 'imported a',
+  stocktake: 'did a stocktake, a',
+  delivery: 'received a delivery, a',
+  waste: 'recorded waste, a',
   redeem: 'took an amount off a',
   reverse: 'undid a redemption on a',
   resend: 're-sent a',

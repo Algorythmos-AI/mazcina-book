@@ -6,9 +6,11 @@ import { ArchiveButton } from '@/components/archive-button';
 import { badgeWarn, card, h1, h2, input, label, muted } from '@/components/ui';
 import { ingredientUnitCost, selectPrice } from '@/lib/costing';
 import { displayDate, issueText, money, plain, unitPrice, unitsForIngredient } from '@/lib/format';
-import { contextFrom, loadCostingData } from '@/lib/queries';
+import { contextFrom, loadCostingData, loadMovements, loadStock } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
+import { countUnit, formatStock, stockLine } from '@/lib/stock';
 import { addPrice, setIngredientArchived, updateIngredient } from '../../actions';
+import { recordWaste, setParLevel } from '../../stock/actions';
 import { IngredientFields } from '../ingredient-fields';
 
 export const metadata: Metadata = { title: 'Ingredient' };
@@ -28,6 +30,11 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
   const supplierName = new Map(data.suppliers.map((s) => [s.id, s.name]));
   const usedIn = data.recipes.filter((r) => !r.archived && r.lines.some((l) => l.ingredientId === ingredient.id));
   const units = unitsForIngredient(ingredient);
+  const [stock, movements] = await Promise.all([loadStock(), loadMovements(ingredient.id, 12)]);
+  const level = stockLine({ onHand: stock.get(ingredient.id)?.onHand ?? null, parLevel: ingredient.parLevel, unitCost: cost.ok ? cost.value : null });
+  const stockUnit = countUnit(ingredient.baseUnit);
+  const MOVEMENT = { count: 'Counted', receive: 'Delivered', waste: 'Waste', adjust: 'Adjusted' } as const;
+  const movedAt = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Sydney', dateStyle: 'medium', timeStyle: 'short' });
 
   return (
     <div className="space-y-6">
@@ -95,6 +102,69 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
               </div>
               <p className={`mt-2 ${muted}`}>Fresh produce, meat and fish have no GST. Most packaged goods and drinks do.</p>
             </ActionForm>
+          )}
+        </section>
+      )}
+
+      {!ingredient.archived && (
+        <section id="stock" className={`${card} scroll-mt-40`}>
+          <h2 className={h2}>Stock</h2>
+          <p className="mt-1 text-lg font-semibold tabular-nums">
+            {level.onHand ? `${formatStock(level.onHand, ingredient.baseUnit)} on hand` : 'No stock recorded yet'}
+            {level.value && <span className={`ml-2 ${muted}`}>worth {money(level.value)}</span>}
+            {level.status === 'low' && <span className={`ml-2 ${badgeWarn}`}>Low</span>}
+            {level.status === 'out' && <span className={`ml-2 ${badgeWarn}`}>Out</span>}
+          </p>
+          <div className="mt-4 grid gap-6 sm:grid-cols-2">
+            <ActionForm action={setParLevel} submitLabel="Save minimum" key={`par-${ingredient.version}`}>
+              <input type="hidden" name="ingredientId" value={ingredient.id} />
+              <span className={label}>Keep at least</span>
+              <div className="mt-1 flex gap-2">
+                <label htmlFor="par-qty" className="sr-only">Minimum quantity</label>
+                <input id="par-qty" name="quantity" inputMode="decimal" placeholder="None" defaultValue={ingredient.parLevel ? plain(ingredient.baseUnit === 'each' ? ingredient.parLevel : (Number(ingredient.parLevel) / 1000).toString()) : ''} className={input} />
+                <label htmlFor="par-unit" className="sr-only">Unit</label>
+                <select id="par-unit" name="unit" defaultValue={stockUnit} className={`${input} w-24`}>
+                  {units.map((u) => (
+                    <option key={u} value={u}>{u}</option>
+                  ))}
+                </select>
+              </div>
+              <p className={`mt-1 ${muted}`}>Below this it shows as low and goes on the order list. Leave blank for none.</p>
+            </ActionForm>
+            <ActionForm action={recordWaste} submitLabel="Take off stock" savedLabel="Recorded" resetOnSuccess>
+              <input type="hidden" name="ingredientId" value={ingredient.id} />
+              <span className={label}>Waste or staff use</span>
+              <div className="mt-1 flex gap-2">
+                <label htmlFor="waste-qty" className="sr-only">Quantity wasted</label>
+                <input id="waste-qty" name="quantity" inputMode="decimal" required placeholder="Qty" className={input} />
+                <label htmlFor="waste-unit" className="sr-only">Unit</label>
+                <select id="waste-unit" name="unit" defaultValue={stockUnit} className={`${input} w-24`}>
+                  {units.map((u) => (
+                    <option key={u} value={u}>{u}</option>
+                  ))}
+                </select>
+              </div>
+              <label htmlFor="waste-note" className="sr-only">Reason</label>
+              <input id="waste-note" name="note" maxLength={120} placeholder="Reason (optional)" className={`mt-2 ${input}`} />
+            </ActionForm>
+          </div>
+          {movements.length > 0 && (
+            <ul className="mt-4 divide-y divide-gray-100">
+              {movements.map((m) => (
+                <li key={m.id} className="flex flex-wrap items-baseline justify-between gap-x-4 py-2">
+                  <span>
+                    <span className="font-semibold">{MOVEMENT[m.kind]}</span>{' '}
+                    <span className="tabular-nums">
+                      {m.kind === 'count'
+                        ? `${formatStock(m.countedQuantity!, ingredient.baseUnit)} (${Number(m.quantityDelta) === 0 ? 'as expected' : `${Number(m.quantityDelta) > 0 ? '+' : ''}${formatStock(m.quantityDelta, ingredient.baseUnit)} against the books`})`
+                        : `${Number(m.quantityDelta) > 0 ? '+' : ''}${formatStock(m.quantityDelta, ingredient.baseUnit)}`}
+                    </span>
+                    {m.note && <span className={muted}> · {m.note}</span>}
+                  </span>
+                  <span className={muted}>{movedAt.format(m.createdAt)} · {m.actorEmail}</span>
+                </li>
+              ))}
+            </ul>
           )}
         </section>
       )}

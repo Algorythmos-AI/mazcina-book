@@ -15,6 +15,8 @@ export interface IngredientDto extends Ingredient {
   yieldPct: string;
   gramsPerEach: string | null;
   gramsPerMl: string | null;
+  /** Reorder point in base units. */
+  parLevel: string | null;
   version: number;
   archived: boolean;
 }

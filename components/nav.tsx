@@ -8,6 +8,7 @@ const LINKS = [
   { href: '/recipes', label: 'Recipes' },
   { href: '/ingredients', label: 'Ingredients' },
   { href: '/suppliers', label: 'Suppliers' },
+  { href: '/stock', label: 'Stock' },
 ];
 
 const OWNER_LINKS = [
