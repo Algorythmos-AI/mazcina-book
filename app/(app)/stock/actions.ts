@@ -72,7 +72,7 @@ export async function recordStocktake(input: z.infer<typeof stocktakePayload>): 
           actorEmail: user.email,
         });
       }
-      await audit(tx, user, 'stocktake', 'stock', batchId, { after: { name: `${payload.lines.length} items`, lines: payload.lines.length } });
+      await audit(tx, user, 'stocktake', 'stock', batchId, { after: { name: payload.lines.length === 1 ? '1 item' : `${payload.lines.length} items`, lines: payload.lines.length } });
     });
     return { counted: payload.lines.length };
   });
@@ -128,7 +128,7 @@ export async function recordDelivery(input: z.infer<typeof deliveryPayload>): Pr
           priced++;
         }
       }
-      await audit(tx, user, 'delivery', 'stock', batchId, { after: { name: `${payload.lines.length} items`, lines: payload.lines.length, priced } });
+      await audit(tx, user, 'delivery', 'stock', batchId, { after: { name: payload.lines.length === 1 ? '1 item' : `${payload.lines.length} items`, lines: payload.lines.length, priced } });
     });
     return { received: payload.lines.length, priced };
   });
