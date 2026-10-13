@@ -150,7 +150,7 @@ export async function applyPriceImport(text: string): Promise<ActionResult<{ sav
     const effectiveDate = todaySydney();
     await db.transaction(async (tx) => {
       await tx.insert(schema.ingredientPrices).values(resolved.map((r) => ({ ...r, effectiveDate, createdBy: user.email })));
-      await audit(tx, user, 'import', 'prices', effectiveDate, { after: { name: `${resolved.length} prices`, rows: resolved.length } });
+      await audit(tx, user, 'import', 'prices', effectiveDate, { after: { name: resolved.length === 1 ? '1 price' : `${resolved.length} prices`, rows: resolved.length } });
     });
     return { saved: resolved.length };
   });

@@ -22,7 +22,9 @@ export function text(form: FormData, key: string): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
-export function required(value: string, label: string, max = 120): string {
+export function required(raw: string, label: string, max = 120): string {
+  // Single-spaced, so "Harris  Farm" and "Harris Farm" cannot both exist.
+  const value = raw.replace(/\s+/g, ' ').trim();
   if (!value) throw new Invalid(`${label} is required`);
   if (value.length > max) throw new Invalid(`${label} is too long`);
   return value;

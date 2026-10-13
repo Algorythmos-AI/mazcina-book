@@ -38,6 +38,13 @@ const VERB: Record<string, string> = {
   lookup_failed: 'typed a wrong code for a',
 };
 
+/** "added an ingredient", not "added a ingredient". */
+function phrase(action: string, entity: string): string {
+  const verb = VERB[action] ?? action;
+  const noun = ENTITY[entity] ?? entity;
+  return `${/^[aeiou]/i.test(noun) ? verb.replace(/ a$/, ' an') : verb.replace(/ an$/, ' a')} ${noun}`;
+}
+
 function subject(row: { before: unknown; after: unknown }): string {
   for (const value of [row.after, row.before]) {
     if (value && typeof value === 'object') {
@@ -69,7 +76,7 @@ export default async function ActivityPage() {
               <li key={row.id} className="flex flex-wrap items-baseline justify-between gap-x-4 py-2.5">
                 <span>
                   <span className="font-semibold">{row.actorEmail === 'seed' ? 'Setup' : row.actorEmail}</span>{' '}
-                  {VERB[row.action] ?? row.action} {ENTITY[row.entity] ?? row.entity}
+                  {phrase(row.action, row.entity)}
                   {subject(row) && <span className="font-semibold">: {subject(row)}</span>}
                 </span>
                 <span className={muted}>{when.format(row.at)}</span>

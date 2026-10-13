@@ -566,10 +566,14 @@ function SaveBadge({ state, onRetry }: { state: SaveState; onRetry: () => void }
   if (state.kind === 'saved') return <p role="status" className={badgeOk}>Saved</p>;
   if (state.kind === 'saving' || state.kind === 'waiting') return <p role="status" className={badgeWarn}>Saving…</p>;
   if (state.kind === 'incomplete') return <p role="status" className={badgeWarn}>Not saved yet: {state.reason}</p>;
+  // Retrying cannot win against someone else's newer version; only a reload can.
+  const stale = state.message.startsWith('Someone else');
   return (
     <div role="alert" className="flex flex-wrap items-center gap-2">
       <p className="text-sm font-semibold text-red-700">Not saved: {state.message}</p>
-      <button type="button" onClick={onRetry} className={secondary}>Retry</button>
+      <button type="button" onClick={stale ? () => window.location.reload() : onRetry} className={secondary}>
+        {stale ? 'Reload' : 'Retry'}
+      </button>
     </div>
   );
 }
