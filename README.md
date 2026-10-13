@@ -52,20 +52,52 @@ in `lib/gift-cards/core.ts`; `npm run test:db` proves them against the dev
 database (no double issue, no overspend under 20 simultaneous redemptions,
 refund handling, webhook replays).
 
-Needed per environment: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
-`GIFT_CODE_KEY` (64 hex characters; losing it makes every unsent code
-unreadable, changing it breaks lookups for existing cards). The Stripe webhook
-endpoint is `/api/stripe/webhook` with events `checkout.session.completed`,
-`checkout.session.async_payment_succeeded`,
+Payments go through Stripe Connect. Algorythmos is the platform; the
+restaurant has its own connected Stripe account and is the seller. Every
+checkout is a direct charge on that account, so the money, the Stripe fees,
+refunds and disputes are the restaurant's, and nothing lands with the platform
+unless `GIFT_PLATFORM_FEE_BPS` is set.
+
+Needed per environment:
+
+- `STRIPE_SECRET_KEY`: a restricted key from the platform account (Checkout
+  Sessions write, Connect accounts and account links write, Charges and
+  PaymentIntents read).
+- `STRIPE_CONNECT_ACCOUNT_ID`: the restaurant's connected account (`acct_...`).
+  Test and live accounts have different ids.
+- `STRIPE_WEBHOOK_SECRET`: the signing secret of the webhook endpoint below.
+- `GIFT_CODE_KEY`: 64 hex characters; losing it makes every unsent code
+  unreadable, changing it breaks lookups for existing cards.
+- `GIFT_PLATFORM_FEE_BPS` (optional): the platform's share in basis points, 0
+  to 1000. Unset means no fee.
+
+The webhook endpoint is `/api/stripe/webhook`. Create it in Stripe as a
+**Connect** endpoint (events on connected accounts); an ordinary endpoint never
+receives these events and no card would be issued. Events:
+`checkout.session.completed`, `checkout.session.async_payment_succeeded`,
 `checkout.session.async_payment_failed`, `checkout.session.expired`,
-`charge.refunded`, `charge.dispute.created`.
+`charge.refunded`, `charge.dispute.created`. Events from any other account are
+acknowledged and ignored.
 
-Production stays off until it has live keys **and** `GIFT_CARDS_LIVE=true`.
-Test keys are refused in production and live keys are refused everywhere else.
+Sales are off, and the website shows "coming soon", when any of these is true:
+a variable above is missing or malformed; the connected account cannot take
+card payments yet (asked of Stripe, remembered for five minutes); production
+has no live key or no `GIFT_CARDS_LIVE=true`. Test keys are refused in
+production and live keys are refused everywhere else. Cards already issued
+keep working whatever the state of sales.
 
-Before going live: the restaurant's own Stripe account with a restricted live
-key; `EMAIL_REPLY_TO` set to a monitored inbox; a "Gift card" payment type in
-the POS; the website change that adds the order form merged and deployed.
+`tsx scripts/stripe-connect-onboard.ts <owner-email>` creates the connected
+account once and prints a Stripe-hosted onboarding link for the owner. Run it
+again for a fresh link. It needs `--live` with a live key.
+
+To test locally: `stripe listen --forward-connect-to
+localhost:3210/api/stripe/webhook` and use the secret it prints.
+
+Going live, in this order: the owner finishes onboarding; production gets the
+live key, account id, webhook secret and `EMAIL_REPLY_TO` (a monitored inbox);
+a test event from the Stripe Dashboard returns 200; a "Gift card" payment type
+exists in the POS; the website change with the order form is merged; then
+`GIFT_CARDS_LIVE=true`. To stop sales, unset `GIFT_CARDS_LIVE` and redeploy.
 
 ## Backups
 

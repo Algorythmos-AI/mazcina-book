@@ -255,6 +255,8 @@ export const giftCardOrders = pgTable(
     status: giftOrderStatusEnum('status').notNull().default('pending'),
     stripeSessionId: text('stripe_session_id').unique(),
     stripePaymentIntentId: text('stripe_payment_intent_id'),
+    /** The connected Stripe account the checkout was opened on. */
+    stripeAccountId: text('stripe_account_id'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     paidAt: timestamp('paid_at', { withTimezone: true }),
   },

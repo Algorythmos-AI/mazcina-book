@@ -2,7 +2,7 @@ import { and, eq, gt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { db, schema } from '@/db';
 import { MAX_AMOUNT_CENTS, MIN_AMOUNT_CENTS, parseAmount } from './codes';
-import { giftCardSales, stripe } from './config';
+import { connectAccount, giftCardSales, platformFee, stripe } from './config';
 
 const { giftCardOrders } = schema;
 const email = z.email().max(200);
@@ -45,9 +45,12 @@ export async function createCheckout(input: Record<string, unknown>, returnTo: s
   const [{ all }] = await db.select({ all: sql<number>`count(*)::int` }).from(giftCardOrders).where(gt(giftCardOrders.createdAt, hourAgo));
   if (mine >= 6 || all >= 120) return fail('Too many attempts just now. Please try again in an hour, or call us.', 429);
 
+  // The sale belongs to the restaurant's own Stripe account; the order remembers which.
+  const account = connectAccount();
+  const fee = platformFee(amountCents);
   const [order] = await db
     .insert(giftCardOrders)
-    .values({ amountCents, buyerName, buyerEmail: buyerEmail.data, recipientName, recipientEmail: recipientEmail.data, message })
+    .values({ amountCents, buyerName, buyerEmail: buyerEmail.data, recipientName, recipientEmail: recipientEmail.data, message, stripeAccountId: account })
     .returning({ id: giftCardOrders.id });
 
   const unavailable = fail('We could not start the payment. You have not been charged. Please try again.', 502);
@@ -67,13 +70,17 @@ export async function createCheckout(input: Record<string, unknown>, returnTo: s
             },
           },
         ],
-        payment_intent_data: { description: `Mazcina gift card $${amountCents / 100}`, metadata: { order_id: order.id } },
+        payment_intent_data: {
+          description: `Mazcina gift card $${amountCents / 100}`,
+          metadata: { order_id: order.id },
+          ...(fee > 0 ? { application_fee_amount: fee } : {}),
+        },
         metadata: { order_id: order.id },
         success_url: `${returnTo}/gift-cards/thanks?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${returnTo}/gift-cards`,
         integration_identifier: 'mazcina_gift_card_qhvtzkwm',
       },
-      { idempotencyKey: `gift-order-${order.id}` },
+      { idempotencyKey: `gift-order-${order.id}`, stripeAccount: account },
     );
     await db.update(giftCardOrders).set({ stripeSessionId: session.id }).where(eq(giftCardOrders.id, order.id));
     if (!session.url) throw new Error('Stripe returned no checkout URL');

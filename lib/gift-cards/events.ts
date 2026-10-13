@@ -21,6 +21,7 @@ async function handle(event: Stripe.Event): Promise<EventOutcome> {
         paymentIntentId: id(session.payment_intent),
         amountTotal: session.amount_total,
         currency: session.currency,
+        account: event.account ?? null,
       });
       return result.created ? 'fulfilled' : 'already_fulfilled';
     }
@@ -52,8 +53,12 @@ async function handle(event: Stripe.Event): Promise<EventOutcome> {
  * Applies a verified Stripe event exactly once. Stripe retries and replays, so
  * an event id that has been seen does nothing; and each handler is also safe
  * to repeat by itself, in case we stop between doing the work and recording it.
+ * Pass `account` to accept events from that connected Stripe account only.
  */
-export async function handleStripeEvent(event: Stripe.Event): Promise<EventOutcome> {
+export async function handleStripeEvent(event: Stripe.Event, account?: string): Promise<EventOutcome> {
+  // Only the restaurant's own account may move gift card money. Anything else is not ours to act on.
+  if (account !== undefined && event.account !== account) return 'ignored';
+
   const [seen] = await db.select({ id: schema.stripeEvents.id }).from(schema.stripeEvents).where(eq(schema.stripeEvents.id, event.id));
   if (seen) return 'duplicate';
 

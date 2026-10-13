@@ -1,7 +1,8 @@
 import { eq, inArray } from 'drizzle-orm';
 import type Stripe from 'stripe';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { db, schema } from '@/db';
+import { createCheckout } from './checkout';
 import { GiftCardError } from './config';
 import { findCardByCode, fulfilOrder, ledgerBalance, redeem, reverseRedemption, voidForPayment } from './core';
 import { decryptCode } from './codes';
@@ -11,6 +12,15 @@ const { giftCardOrders, giftCards, giftCardLedger, emailOutbox, stripeEvents } =
 const TAG = `dbtest-${Date.now()}`;
 const orderIds: string[] = [];
 const eventIds: string[] = [];
+const ACCOUNT = 'acct_1TestMazcina0001';
+const OTHER_ACCOUNT = 'acct_1SomeoneElse0002';
+
+// Checkout talks to Stripe; here it talks to this stand-in, which records what it was asked.
+const sessionsCreate = vi.hoisted(() => vi.fn());
+vi.mock('./config', async (original) => ({
+  ...(await original<typeof import('./config')>()),
+  stripe: () => ({ checkout: { sessions: { create: sessionsCreate } } }),
+}));
 
 beforeAll(() => {
   if (process.env.VERCEL_ENV === 'production') throw new Error('Refusing to run database tests against production');
@@ -31,10 +41,10 @@ afterAll(async () => {
   if (eventIds.length > 0) await db.delete(stripeEvents).where(inArray(stripeEvents.id, eventIds));
 });
 
-async function order(amountCents = 10000) {
+async function order(amountCents = 10000, stripeAccountId: string | null = null) {
   const [row] = await db
     .insert(giftCardOrders)
-    .values({ amountCents, buyerName: 'Test Buyer', buyerEmail: `${TAG}@example.com`, recipientName: 'Test Friend', recipientEmail: `${TAG}-friend@example.com`, message: 'Enjoy' })
+    .values({ amountCents, buyerName: 'Test Buyer', buyerEmail: `${TAG}@example.com`, recipientName: 'Test Friend', recipientEmail: `${TAG}-friend@example.com`, message: 'Enjoy', stripeAccountId })
     .returning();
   orderIds.push(row.id);
   return row;
@@ -50,10 +60,10 @@ async function issued(amountCents = 10000, n = String(orderIds.length)) {
 
 const card = async (id: string) => (await db.select().from(giftCards).where(eq(giftCards.id, id)))[0];
 
-function event(type: string, object: Record<string, unknown>): Stripe.Event {
+function event(type: string, object: Record<string, unknown>, account?: string): Stripe.Event {
   const id = `evt_${TAG}_${eventIds.length}`;
   eventIds.push(id);
-  return { id, type, data: { object } } as unknown as Stripe.Event;
+  return { id, type, account, data: { object } } as unknown as Stripe.Event;
 }
 
 describe('issuing', () => {
@@ -187,5 +197,122 @@ describe('Stripe events', () => {
     expect((await card(cardId)).status).toBe('void');
     expect(await handleStripeEvent(event('customer.created', {}))).toBe('ignored');
     expect(await handleStripeEvent(event('checkout.session.completed', { id: 'cs_x', client_reference_id: null, payment_status: 'paid' }))).toBe('ignored');
+  });
+});
+
+describe('the connected Stripe account', () => {
+  const paid = (orderId: string, n: string) => ({ id: `cs_${TAG}_${n}`, client_reference_id: orderId, payment_status: 'paid', payment_intent: `pi_${TAG}_${n}`, amount_total: 7500, currency: 'aud' });
+
+  it('issues a card only for a payment taken on the account the order was opened on', async () => {
+    const o = await order(7500, ACCOUNT);
+    await expect(fulfilOrder(o.id, { ...pay(o.id, 'acct-none', 7500) })).rejects.toThrow(GiftCardError);
+    await expect(fulfilOrder(o.id, { ...pay(o.id, 'acct-other', 7500), account: OTHER_ACCOUNT })).rejects.toThrow(GiftCardError);
+    expect(await db.select().from(giftCards).where(eq(giftCards.orderId, o.id))).toHaveLength(0);
+    expect((await fulfilOrder(o.id, { ...pay(o.id, 'acct-right', 7500), account: ACCOUNT })).created).toBe(true);
+  });
+
+  it('refuses a connected-account payment for an order that was not opened on one', async () => {
+    const o = await order(7500);
+    await expect(fulfilOrder(o.id, { ...pay(o.id, 'acct-legacy', 7500), account: ACCOUNT })).rejects.toThrow(GiftCardError);
+  });
+
+  it('ignores events from any other account, or from none, without using up the event', async () => {
+    const o = await order(7500, ACCOUNT);
+    const session = paid(o.id, 'conn');
+    expect(await handleStripeEvent(event('checkout.session.completed', session, OTHER_ACCOUNT), ACCOUNT)).toBe('ignored');
+    expect(await handleStripeEvent(event('checkout.session.completed', session), ACCOUNT)).toBe('ignored');
+    expect(await db.select().from(giftCards).where(eq(giftCards.orderId, o.id))).toHaveLength(0);
+
+    const right = event('checkout.session.completed', session, ACCOUNT);
+    expect(await handleStripeEvent(right, ACCOUNT)).toBe('fulfilled');
+    expect(await handleStripeEvent(right, ACCOUNT)).toBe('duplicate');
+    expect(await db.select().from(giftCards).where(eq(giftCards.orderId, o.id))).toHaveLength(1);
+  });
+
+  it('rejects a right-account event for an order opened on a different account', async () => {
+    const o = await order(7500, OTHER_ACCOUNT);
+    expect(await handleStripeEvent(event('checkout.session.completed', paid(o.id, 'cross'), ACCOUNT), ACCOUNT)).toBe('rejected');
+    expect(await db.select().from(giftCards).where(eq(giftCards.orderId, o.id))).toHaveLength(0);
+  });
+
+  it('voids on a refund or dispute from the connected account', async () => {
+    const o = await order(7500, ACCOUNT);
+    const { cardId } = await fulfilOrder(o.id, { ...pay(o.id, 'conn-refund', 7500), account: ACCOUNT });
+    expect(await handleStripeEvent(event('charge.refunded', { payment_intent: `pi_${TAG}_conn-refund` }, OTHER_ACCOUNT), ACCOUNT)).toBe('ignored');
+    expect((await card(cardId)).status).toBe('active');
+    expect(await handleStripeEvent(event('charge.dispute.created', { payment_intent: `pi_${TAG}_conn-refund` }, ACCOUNT), ACCOUNT)).toBe('voided');
+    expect((await card(cardId)).status).toBe('void');
+  });
+});
+
+describe('checkout', () => {
+  const KEYS = ['STRIPE_SECRET_KEY', 'STRIPE_CONNECT_ACCOUNT_ID', 'GIFT_PLATFORM_FEE_BPS'] as const;
+  const form = (n: string) => ({ amount: '100', buyerName: 'Test Buyer', buyerEmail: `${TAG}-co-${n}@example.com`, forMe: true, terms: true });
+  const placed = async (n: string) => (await db.select().from(giftCardOrders).where(eq(giftCardOrders.buyerEmail, `${TAG}-co-${n}@example.com`)))[0];
+
+  async function checkout(n: string, env: Partial<Record<(typeof KEYS)[number], string>>) {
+    const before = KEYS.map((key) => [key, process.env[key]] as const);
+    for (const key of KEYS) delete process.env[key];
+    Object.assign(process.env, { STRIPE_SECRET_KEY: 'rk_test_x', STRIPE_CONNECT_ACCOUNT_ID: ACCOUNT, ...env });
+    sessionsCreate.mockReset();
+    sessionsCreate.mockImplementation(async () => ({ id: `cs_${TAG}_co_${n}`, url: 'https://checkout.stripe.test/pay' }));
+    try {
+      const result = await createCheckout(form(n), 'https://mazcinarestobar.com.au');
+      const row = await placed(n);
+      if (row) orderIds.push(row.id);
+      return { result, row };
+    } finally {
+      for (const [key, value] of before) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+      }
+    }
+  }
+
+  it('opens the checkout on the connected account, with no platform fee by default', async () => {
+    const { result, row } = await checkout('plain', {});
+    expect(result).toEqual({ ok: true, url: 'https://checkout.stripe.test/pay' });
+    expect(row).toMatchObject({ amountCents: 10000, stripeAccountId: ACCOUNT, status: 'pending', stripeSessionId: `cs_${TAG}_co_plain` });
+    const [params, options] = sessionsCreate.mock.calls[0];
+    expect(options).toEqual({ idempotencyKey: `gift-order-${row.id}`, stripeAccount: ACCOUNT });
+    expect(params.line_items[0].price_data).toMatchObject({ currency: 'aud', unit_amount: 10000 });
+    expect(params.payment_intent_data).not.toHaveProperty('application_fee_amount');
+  });
+
+  it('adds the platform fee when one is set', async () => {
+    const { row } = await checkout('fee', { GIFT_PLATFORM_FEE_BPS: '250' });
+    const [params, options] = sessionsCreate.mock.calls[0];
+    expect(params.payment_intent_data.application_fee_amount).toBe(250);
+    expect(options.stripeAccount).toBe(row.stripeAccountId);
+  });
+
+  it('never reaches Stripe, and saves nothing, without a valid connected account or fee', async () => {
+    for (const [n, env] of [['noacct', { STRIPE_CONNECT_ACCOUNT_ID: '' }], ['badacct', { STRIPE_CONNECT_ACCOUNT_ID: 'mazcina' }], ['badfee', { GIFT_PLATFORM_FEE_BPS: '5000' }]] as const) {
+      const { result, row } = await checkout(n, env);
+      expect(result).toMatchObject({ ok: false, status: 503 });
+      expect(row).toBeUndefined();
+      expect(sessionsCreate).not.toHaveBeenCalled();
+    }
+  });
+
+  it('tells the buyer they were not charged when Stripe refuses, and closes the order', async () => {
+    const before = process.env.STRIPE_SECRET_KEY;
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+    process.env.STRIPE_SECRET_KEY = 'rk_test_x';
+    process.env.STRIPE_CONNECT_ACCOUNT_ID = ACCOUNT;
+    sessionsCreate.mockReset();
+    sessionsCreate.mockRejectedValue(new Error('The account cannot currently make live charges'));
+    try {
+      const result = await createCheckout(form('refused'), 'https://mazcinarestobar.com.au');
+      expect(result).toMatchObject({ ok: false, status: 502 });
+      const row = await placed('refused');
+      orderIds.push(row.id);
+      expect(row.status).toBe('failed');
+    } finally {
+      errors.mockRestore();
+      delete process.env.STRIPE_CONNECT_ACCOUNT_ID;
+      if (before === undefined) delete process.env.STRIPE_SECRET_KEY;
+      else process.env.STRIPE_SECRET_KEY = before;
+    }
   });
 });
