@@ -114,8 +114,28 @@ A Vercel Cron job (`/api/cron/backup`, 16:00 UTC, which is 2am or 3am in Sydney 
 daylight saving; see `vercel.json`) writes a full JSON export to the private
 Blob store `mazcina-kitchen-backups` as `backups/YYYY-MM-DD.json` and deletes
 files older than 30 days. Owners can download the same export any time from
-the Team page. To restore, load the JSON back table by table into a fresh
-database; rehearse this before relying on it.
+the Team page.
+
+### Restoring
+
+`scripts/restore.ts` loads a backup file into an empty database and then reads
+every table back to check it matches the file. It refuses to run if the target
+already holds data, so it cannot overwrite anything.
+
+1. Get the file: the day's `backups/YYYY-MM-DD.json` from the Blob store, or
+   "Download all data" on the Team page.
+2. Create a fresh database (a new Neon database or branch) and apply the
+   migrations to it: `DATABASE_URL_UNPOOLED=<new> npx drizzle-kit migrate`.
+3. Restore: `DATABASE_URL=<new> npx tsx scripts/restore.ts <file.json>`. Every
+   table should print `ok`.
+4. Point the app's `DATABASE_URL` variables at the new database and redeploy.
+
+Login sessions are not in a backup, so everyone signs in again with a new
+code. Gift card codes are stored encrypted and need the same `GIFT_CODE_KEY`.
+Payment webhook history and queued emails are not backed up.
+
+Rehearsed on 2026-10-14 with an export of the test database (15 tables, 144
+rows) into a scratch database: every table matched.
 
 ## Deploying
 
