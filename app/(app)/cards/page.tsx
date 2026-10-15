@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { desc, eq } from 'drizzle-orm';
 import { ActionForm } from '@/components/action-form';
-import { badgeBad, badgeOk, badgeWarn, card, h1, h2, input, label, muted } from '@/components/ui';
+import { QrScanner } from '@/components/qr-scanner';
+import { badgeBad, badgeOk, badgeWarn, card, h1, h2, input, label, link, muted } from '@/components/ui';
 import { db, schema } from '@/db';
 import { displayDate, moneyFromCents, todaySydney } from '@/lib/format';
 import { giftCardSales } from '@/lib/gift-cards/config';
@@ -48,6 +49,7 @@ export default async function CardsPage() {
             className={`${input} max-w-sm font-mono text-lg uppercase tracking-widest`}
           />
           <p className={`mt-2 ${muted}`}>Dashes and spaces do not matter. Take the amount off here, then record it in the till as a gift card payment.</p>
+          <QrScanner inputId="card-code" />
         </ActionForm>
       </section>
 
@@ -55,6 +57,7 @@ export default async function CardsPage() {
         <section className={card}>
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <h2 className={h2}>Cards sold ({cards.length})</h2>
+            <Link href="/cards/sign" className={link}>Counter sign to print</Link>
             <p className={muted}>Still to be spent: <span className="font-bold text-mazcina-emerald">{moneyFromCents(outstanding)}</span></p>
           </div>
           {cards.length === 0 ? (

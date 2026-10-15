@@ -3,7 +3,8 @@ import { db, schema } from '@/db';
 import { sendEmail } from '@/lib/email';
 import { decryptCode } from './codes';
 import { codeKey } from './config';
-import { receiptEmail, recipientEmail } from './emails';
+import { CODE_QR_ID, receiptEmail, recipientEmail } from './emails';
+import { codeQrPng } from './qr';
 
 const { emailOutbox, giftCardOrders, giftCards } = schema;
 const MAX_ATTEMPTS = 8;
@@ -48,7 +49,8 @@ export async function sendPendingEmails(limit = 20): Promise<{ sent: number; fai
         message: order.message,
       };
       if (row.kind === 'gift_card_recipient') {
-        await sendEmail({ to: order.recipientEmail, from: 'giftCards', ...recipientEmail(details) });
+        const qr = { filename: 'gift-card-qr.png', content: await codeQrPng(details.code), contentId: CODE_QR_ID };
+        await sendEmail({ to: order.recipientEmail, from: 'giftCards', ...recipientEmail(details), inline: [qr] });
       } else if (row.kind === 'gift_card_receipt') {
         // Buying for yourself: the card email is the confirmation, so skip the second one.
         if (order.buyerEmail.toLowerCase() !== order.recipientEmail.toLowerCase()) {
