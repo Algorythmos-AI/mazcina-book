@@ -11,7 +11,9 @@ export const metadata: Metadata = { title: 'Gift card counter sign' };
 /** A printable A5 sign for the counter: customers scan it to buy a gift card on the website. */
 export default async function CounterSignPage() {
   await requireRole('owner');
-  const url = `${primarySite()}/gift-cards`;
+  // Off production the sign points at the first extra site origin (e.g. a Mac on the local network), so it can be tested end to end.
+  const local = process.env.VERCEL_ENV === 'production' ? null : (process.env.GIFT_SITE_ORIGINS ?? '').split(',')[0]?.trim().replace(/\/$/, '');
+  const url = `${local || primarySite()}/gift-cards`;
   const qr = await linkQrSvg(url);
 
   return (
@@ -36,7 +38,7 @@ export default async function CounterSignPage() {
 
         <p className="mt-6 text-lg font-bold text-mazcina-emerald">Scan to buy a gift card</p>
         <p className={`mt-1 ${muted}`}>$25 to $500 · sent by email in minutes · valid for 3 years</p>
-        <p className="mt-6 text-sm font-semibold text-mazcina-wood">mazcinarestobar.com.au/gift-cards</p>
+        <p className="mt-6 text-sm font-semibold text-mazcina-wood">{url.replace(/^https?:\/\//, '')}</p>
       </article>
     </div>
   );
