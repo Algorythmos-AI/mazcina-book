@@ -13,6 +13,8 @@ export interface Email {
   html?: string;
   /** Which address it comes from. Sign-in codes are `kitchen`; anything a customer receives is `giftCards`. */
   from?: keyof typeof SENDERS;
+  /** Images shown inside the HTML, referenced there as `cid:<contentId>`. */
+  inline?: { filename: string; content: Buffer; contentId: string }[];
 }
 
 /**
@@ -23,7 +25,8 @@ export interface Email {
 export async function sendEmail(email: Email): Promise<void> {
   const env = process.env.VERCEL_ENV ?? 'development';
   if (env === 'development') {
-    console.info(`[email:dev] to=${email.to} subject="${email.subject}"\n${email.text}`);
+    const images = email.inline?.length ? `\n[with ${email.inline.map((i) => i.filename).join(', ')}]` : '';
+    console.info(`[email:dev] to=${email.to} subject="${email.subject}"\n${email.text}${images}`);
     return;
   }
   let to = email.to;
@@ -44,6 +47,7 @@ export async function sendEmail(email: Email): Promise<void> {
     text: email.text,
     html: email.html,
     replyTo: process.env.EMAIL_REPLY_TO || undefined,
+    attachments: email.inline?.map((i) => ({ filename: i.filename, content: i.content, contentId: i.contentId })),
   });
   if (error) throw new Error(`Resend: ${error.name}: ${error.message}`);
 }

@@ -13,8 +13,11 @@ interface CardEmail {
 const dollars = (cents: number) => `$${(cents / 100).toFixed(0)}`;
 const esc = (text: string) => text.replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]!);
 
+/** The QR image attached to the card email; the HTML shows it with `cid:` + this. */
+export const CODE_QR_ID = 'gift-card-code';
+
 const TERMS = [
-  'Show this code when you pay at Mazcina Resto - Bar, 248 Palmer St, Darlinghurst.',
+  'Show this code, or the QR code in this email, when you pay at Mazcina Resto - Bar, 248 Palmer St, Darlinghurst.',
   'Use it over as many visits as you like until the expiry date. It cannot be exchanged for cash.',
   'Treat the code like cash: anyone who has it can spend it.',
 ];
@@ -38,7 +41,7 @@ export function recipientEmail(card: CardEmail) {
     ...TERMS,
   ].join('\n');
   const html = shell(
-    `<p style="font-size:16px">Hi ${esc(card.recipientName)},</p><p style="font-size:16px">You have a <strong>${dollars(card.amountCents)}</strong> Mazcina gift card${esc(from)}.</p>${card.message ? `<p style="font-size:16px;font-style:italic;border-left:3px solid #955412;padding-left:12px">${esc(card.message)}</p>` : ''}<p style="margin:24px 0 4px;font-size:12px;letter-spacing:2px;color:#2a574c">YOUR CODE</p><p style="margin:0;font-family:'Courier New',monospace;font-size:24px;font-weight:bold;letter-spacing:2px">${code}</p><p style="font-size:14px;color:#2a574c">Valid until ${displayDate(card.expiresOn)}</p><ul style="font-size:13px;color:#2a574c;padding-left:18px">${TERMS.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`,
+    `<p style="font-size:16px">Hi ${esc(card.recipientName)},</p><p style="font-size:16px">You have a <strong>${dollars(card.amountCents)}</strong> Mazcina gift card${esc(from)}.</p>${card.message ? `<p style="font-size:16px;font-style:italic;border-left:3px solid #955412;padding-left:12px">${esc(card.message)}</p>` : ''}<p style="margin:24px 0 4px;font-size:12px;letter-spacing:2px;color:#2a574c">YOUR CODE</p><p style="margin:0;font-family:'Courier New',monospace;font-size:24px;font-weight:bold;letter-spacing:2px">${code}</p><img src="cid:${CODE_QR_ID}" width="180" height="180" alt="QR code for gift card ${code}" style="display:block;margin:16px 0 0;border:0"><p style="font-size:14px;color:#2a574c">Valid until ${displayDate(card.expiresOn)}</p><ul style="font-size:13px;color:#2a574c;padding-left:18px">${TERMS.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`,
   );
   return { subject: `Your ${dollars(card.amountCents)} Mazcina gift card`, text, html };
 }
