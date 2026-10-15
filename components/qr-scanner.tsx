@@ -2,7 +2,9 @@
 
 import jsQR from 'jsqr';
 import { useEffect, useRef, useState } from 'react';
+import { GIFT_CODE_PATTERN as GIFT_CODE } from '@/lib/gift-cards/code-pattern';
 import { secondary } from './ui';
+
 
 /**
  * Opens the camera and reads the QR code from a gift card email. On a hit it
@@ -12,6 +14,7 @@ import { secondary } from './ui';
 export function QrScanner({ inputId }: { inputId: string }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hint, setHint] = useState<string | null>(null);
   const video = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -31,15 +34,18 @@ export function QrScanner({ inputId }: { inputId: string }) {
         context.drawImage(v, 0, 0);
         const frame = context.getImageData(0, 0, canvas.width, canvas.height);
         const found = jsQR(frame.data, frame.width, frame.height, { inversionAttempts: 'dontInvert' });
-        if (found?.data.trim()) {
+        const text = found?.data.trim().toUpperCase().replace(/[\s-]/g, '') ?? '';
+        if (GIFT_CODE.test(text)) {
           const field = document.getElementById(inputId) as HTMLInputElement | null;
           if (field) {
-            field.value = found.data.trim().toUpperCase();
+            field.value = text;
             field.form?.requestSubmit();
           }
           setOpen(false);
           return;
         }
+        // Some other QR (a menu, a table number): say so and keep looking, without counting it as a wrong code.
+        if (text) setHint('That is not a gift card QR code. Hold up the one in the gift card email.');
       }
       timer = setTimeout(tick, 200);
     };
@@ -77,6 +83,7 @@ export function QrScanner({ inputId }: { inputId: string }) {
         <div className="space-y-2">
           <video ref={video} muted playsInline className="aspect-square w-full max-w-sm rounded-md bg-black object-cover" />
           <p className="text-sm text-mazcina-green">Hold the QR code from the customer&apos;s email inside the frame.</p>
+          {hint && <p role="status" className="text-sm font-semibold text-amber-800">{hint}</p>}
           <button type="button" onClick={() => setOpen(false)} className={secondary}>
             Stop scanning
           </button>
@@ -86,6 +93,7 @@ export function QrScanner({ inputId }: { inputId: string }) {
           type="button"
           onClick={() => {
             setError(null);
+            setHint(null);
             setOpen(true);
           }}
           className={secondary}

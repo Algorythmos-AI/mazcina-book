@@ -198,6 +198,25 @@ describe('Stripe events', () => {
     expect(await handleStripeEvent(event('customer.created', {}))).toBe('ignored');
     expect(await handleStripeEvent(event('checkout.session.completed', { id: 'cs_x', client_reference_id: null, payment_status: 'paid' }))).toBe('ignored');
   });
+
+  it('flags, but does not cancel, a card whose payment is only partly refunded', async () => {
+    const { cardId, paymentIntentId } = await issued(20000);
+    expect(await handleStripeEvent(event('charge.refunded', { payment_intent: paymentIntentId, amount: 20000, amount_refunded: 2000 }))).toBe('flagged');
+    const c = await card(cardId);
+    expect(c.status).toBe('active');
+    expect(c.balanceCents).toBe(20000);
+    expect(c.flaggedReason).toContain('Partly refunded ($20.00 of $200.00)');
+    // Refunding the rest later cancels it as usual.
+    expect(await handleStripeEvent(event('charge.refunded', { payment_intent: paymentIntentId, amount: 20000, amount_refunded: 20000 }))).toBe('voided');
+  });
+
+  it('flags a card for the owner when a dispute is won, and ignores a lost one', async () => {
+    const { cardId, paymentIntentId } = await issued(5000);
+    expect(await handleStripeEvent(event('charge.dispute.created', { payment_intent: paymentIntentId }))).toBe('voided');
+    expect(await handleStripeEvent(event('charge.dispute.closed', { payment_intent: paymentIntentId, status: 'lost' }))).toBe('ignored');
+    expect(await handleStripeEvent(event('charge.dispute.closed', { payment_intent: paymentIntentId, status: 'won' }))).toBe('flagged');
+    expect((await card(cardId)).flaggedReason).toContain('Dispute won');
+  });
 });
 
 describe('the connected Stripe account', () => {

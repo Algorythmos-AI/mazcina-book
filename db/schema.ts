@@ -257,6 +257,8 @@ export const giftCardOrders = pgTable(
     message: text('message'),
     status: giftOrderStatusEnum('status').notNull().default('pending'),
     stripeSessionId: text('stripe_session_id').unique(),
+    /** Keyed hash of the buyer's IP address, only for the per-address checkout limit. */
+    clientIpHash: text('client_ip_hash'),
     stripePaymentIntentId: text('stripe_payment_intent_id'),
     /** The connected Stripe account the checkout was opened on. */
     stripeAccountId: text('stripe_account_id'),
@@ -265,6 +267,7 @@ export const giftCardOrders = pgTable(
   },
   (t) => [
     index('gift_card_orders_payment_intent').on(t.stripePaymentIntentId),
+    index('gift_card_orders_ip_recent').on(t.clientIpHash, t.createdAt),
     check('gift_card_orders_amount_range', sql`${t.amountCents} >= 2500 AND ${t.amountCents} <= 50000 AND ${t.amountCents} % 100 = 0`),
   ],
 );

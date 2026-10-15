@@ -135,6 +135,14 @@ export async function voidForPayment(paymentIntentId: string, reason: string): P
   });
 }
 
+/** Puts a note on the card for the owner without changing its balance or status. */
+export async function flagForPayment(paymentIntentId: string, reason: string): Promise<boolean> {
+  const [order] = await db.select({ id: giftCardOrders.id }).from(giftCardOrders).where(eq(giftCardOrders.stripePaymentIntentId, paymentIntentId));
+  if (!order) return false;
+  const updated = await db.update(giftCards).set({ flaggedReason: reason }).where(eq(giftCards.orderId, order.id)).returning({ id: giftCards.id });
+  return updated.length > 0;
+}
+
 /** Sum of the ledger for a card: must always equal `balance_cents`. Used by tests and the card page. */
 export async function ledgerBalance(cardId: string): Promise<number> {
   const [row] = await db

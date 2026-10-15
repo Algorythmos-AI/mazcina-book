@@ -40,6 +40,10 @@ export async function sendPendingEmails(limit = 20): Promise<{ sent: number; fai
         .where(eq(giftCards.id, row.giftCardId));
       if (!found) throw new Error('card not found');
       const { card, order } = found;
+      if (card.status === 'void') {
+        await db.update(emailOutbox).set({ status: 'failed', lastError: 'Not sent: the card was cancelled first' }).where(eq(emailOutbox.id, row.id));
+        continue;
+      }
       const details = {
         code: decryptCode(card.codeEncrypted, codeKey()),
         amountCents: card.initialCents,
@@ -50,11 +54,11 @@ export async function sendPendingEmails(limit = 20): Promise<{ sent: number; fai
       };
       if (row.kind === 'gift_card_recipient') {
         const qr = { filename: 'gift-card-qr.png', content: await codeQrPng(details.code), contentId: CODE_QR_ID };
-        await sendEmail({ to: order.recipientEmail, from: 'giftCards', ...recipientEmail(details), inline: [qr] });
+        await sendEmail({ to: order.recipientEmail, from: 'giftCards', ...recipientEmail(details), inline: [qr], idempotencyKey: `outbox-${row.id}` });
       } else if (row.kind === 'gift_card_receipt') {
         // Buying for yourself: the card email is the confirmation, so skip the second one.
         if (order.buyerEmail.toLowerCase() !== order.recipientEmail.toLowerCase()) {
-          await sendEmail({ to: order.buyerEmail, from: 'giftCards', ...receiptEmail({ ...details, recipientEmail: order.recipientEmail }) });
+          await sendEmail({ to: order.buyerEmail, from: 'giftCards', ...receiptEmail({ ...details, recipientEmail: order.recipientEmail }), idempotencyKey: `outbox-${row.id}` });
         }
       } else {
         throw new Error(`unknown email kind ${row.kind}`);

@@ -85,7 +85,7 @@ The webhook endpoint is `/api/stripe/webhook`. Create it in Stripe as a
 receives these events and no card would be issued. Events:
 `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
 `checkout.session.async_payment_failed`, `checkout.session.expired`,
-`charge.refunded`, `charge.dispute.created`. Events from any other account are
+`charge.refunded`, `charge.dispute.created`, `charge.dispute.closed`. Events from any other account are
 acknowledged and ignored.
 
 Sales are off, and the website shows "coming soon", when any of these is true:
@@ -99,8 +99,26 @@ keep working whatever the state of sales.
 account once and prints a Stripe-hosted onboarding link for the owner. Run it
 again for a fresh link. It needs `--live` with a live key.
 
-To test locally: `stripe listen --forward-connect-to
-localhost:3210/api/stripe/webhook` and use the secret it prints.
+Refunds and disputes: a full refund or a new dispute cancels an untouched card;
+a card already used is only flagged. A partial refund only flags the card, and
+a dispute the restaurant wins flags the cancelled card so the owner can decide
+whether to reissue it. Flags show as "Check" in the Gift cards list.
+
+To test locally: `stripe listen --events
+checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.async_payment_failed,checkout.session.expired,charge.refunded,charge.dispute.created,charge.dispute.closed
+--forward-connect-to localhost:3210/api/stripe/webhook` and use the secret it
+prints. To test from a phone on the same network, run the website with
+`--host`, set the website's `PUBLIC_GIFT_CARDS_API` to `http://<mac-ip>:3210`
+and this app's `GIFT_SITE_ORIGINS` to `http://<mac-ip>:4321`. The camera
+scanner only works on https or localhost.
+
+Counter sign (Gift cards → Counter sign to print): its QR opens
+`https://mazcinarestobar.com.au/gift`, a redirect on the website. The QR files
+in `public/counter-sign/` are printed in the restaurant: never regenerate or
+change them, and never remove the `/gift` redirect.
+
+Checkouts are limited to 6 an hour per buyer email, 15 per IP address and
+2000 overall.
 
 Going live, in this order: the owner finishes onboarding; production gets the
 live key, account id, webhook secret and `EMAIL_REPLY_TO` (a monitored inbox);

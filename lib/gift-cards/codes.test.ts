@@ -1,6 +1,8 @@
+import { GIFT_CODE_PATTERN } from './code-pattern';
 import { describe, expect, it } from 'vitest';
 import {
   CODE_ALPHABET,
+  CODE_LENGTH,
   decryptCode,
   encryptCode,
   expiryFor,
@@ -13,6 +15,12 @@ import {
 
 const KEY = 'a'.repeat(64);
 const OTHER = 'b'.repeat(64);
+
+describe('the scanner pattern', () => {
+  it('accepts exactly what the code generator produces', () => {
+    expect(GIFT_CODE_PATTERN.source).toBe(`^[${CODE_ALPHABET}]{${CODE_LENGTH}}$`);
+  });
+});
 
 describe('codes', () => {
   it('generates 16 unambiguous characters, different every time', () => {

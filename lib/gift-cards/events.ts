@@ -2,7 +2,7 @@ import type Stripe from 'stripe';
 import { eq } from 'drizzle-orm';
 import { db, schema } from '@/db';
 import { GiftCardError } from './config';
-import { fulfilOrder, markOrder, voidForPayment } from './core';
+import { flagForPayment, fulfilOrder, markOrder, voidForPayment } from './core';
 
 export type EventOutcome = 'duplicate' | 'fulfilled' | 'already_fulfilled' | 'not_paid' | 'order_closed' | 'voided' | 'flagged' | 'ignored' | 'rejected';
 
@@ -33,8 +33,15 @@ async function handle(event: Stripe.Event): Promise<EventOutcome> {
       return 'order_closed';
     }
     case 'charge.refunded': {
-      const paymentIntent = id(event.data.object.payment_intent);
+      const charge = event.data.object;
+      const paymentIntent = id(charge.payment_intent);
       if (!paymentIntent) return 'ignored';
+      // A partial refund (say, goodwill) must not cancel a card that is mostly paid for: a person decides.
+      if (charge.amount_refunded < charge.amount) {
+        const dollars = (cents: number) => `$${(cents / 100).toFixed(2)}`;
+        const flagged = await flagForPayment(paymentIntent, `Partly refunded (${dollars(charge.amount_refunded)} of ${dollars(charge.amount)}). Check what should be left on the card.`);
+        return flagged ? 'flagged' : 'ignored';
+      }
       const result = await voidForPayment(paymentIntent, 'Payment refunded');
       return result === 'voided' ? 'voided' : result === 'flagged' ? 'flagged' : 'ignored';
     }
@@ -43,6 +50,14 @@ async function handle(event: Stripe.Event): Promise<EventOutcome> {
       if (!paymentIntent) return 'ignored';
       const result = await voidForPayment(paymentIntent, 'Payment disputed by the cardholder');
       return result === 'voided' ? 'voided' : result === 'flagged' ? 'flagged' : 'ignored';
+    }
+    case 'charge.dispute.closed': {
+      const dispute = event.data.object;
+      const paymentIntent = id(dispute.payment_intent);
+      if (!paymentIntent || dispute.status !== 'won') return 'ignored';
+      // The card was cancelled when the dispute opened; the restaurant kept the money, so a person decides whether to reissue.
+      const flagged = await flagForPayment(paymentIntent, 'Dispute won: the payment stands. The card was cancelled when the dispute opened; reissue it if that is right.');
+      return flagged ? 'flagged' : 'ignored';
     }
     default:
       return 'ignored';

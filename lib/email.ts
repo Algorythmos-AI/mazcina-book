@@ -15,6 +15,8 @@ export interface Email {
   from?: keyof typeof SENDERS;
   /** Images shown inside the HTML, referenced there as `cid:<contentId>`. */
   inline?: { filename: string; content: Buffer; contentId: string }[];
+  /** Resend sends at most one email per key (within 24 hours), so a retry after a crash is not a duplicate. */
+  idempotencyKey?: string;
 }
 
 /**
@@ -48,6 +50,6 @@ export async function sendEmail(email: Email): Promise<void> {
     html: email.html,
     replyTo: process.env.EMAIL_REPLY_TO || undefined,
     attachments: email.inline?.map((i) => ({ filename: i.filename, content: i.content, contentId: i.contentId })),
-  });
+  }, email.idempotencyKey ? { idempotencyKey: email.idempotencyKey } : undefined);
   if (error) throw new Error(`Resend: ${error.name}: ${error.message}`);
 }
