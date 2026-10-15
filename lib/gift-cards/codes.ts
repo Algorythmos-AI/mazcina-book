@@ -39,6 +39,11 @@ function subkey(key: string, purpose: string): Buffer {
   return Buffer.from(hkdfSync('sha256', Buffer.from(key, 'hex'), Buffer.alloc(0), `mazcina-gift-card:${purpose}`, 32));
 }
 
+/** A buyer's IP address, hashed with its own subkey: enough to count checkouts per address, not to recover it. */
+export function hashClientIp(ip: string, key: string): string {
+  return createHmac('sha256', subkey(key, 'client-ip')).update(ip.trim()).digest('hex');
+}
+
 export function hashCode(code: string, key: string): string {
   return createHmac('sha256', subkey(key, 'lookup')).update(code).digest('hex');
 }

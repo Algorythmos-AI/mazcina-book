@@ -19,6 +19,8 @@ export async function POST(request: Request) {
   }
   if (!input || typeof input !== 'object' || Array.isArray(input)) return json(request, { error: 'Could not read the form' }, 400);
 
-  const result = await createCheckout(input as Record<string, unknown>, origin);
+  // On Vercel the first x-forwarded-for entry is the client, set by the platform rather than the caller.
+  const ip = request.headers.get('x-real-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
+  const result = await createCheckout(input as Record<string, unknown>, origin, ip);
   return result.ok ? json(request, { url: result.url }) : json(request, { error: result.error }, result.status);
 }

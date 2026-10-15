@@ -1,8 +1,8 @@
 import { and, eq, gt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { db, schema } from '@/db';
-import { MAX_AMOUNT_CENTS, MIN_AMOUNT_CENTS, parseAmount } from './codes';
-import { connectAccount, giftCardSales, platformFee, stripe } from './config';
+import { hashClientIp, MAX_AMOUNT_CENTS, MIN_AMOUNT_CENTS, parseAmount } from './codes';
+import { codeKey, connectAccount, giftCardSales, platformFee, stripe } from './config';
 
 const { giftCardOrders } = schema;
 const email = z.email().max(200);
@@ -16,7 +16,7 @@ export type CheckoutResult = { ok: true; url: string } | { ok: false; error: str
  * trusted for it. No card is created until Stripe confirms payment.
  * `returnTo` is the website origin the customer came from (already checked).
  */
-export async function createCheckout(input: Record<string, unknown>, returnTo: string): Promise<CheckoutResult> {
+export async function createCheckout(input: Record<string, unknown>, returnTo: string, clientIp: string | null = null): Promise<CheckoutResult> {
   const fail = (error: string, status = 400): CheckoutResult => ({ ok: false, error, status });
   const sales = giftCardSales();
   if (!sales.enabled) return fail('Gift cards are not on sale online yet. Please call or email us.', 503);
@@ -36,21 +36,29 @@ export async function createCheckout(input: Record<string, unknown>, returnTo: s
   if (!recipientEmail.success) return fail("Please check the recipient's email address.");
   if (input.terms !== true) return fail('Please tick the box to accept the gift card terms.');
 
-  // A simple brake on abuse: nobody needs more than a handful of checkouts an hour.
+  // Brakes on abuse: nobody needs more than a handful of checkouts an hour, from one email or one
+  // address. The overall cap is high so one script cannot switch sales off for everyone.
   const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  const ipHash = clientIp ? hashClientIp(clientIp, codeKey()) : null;
   const [{ mine }] = await db
     .select({ mine: sql<number>`count(*)::int` })
     .from(giftCardOrders)
     .where(and(eq(giftCardOrders.buyerEmail, buyerEmail.data), gt(giftCardOrders.createdAt, hourAgo)));
+  const [{ fromHere }] = ipHash
+    ? await db
+        .select({ fromHere: sql<number>`count(*)::int` })
+        .from(giftCardOrders)
+        .where(and(eq(giftCardOrders.clientIpHash, ipHash), gt(giftCardOrders.createdAt, hourAgo)))
+    : [{ fromHere: 0 }];
   const [{ all }] = await db.select({ all: sql<number>`count(*)::int` }).from(giftCardOrders).where(gt(giftCardOrders.createdAt, hourAgo));
-  if (mine >= 6 || all >= 120) return fail('Too many attempts just now. Please try again in an hour, or call us.', 429);
+  if (mine >= 6 || fromHere >= 15 || all >= 2000) return fail('Too many attempts just now. Please try again in an hour, or call us.', 429);
 
   // The sale belongs to the restaurant's own Stripe account; the order remembers which.
   const account = connectAccount();
   const fee = platformFee(amountCents);
   const [order] = await db
     .insert(giftCardOrders)
-    .values({ amountCents, buyerName, buyerEmail: buyerEmail.data, recipientName, recipientEmail: recipientEmail.data, message, stripeAccountId: account })
+    .values({ amountCents, buyerName, buyerEmail: buyerEmail.data, recipientName, recipientEmail: recipientEmail.data, message, stripeAccountId: account, clientIpHash: ipHash })
     .returning({ id: giftCardOrders.id });
 
   const unavailable = fail('We could not start the payment. You have not been charged. Please try again.', 502);
