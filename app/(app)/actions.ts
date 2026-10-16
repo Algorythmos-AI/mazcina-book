@@ -205,8 +205,9 @@ const recipePayload = z.object({
   type: z.enum(['dish', 'prep']),
   yieldQuantity: z.string(),
   yieldUnit: unit.nullable(),
+  yieldEstimated: z.boolean(),
   portions: z.string(),
-  notes: z.string().max(4000),
+  notes: z.string().max(12000),
   lines: z
     .array(
       z.object({
@@ -300,7 +301,7 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
       }
 
       const version = before.version + 1;
-      const values = { name, type: payload.type, yieldQuantity, yieldUnit, portions, notes: payload.notes.trim() || null };
+      const values = { name, type: payload.type, yieldQuantity, yieldUnit, yieldEstimated: !!yieldQuantity && payload.yieldEstimated, portions, notes: payload.notes.trim() || null };
       await tx.update(schema.recipes).set({ ...values, updatedAt: new Date(), version }).where(eq(schema.recipes.id, payload.id));
       await tx.delete(schema.recipeLines).where(eq(schema.recipeLines.recipeId, payload.id));
       if (lines.length > 0) await tx.insert(schema.recipeLines).values(lines);

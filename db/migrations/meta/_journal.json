@@ -36,6 +36,13 @@
       "when": 1792034670369,
       "tag": "0004_gift_card_ip_limit",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792128495778,
+      "tag": "0005_recipe_yield_estimated",
+      "breakpoints": true
     }
   ]
 }

@@ -23,6 +23,7 @@ function Costing({ costing }: { costing: ItemCosting }) {
   return (
     <span className="flex flex-col items-end gap-0.5">
       <span className={RATING_BADGE[costing.rating]}>{costing.foodCostPct ? percent(costing.foodCostPct) : 'No price'}</span>
+      {costing.estimates.length > 0 && <span className={`${muted} text-xs`} title={`Estimated yields: ${costing.estimates.join(', ')}`}>estimate</span>}
       <span className={`${muted} text-xs tabular-nums`}>cost {money(costing.cost)}</span>
     </span>
   );

@@ -1,0 +1,2201 @@
+[
+ {
+  "name": "Pan Mazcina",
+  "section": "Masas y panes",
+  "page": 5,
+  "use": "Pan grande de 150 g y pan pequeño de 40 g. Base para sándwiches y acompañamientos.",
+  "yieldText": "1 masa, aprox. 1,75 kg.",
+  "lines": [
+   {
+    "item": "Harina de trigo",
+    "quantityText": "1.000 g",
+    "noteText": "8 tazas aprox.",
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "35 g",
+    "noteText": "2 cucharadas aprox.",
+    "quantity": 35,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "100 ml",
+    "noteText": "6 cucharadas + 2 cucharaditas",
+    "quantity": 100,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua tibia",
+    "quantityText": "580 ml",
+    "noteText": "2 1/2 tazas aprox.",
+    "quantity": 580,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Levadura seca",
+    "quantityText": "40 g",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar",
+    "quantityText": "40 g",
+    "noteText": "3 cucharadas + 1 cucharadita",
+    "quantity": 40,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevos (dora)",
+    "quantityText": "2 unidades",
+    "noteText": null,
+    "quantity": 2,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Leche (dora)",
+    "quantityText": "100 ml",
+    "noteText": "6 cucharadas + 2 cucharaditas",
+    "quantity": 100,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Semillas de calabaza",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Máquina amasadora",
+   "Bowl pequeño",
+   "Balanza",
+   "Bandejas de horno",
+   "Papel de hornear",
+   "Aceite en spray",
+   "Film plástico",
+   "Brocha de cocina"
+  ],
+  "method": [
+   "Colocar harina, sal y aceite de oliva en el bowl de la amasadora.",
+   "Aparte, mezclar agua tibia, azúcar y levadura seca. Dejar hasta que la levadura se active y la mezcla esté espumosa.",
+   "Con la amasadora a velocidad baja, incorporar gradualmente la mezcla de levadura. Amasar 5-6 minutos hasta obtener una masa lisa y homogénea.",
+   "Porcionar: pan grande 150 g; pan pequeño 40 g. Formar bollos y aplastar suavemente.",
+   "Disponer sobre bandeja con papel de hornear rociado con aceite. Cubrir con film y fermentar 15-25 minutos, según temperatura ambiente, hasta que aumenten visiblemente de volumen.",
+   "Mezclar 2 huevos con 100 ml de leche para la dora. Pintar los panes y terminar con semillas de calabaza.",
+   "Hornear a 180-200 °C durante 15-20 minutos. Revisar a los 12 minutos y girar la bandeja cada 2 minutos restantes para lograr cocción pareja."
+  ],
+  "criticalPoints": [
+   "El agua debe estar tibia; evitar agua muy caliente.",
+   "Mantener gramajes uniformes en el porcionado.",
+   "El tiempo de fermentación depende de la temperatura ambiente.",
+   "Girar la bandeja durante la etapa final por las características del horno de Mazcina."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Sopaipillas Mazcina",
+  "section": "Masas y panes",
+  "page": 6,
+  "use": "Acompañamiento y base para servicio con Pebre Mazcina.",
+  "yieldText": "1 masa, aprox. 1,6 kg.",
+  "lines": [
+   {
+    "item": "Harina",
+    "quantityText": "1.000 g",
+    "noteText": "8 tazas aprox.",
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "20 g",
+    "noteText": "1 cucharada + 1 cucharadita aprox.",
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Zapallo camote cocido y escurrido",
+    "quantityText": "500 g",
+    "noteText": null,
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mantequilla clarificada",
+    "quantityText": "100 g",
+    "noteText": "7 cucharadas aprox.",
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Polvos de hornear",
+    "quantityText": "8g",
+    "noteText": "2 cucharaditas",
+    "quantity": 8,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua de cocción del zapallo",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Solo si la masa lo requiere",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Amasadora",
+   "Balanza",
+   "Rodillos laminadores",
+   "Cortador redondo 6-8 cm (por confirmar)",
+   "Freidora"
+  ],
+  "method": [
+   "Cocinar el zapallo en agua con sal; como referencia, usar 20 g de sal por cada 1 kg de zapallo crudo. Escurrir y reservar parte del agua de cocción.",
+   "Mezclar harina, sal, zapallo, mantequilla clarificada y polvos de hornear a velocidad media hasta obtener masa homogénea. Agregar agua reservada solo si hace falta.",
+   "Refrigerar al menos 30 minutos.",
+   "Laminar, enharinando entre pasadas, hasta 8 mm de espesor.",
+   "Cortar discos y realizar 2 perforaciones en el centro.",
+   "Freír en aceite profundo por aproximadamente 2 minutos o hasta dorar y cocinar."
+  ],
+  "criticalPoints": [
+   "Escurrir bien el zapallo.",
+   "Mantener espesor uniforme de 8 mm.",
+   "Diámetro exacto del cortador pendiente de confirmación."
+  ],
+  "pending": [
+   "Cortador redondo 6-8 cm (por confirmar)",
+   "Diámetro exacto del cortador pendiente de confirmación."
+  ]
+ },
+ {
+  "name": "Masa de Empanadas Mazcina",
+  "section": "Masas y panes",
+  "page": 6,
+  "use": "Base para empanadas de carne, camarón-queso y queso.",
+  "yieldText": "Aprox. 35-40 tapas por receta.",
+  "lines": [
+   {
+    "item": "Harina",
+    "quantityText": "1.000 g",
+    "noteText": "8 tazas aprox.",
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "20 g",
+    "noteText": "1 cucharada + 1 cucharadita",
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mantequilla clarificada",
+    "quantityText": "100 g",
+    "noteText": "7 cucharadas aprox.",
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Yema de huevo",
+    "quantityText": "1 unidad",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vino blanco",
+    "quantityText": "30 ml",
+    "noteText": "2 cucharadas",
+    "quantity": 30,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "450 ml",
+    "noteText": "1 3/4 tazas + 2 cucharadas aprox.",
+    "quantity": 450,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Amasadora",
+   "Balanza",
+   "Film plástico",
+   "Rodillos laminadores",
+   "Cortador redondo de 10 cm",
+   "Bandejas",
+   "Papel de hornear",
+   "Freidora"
+  ],
+  "method": [
+   "Mezclar todos los ingredientes en la amasadora a velocidad media hasta obtener una masa homogénea.",
+   "Envolver en film y refrigerar al menos 30 minutos.",
+   "Laminar enharinando ligeramente en cada pasada hasta 4 mm de espesor.",
+   "Cortar discos de 10 cm y disponerlos en bandejas separados con papel de hornear.",
+   "Rellenar, cerrar según la forma estándar de cada empanada y congelar.",
+   "Freír directamente desde congeladas durante aproximadamente 5 minutos."
+  ],
+  "criticalPoints": [
+   "Mantener 4 mm de espesor.",
+   "Enharinar entre pasadas para evitar adherencia.",
+   "Separar tapas con papel de hornear.",
+   "Freír desde congelado."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Panqueques Mazcina",
+  "section": "Masas y panes",
+  "page": 7,
+  "use": "Base para Celestinos Mazcina.",
+  "yieldText": "5-6 panqueques.",
+  "lines": [
+   {
+    "item": "Harina",
+    "quantityText": "250 g",
+    "noteText": "2 tazas aprox.",
+    "quantity": 250,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Leche entera",
+    "quantityText": "500 ml",
+    "noteText": "2 tazas",
+    "quantity": 500,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevos",
+    "quantityText": "2 unidades",
+    "noteText": null,
+    "quantity": 2,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de canola",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Para cocción",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Bowl",
+   "Hand blender",
+   "Sartén antiadherente",
+   "Espátula",
+   "Cucharón"
+  ],
+  "method": [
+   "Procesar harina, leche y huevos con hand blender hasta obtener mezcla líquida, homogénea y sin grumos.",
+   "Calentar sartén antiadherente y aplicar una fina capa de aceite de canola.",
+   "Verter una porción, distribuir y cocinar por ambos lados hasta dorado suave. Repetir, agregando una pequeña cantidad de aceite en cada panqueque."
+  ],
+  "criticalPoints": [
+   "La mezcla debe estar lisa y sin grumos.",
+   "Usar solo una fina capa de aceite."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Pasta Fresca Mazcina",
+  "section": "Masas y panes",
+  "page": 8,
+  "use": "Base para Red Mechada Pasta y Green Creamy Pasta.",
+  "yieldText": "Porciones de 150 g.",
+  "lines": [
+   {
+    "item": "Harina",
+    "quantityText": "1.000 g",
+    "noteText": "8 tazas aprox.",
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevos enteros",
+    "quantityText": "10 unidades",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "10 g",
+    "noteText": "2 cucharaditas",
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "15 ml",
+    "noteText": "1 cucharada",
+    "quantity": 15,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Solo si la masa lo requiere",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Harina + sémola",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Para laminado y corte",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Amasadora",
+   "Bowls",
+   "Balanza",
+   "Film",
+   "Rodillos laminadores",
+   "Cuchillo",
+   "Contenedores",
+   "Papel de hornear"
+  ],
+  "method": [
+   "Mezclar harina, sal y aceite en el bowl. Aparte, quebrar y mezclar los huevos, verificando que no haya cáscaras.",
+   "Incorporar huevos y amasar a velocidad baja hasta unir. Agregar muy poca agua solo si la masa lo requiere.",
+   "Terminar el amasado a mano sobre el mesón. Envolver y refrigerar mínimo 30 minutos.",
+   "Laminar hasta 2 mm. Cortar láminas de aprox. 20 x 10 cm. Enharinar con mezcla de harina y sémola.",
+   "Cortar a cuchillo tiras de aprox. 1 cm de ancho. Enharinar bien.",
+   "Porcionar 150 g; guardar 2 porciones por contenedor separadas con papel de hornear. Congelar.",
+   "Para servicio, cocinar directamente desde congelada en agua hirviendo con sal 2-3 minutos, separando con tenazas."
+  ],
+  "criticalPoints": [
+   "Agregar agua solo si es necesario.",
+   "Mantener 2 mm de espesor y 1 cm de ancho.",
+   "Enharinar bien para evitar adherencia.",
+   "Cocinar desde congelado."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Ajo Confitado Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 9,
+  "use": "Base para Mantequilla de Ajo, Mayonesa de Ajo y aceite aromatizado.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Ajo pelado",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "1.000 ml",
+    "noteText": "4 tazas aprox.",
+    "quantity": 1000,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Laurel",
+    "quantityText": "3 hojas",
+    "noteText": null,
+    "quantity": 3,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Romero",
+    "quantityText": "6g",
+    "noteText": "2 cucharadas aprox.",
+    "quantity": 6,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Orégano seco",
+    "quantityText": "6g",
+    "noteText": "2 cucharadas aprox.",
+    "quantity": 6,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Tomillo seco",
+    "quantityText": "6g",
+    "noteText": "2 cucharadas aprox.",
+    "quantity": 6,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "15 g",
+    "noteText": "2 1/2 cucharaditas",
+    "quantity": 15,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra gruesa",
+    "quantityText": "3g",
+    "noteText": "1 cucharadita aprox.",
+    "quantity": 3,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla",
+   "Colador",
+   "Bowl",
+   "Hand blender/procesador",
+   "Contenedores"
+  ],
+  "method": [
+   "Cocinar todos los ingredientes en olla a fuego muy bajo durante 25-30 minutos, hasta que el ajo esté completamente blando.",
+   "Dejar enfriar. Filtrar, separando ajo y hierbas del aceite.",
+   "Retirar hierbas y procesar el ajo hasta obtener puré homogéneo.",
+   "Reservar el puré y, por separado, el aceite aromatizado."
+  ],
+  "criticalPoints": [
+   "El ajo debe confitarse, no freírse ni dorarse.",
+   "No desechar el aceite aromatizado."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Manteca de Carne Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 9,
+  "use": "Grasa base para pino de carne y mechada.",
+  "yieldText": "Variable.",
+  "lines": [
+   {
+    "item": "Recortes limpios de grasa de vacuno",
+    "quantityText": "Cantidad disponible",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla",
+   "Colador fino",
+   "Contenedor resistente al calor"
+  ],
+  "method": [
+   "Colocar los recortes de grasa en una olla y cocinar lentamente hasta que la grasa se funda.",
+   "Filtrar cuidadosamente para separar sólidos.",
+   "Dejar enfriar y reservar la manteca para producción."
+  ],
+  "criticalPoints": [
+   "Utilizar solo recortes limpios y aptos.",
+   "Filtrar bien antes de almacenar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Mantequilla de Ajo Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 10,
+  "use": "Para tostadas de baguette usadas en tablas y entradas.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Mantequilla clarificada",
+    "quantityText": "500 g",
+    "noteText": "2 tazas aprox.",
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Puré de ajo confitado",
+    "quantityText": "50 g",
+    "noteText": "3 cucharadas aprox.",
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "1 cucharada",
+    "noteText": "8-10 g aprox.",
+    "quantity": 9,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharadita",
+    "noteText": "5-6 g aprox.",
+    "quantity": 5.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra molida",
+    "quantityText": "1/4 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cilantro seco",
+    "quantityText": "1 cucharada",
+    "noteText": "2-3 g aprox.",
+    "quantity": 2.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Bowl",
+   "Espátula",
+   "Microondas si se requiere"
+  ],
+  "method": [
+   "Ablandar la mantequilla a temperatura ambiente. Si está refrigerada, calentar en microondas en intervalos de 30 segundos hasta que sea trabajable, sin sobrecalentar.",
+   "Mezclar con el resto de ingredientes hasta homogeneizar.",
+   "Para tostadas: cortar baguette en diagonal, untar una cara y tostar según servicio."
+  ],
+  "criticalPoints": [
+   "La mantequilla debe estar blanda, no líquida.",
+   "Distribuir condimentos uniformemente."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Mayonesa de Ajo (Alioli) Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 10,
+  "use": "Base para tártara y salsa de acompañamiento.",
+  "yieldText": "Aprox. 1 kg + agregados.",
+  "lines": [
+   {
+    "item": "Mayonesa",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Puré de ajo confitado",
+    "quantityText": "3 cucharadas",
+    "noteText": "45 g aprox.",
+    "quantity": 45,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "1 cucharada",
+    "noteText": "8-10 g aprox.",
+    "quantity": 9,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharadita",
+    "noteText": "5-6 g aprox.",
+    "quantity": 5.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de limón",
+    "quantityText": "15 ml",
+    "noteText": "1 cucharada",
+    "quantity": 15,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Bowl",
+   "Espátula",
+   "Contenedor"
+  ],
+  "method": [
+   "Mezclar todos los ingredientes hasta obtener una salsa lisa y homogénea.",
+   "Traspasar a contenedor limpio."
+  ],
+  "criticalPoints": [
+   "Mezclar muy bien para evitar concentraciones de condimento."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Salsa Tártara Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 11,
+  "use": "Para Fish Sandwich, Kids Crispy Barramundi y otros platos.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Mayonesa de Ajo Mazcina",
+    "quantityText": "1 receta",
+    "noteText": "Aprox. 1 kg",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Pepinillos dill",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla Encurtida Mazcina",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Perejil fresco",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Alcaparras",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Procesador",
+   "Bowl",
+   "Espátula"
+  ],
+  "method": [
+   "Procesar pepinillos, cebolla encurtida, perejil y alcaparras hasta picado fino, sin hacer puré.",
+   "Mezclar con la Mayonesa de Ajo hasta homogeneizar."
+  ],
+  "criticalPoints": [
+   "Evitar exceso de líquido de los encurtidos.",
+   "Mantener textura fina pero visible."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Cebolla Encurtida Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 12,
+  "use": "Base para mini ensalada, ensaladas, tártara y decoración.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Cebolla roja",
+    "quantityText": "2.000 g",
+    "noteText": null,
+    "quantity": 2000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vinagre de vino tinto",
+    "quantityText": "800 ml",
+    "noteText": "3 1/3 tazas aprox.",
+    "quantity": 800,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "800 ml",
+    "noteText": "3 1/3 tazas aprox.",
+    "quantity": 800,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "50 g",
+    "noteText": "3 cucharadas aprox.",
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar",
+    "quantityText": "100 g",
+    "noteText": "1/2 taza aprox.",
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Semillas de cilantro",
+    "quantityText": "1 cucharada",
+    "noteText": "6-8 g aprox.",
+    "quantity": 7,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Cuchillo",
+   "Olla",
+   "Frasco/contenedor resistente al calor"
+  ],
+  "method": [
+   "Cortar cebolla en pluma fina y disponer en el contenedor.",
+   "Hervir vinagre, agua, sal, azúcar y semillas de cilantro hasta disolver.",
+   "Verter el líquido hirviendo sobre la cebolla hasta cubrir. Dejar enfriar antes de usar."
+  ],
+  "criticalPoints": [
+   "Corte uniforme.",
+   "Cubrir completamente la cebolla con el líquido."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Salsa de Tomate Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 12,
+  "use": "Base para pastas, Garlic Prawns, mechada, Baked Feta y otras preparaciones.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Tomates enlatados",
+    "quantityText": "2.500 g",
+    "noteText": null,
+    "quantity": 2500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentones rojos rostizados enlatados",
+    "quantityText": "1.500 g",
+    "noteText": null,
+    "quantity": 1500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla blanca o morada",
+    "quantityText": "500 g",
+    "noteText": null,
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo pelado",
+    "quantityText": "80 g",
+    "noteText": null,
+    "quantity": 80,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Romero fresco",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "30 g",
+    "noteText": "5 cucharaditas aprox.",
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra gruesa",
+    "quantityText": "3g",
+    "noteText": "1 cucharadita",
+    "quantity": 3,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "300 ml",
+    "noteText": "1 1/4 tazas aprox.",
+    "quantity": 300,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Cuchillo",
+   "Bandeja de horno grande y profunda",
+   "Espátula",
+   "Hand blender",
+   "Contenedores"
+  ],
+  "method": [
+   "Picar cebolla y ajo en cubos pequeños. Deshojar romero.",
+   "Mezclar todos los ingredientes en bandeja grande.",
+   "Hornear a 250 °C o temperatura máxima disponible durante aprox. 1 hora, removiendo cada 20 minutos.",
+   "Dejar enfriar y triturar con hand blender hasta textura homogénea. Porcionar."
+  ],
+  "criticalPoints": [
+   "Remover cada 20 minutos.",
+   "Usar bandeja profunda para evitar derrames."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Confitado de Tomates Cherry y Pimentones Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 13,
+  "use": "Para Baked Feta Pot y Mazcina Salad.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Tomates cherry",
+    "quantityText": "500 g",
+    "noteText": null,
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentones rojos rostizados enlatados",
+    "quantityText": "500 g",
+    "noteText": null,
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar",
+    "quantityText": "180 g",
+    "noteText": "3/4 taza + 2 cucharadas aprox.",
+    "quantity": 180,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite aromatizado de Ajo Confitado",
+    "quantityText": "80 ml",
+    "noteText": "5 cucharadas + 1 cucharadita",
+    "quantity": 80,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Sal",
+    "quantityText": "10 g",
+    "noteText": "2 cucharaditas",
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra gruesa",
+    "quantityText": "2g",
+    "noteText": null,
+    "quantity": 2,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla",
+   "Espátula"
+  ],
+  "method": [
+   "Cocinar todos los ingredientes a fuego bajo-medio.",
+   "Reducir aproximadamente 1/4 del líquido inicial, mezclando con cuidado.",
+   "Dejar enfriar y porcionar."
+  ],
+  "criticalPoints": [
+   "Evitar quemar el azúcar.",
+   "No romper excesivamente los tomates."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Salsa Brava Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 13,
+  "use": "Para Mazcina Bravas.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Pimentones rojos rostizados",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Concentrado de tomate",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Paprika ahumada",
+    "quantityText": "2 cucharadas",
+    "noteText": "14 g aprox.",
+    "quantity": 14,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Paprika dulce",
+    "quantityText": "2 cucharadas",
+    "noteText": "14 g aprox.",
+    "quantity": 14,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cayena o chili powder",
+    "quantityText": "6g",
+    "noteText": null,
+    "quantity": 6,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "50 ml",
+    "noteText": "3 cucharadas + 1 cucharadita",
+    "quantity": 50,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla",
+   "Cuchillo",
+   "Hand blender"
+  ],
+  "method": [
+   "Calentar aceite y dorar ajo finamente picado junto con el concentrado de tomate.",
+   "Agregar especias y mezclar evitando que se quemen.",
+   "Agregar pimentones y cocinar 15-20 minutos a fuego medio.",
+   "Triturar con hand blender. Probar y rectificar sal o líquido según necesidad."
+  ],
+  "criticalPoints": [
+   "Cocinar bien el concentrado de tomate.",
+   "Evitar quemar especias."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Fumet de Pescado Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 14,
+  "use": "Fondo para Mediterranean Rice.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Cabezas/espinas/colas de pescado",
+    "quantityText": "2.000 g",
+    "noteText": null,
+    "quantity": 2000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Recortes de verduras limpios",
+    "quantityText": "800 g aprox.",
+    "noteText": null,
+    "quantity": 800,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo",
+    "quantityText": "100 g",
+    "noteText": null,
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vino blanco",
+    "quantityText": "1.000 ml",
+    "noteText": "4 tazas aprox.",
+    "quantity": 1000,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Caldo de verduras en polvo",
+    "quantityText": "1 cucharada",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "3.000 ml",
+    "noteText": "3 litros",
+    "quantity": 3000,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azafrán",
+    "quantityText": "1 paquete",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "40 g",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra gruesa",
+    "quantityText": "3g",
+    "noteText": null,
+    "quantity": 3,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Para dorar",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla grande",
+   "Sartén/olla pequeña",
+   "Colador"
+  ],
+  "method": [
+   "Tostar suavemente el azafrán y desglasar/activar con el vino blanco. Reservar.",
+   "En olla grande, dorar pescado, verduras y ajo con un poco de aceite.",
+   "Agregar vino con azafrán, agua, caldo, sal y pimienta. Llevar a hervor y cocinar a fuego bajo aprox. 1 hora.",
+   "Filtrar completamente y reservar solo el líquido."
+  ],
+  "criticalPoints": [
+   "No quemar el azafrán.",
+   "Usar recortes vegetales limpios y aptos.",
+   "Mantener hervor suave."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Pesto Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 15,
+  "use": "Base para Green Creamy Pasta.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Espinaca fresca",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Albahaca fresca",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cashew nuts / castañas de cajú",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "50 ml",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "5g",
+    "noteText": null,
+    "quantity": 5,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla en polvo",
+    "quantityText": "5g",
+    "noteText": null,
+    "quantity": 5,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "15 g",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra",
+    "quantityText": "3g",
+    "noteText": null,
+    "quantity": 3,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla",
+   "Bowl con hielo",
+   "Colador",
+   "Procesador"
+  ],
+  "method": [
+   "Blanquear brevemente espinaca y albahaca en agua hirviendo.",
+   "Pasar inmediatamente a agua con hielo para cortar cocción.",
+   "Escurrir y retirar la mayor cantidad posible de agua.",
+   "Procesar con el resto de ingredientes hasta obtener mezcla homogénea y pastosa."
+  ],
+  "criticalPoints": [
+   "Blanqueado breve.",
+   "Escurrir muy bien antes de procesar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Jugo Concentrado de Jengibre Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 16,
+  "use": "Base para ceviche de salmón y ceviche de champiñones.",
+  "yieldText": "Proporción 1:1.",
+  "lines": [
+   {
+    "item": "Jengibre fresco",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "1.000 ml",
+    "noteText": "4 tazas aprox.",
+    "quantity": 1000,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Pelador",
+   "Procesador",
+   "Colador fino"
+  ],
+  "method": [
+   "Pelar y trocear jengibre.",
+   "Procesar con agua en proporción 1:1.",
+   "Filtrar presionando la pulpa para extraer el máximo líquido. Reservar el jugo concentrado."
+  ],
+  "criticalPoints": [
+   "Mantener siempre la proporción 1:1."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Dressing de Limón Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 16,
+  "use": "Dressing base para ensaladas y Mini Ensalada Mazcina.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "100 ml",
+    "noteText": null,
+    "quantity": 100,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de limón",
+    "quantityText": "60 ml",
+    "noteText": "4 cucharadas",
+    "quantity": 60,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite aromatizado de Ajo Confitado",
+    "quantityText": "20 ml",
+    "noteText": "1 cucharada + 1 cucharadita",
+    "quantity": 20,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra molida",
+    "quantityText": "1/4 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Mamadera plástica"
+  ],
+  "method": [
+   "Colocar todos los ingredientes en la mamadera, cerrar y agitar enérgicamente.",
+   "Agitar muy bien antes de cada uso."
+  ],
+  "criticalPoints": [
+   "La mezcla se separa naturalmente; agitar siempre antes de usar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Adobo para Pescado Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 17,
+  "use": "Condimento seco para barramundi y salmón.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Orégano seco",
+    "quantityText": "4 cucharadas",
+    "noteText": "12 g aprox.",
+    "quantity": 12,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "2 cucharadas",
+    "noteText": "16-20 g aprox.",
+    "quantity": 18,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla en polvo",
+    "quantityText": "2 cucharadas",
+    "noteText": "14-16 g aprox.",
+    "quantity": 15,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Comino molido",
+    "quantityText": "2 cucharadas",
+    "noteText": "12-14 g aprox.",
+    "quantity": 13,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "2 cucharadas",
+    "noteText": "30-36 g aprox.",
+    "quantity": 33,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra molida",
+    "quantityText": "1/2 cucharada",
+    "noteText": "3-4 g aprox.",
+    "quantity": 3.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Bowl",
+   "Contenedor seco"
+  ],
+  "method": [
+   "Mezclar todos los condimentos hasta homogeneizar. Guardar en contenedor limpio y seco."
+  ],
+  "criticalPoints": [
+   "Mantener completamente seco.",
+   "Gramaje de uso por filete debe verificarse en estandarización final."
+  ],
+  "pending": [
+   "Gramaje de uso por filete debe verificarse en estandarización final."
+  ]
+ },
+ {
+  "name": "Batido para Pescado Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 17,
+  "use": "Rebozado para barramundi frito.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Harina",
+    "quantityText": "500 g",
+    "noteText": "4 tazas aprox.",
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Polvos de hornear",
+    "quantityText": "1 cucharada",
+    "noteText": "12 g aprox.",
+    "quantity": 12,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevo",
+    "quantityText": "1 unidad",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vinagre de malta",
+    "quantityText": "100 ml",
+    "noteText": null,
+    "quantity": 100,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cerveza",
+    "quantityText": "200 ml",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra molida",
+    "quantityText": "1/4 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "200-400 ml aprox.",
+    "noteText": "Ajustar consistencia",
+    "quantity": 300,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Bowl",
+   "Batidor manual",
+   "Contenedor refrigerado"
+  ],
+  "method": [
+   "Mezclar ingredientes secos.",
+   "Agregar huevo, vinagre y cerveza.",
+   "Incorporar 200 ml de agua y continuar agregando gradualmente hasta lograr consistencia adecuada; máximo referencial 400 ml.",
+   "Refrigerar y mantener frío hasta y durante el uso."
+  ],
+  "criticalPoints": [
+   "El batido debe estar bien frío para favorecer una cobertura crujiente.",
+   "Agregar agua gradualmente."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Arroz Blanco Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 18,
+  "use": "Base para Lomo Saltado y Mediterranean Rice.",
+  "yieldText": "Porciones de 150 g.",
+  "lines": [
+   {
+    "item": "Arroz",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "1.500 ml",
+    "noteText": "6 tazas aprox.",
+    "quantity": 1500,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "40 g",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite aromatizado de Ajo Confitado",
+    "quantityText": "40 ml",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Arrocera",
+   "Balanza",
+   "Bandeja de enfriado",
+   "Contenedores"
+  ],
+  "method": [
+   "Colocar todos los ingredientes en la arrocera y mezclar. Cocinar en ciclo normal.",
+   "Al finalizar, mezclar suavemente. Retirar, enfriar completamente y porcionar en 150 g."
+  ],
+  "criticalPoints": [
+   "Respetar proporción 1 kg arroz : 1,5 L agua.",
+   "Enfriar antes de porcionar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Homemade Potatoes Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 19,
+  "use": "Base para Mazcina Bravas y Papas Provenzal.",
+  "yieldText": "Porciones de 200 g.",
+  "lines": [
+   {
+    "item": "Papas frescas",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite para freír",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla",
+   "Colador",
+   "Freidora",
+   "Bandeja de enfriado",
+   "Balanza"
+  ],
+  "method": [
+   "Cortar papas en cubos uniformes.",
+   "Hervir en agua con sal aprox. 15-20 minutos, o hasta que estén blandas pero sin deshacerse.",
+   "Escurrir y enfriar completamente.",
+   "Dar una primera fritura, retirar y enfriar nuevamente.",
+   "Porcionar en 200 g para servicio."
+  ],
+  "criticalPoints": [
+   "El tiempo de hervor es referencial; manda la textura.",
+   "Enfriar completamente antes y después de la primera fritura."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Papas Provenzal Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 19,
+  "use": "Acompañamiento para Grilled Barramundi y Salmón Cancato.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Homemade Potatoes Mazcina",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Perejil fresco picado",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Queso parmesano",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "Bowl"
+  ],
+  "method": [
+   "Freír 200 g de Homemade Potatoes hasta doradas y crujientes.",
+   "En bowl mezclar ajo, perejil y parmesano. Incorporar papas calientes, salar ligeramente y mezclar."
+  ],
+  "criticalPoints": [
+   "Mezclar inmediatamente después de freír para que el condimento se adhiera."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Cebolla Estofada Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 20,
+  "use": "Base para Chorrillana y extra de sándwiches.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Cebolla blanca",
+    "quantityText": "2.000 g",
+    "noteText": null,
+    "quantity": 2000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de canola",
+    "quantityText": "40 ml",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharada",
+    "noteText": "15-18 g aprox.",
+    "quantity": 16.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla o sartén grande"
+  ],
+  "method": [
+   "Cortar cebolla en pluma uniforme.",
+   "Cocinar lentamente con aceite hasta que quede muy blanda y comience a caramelizar.",
+   "Agregar sal al final, probar y rectificar."
+  ],
+  "criticalPoints": [
+   "Buscar caramelización suave sin quemar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Salsa de Lomo Saltado Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 20,
+  "use": "Salsa para Lomo Saltado.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Syrup de azúcar",
+    "quantityText": "50 ml",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vinagre balsámico",
+    "quantityText": "50 ml",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de soya regular",
+    "quantityText": "100 ml",
+    "noteText": null,
+    "quantity": 100,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de soya negra",
+    "quantityText": "50 ml",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Mamadera plástica"
+  ],
+  "method": [
+   "Mezclar todos los ingredientes en la mamadera y agitar bien. Agitar antes de cada uso."
+  ],
+  "criticalPoints": [
+   "Respetar proporciones."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Tortillas de Harina Fritas Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 21,
+  "use": "Acompañamiento para tablas y entradas.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Tortillas de harina",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Cada tortilla se corta en 8",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Paprika ahumada",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Tomillo seco",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "A gusto",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Cuchillo",
+   "Freidora",
+   "Bowl",
+   "Contenedor seco"
+  ],
+  "method": [
+   "Cortar cada tortilla circular en 8 triángulos.",
+   "Freír hasta doradas y crujientes.",
+   "Mientras estén calientes, mezclar con paprika, tomillo y sal.",
+   "Enfriar completamente y almacenar en lugar fresco y seco."
+  ],
+  "criticalPoints": [
+   "Condimentar inmediatamente al salir de la freidora.",
+   "Enfriar antes de guardar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Pebre Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 21,
+  "use": "Acompañamiento para empanadas, sopaipillas y panes de 40 g.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Tomate fresco",
+    "quantityText": "200 g aprox.",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla morada y/o blanca",
+    "quantityText": "100-150 g",
+    "noteText": null,
+    "quantity": 125,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cilantro fresco",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vinagre de vino tinto",
+    "quantityText": "30 ml",
+    "noteText": "2 cucharadas",
+    "quantity": 30,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de limón",
+    "quantityText": "2,5-5 ml",
+    "noteText": "1/2-1 cucharadita",
+    "quantity": 3.75,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharadita-1 cucharada",
+    "noteText": "Por confirmar",
+    "quantity": null,
+    "unit": null,
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de canola",
+    "quantityText": "40 ml aprox.",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Procesador",
+   "Colador",
+   "Cuchillo",
+   "Bowl"
+  ],
+  "method": [
+   "Procesar tomate brevemente, manteniendo textura.",
+   "Procesar cebolla por separado, lavar suavemente con agua y escurrir muy bien.",
+   "Picar cilantro a cuchillo. Mezclar todo con vinagre, limón, aceite y sal.",
+   "Probar y rectificar. Mantener refrigerado."
+  ],
+  "criticalPoints": [
+   "No hacer puré.",
+   "Cantidad definitiva de sal pendiente de estandarización."
+  ],
+  "pending": [
+   "Sal: Por confirmar",
+   "Cantidad definitiva de sal pendiente de estandarización."
+  ]
+ },
+ {
+  "name": "Mini Ensalada Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 22,
+  "use": "Decoración/acomp. estándar para gran parte de la carta.",
+  "yieldText": "20 g estándar; algunos platos usan 30-40 g.",
+  "lines": [
+   {
+    "item": "Rocket",
+    "quantityText": "Cantidad proporcional",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla Encurtida Mazcina",
+    "quantityText": "Cantidad proporcional",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Dressing de Limón Mazcina",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Bowl pequeño"
+  ],
+  "method": [
+   "Mezclar rocket y cebolla encurtida con una pequeña cantidad de Dressing de Limón justo antes del montaje."
+  ],
+  "criticalPoints": [
+   "Mantener las hojas frescas y condimentar al momento."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Ensalada Chilena Mazcina",
+  "section": "Bases, fondos y preparaciones intermedias",
+  "page": 22,
+  "use": "Acompañamiento y ensalada de carta.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Tomate fresco en láminas",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla roja en pluma fina",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cilantro fresco",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Cuchillo",
+   "Bowl"
+  ],
+  "method": [
+   "Mezclar suavemente tomate, cebolla y cilantro. Condimentar con sal y aceite justo antes de servir."
+  ],
+  "criticalPoints": [
+   "Mantener el tomate entero y fresco."
+  ],
+  "pending": []
+ }
+]

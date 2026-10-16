@@ -46,6 +46,7 @@ interface Draft {
   type: 'dish' | 'prep';
   yieldQuantity: string;
   yieldUnit: Unit;
+  yieldEstimated: boolean;
   portions: string;
   notes: string;
   lines: DraftLine[];
@@ -79,6 +80,7 @@ function toDraft(recipe: RecipeDto): Draft {
     type: recipe.type,
     yieldQuantity: plain(recipe.yieldQuantity),
     yieldUnit: recipe.yieldUnit ?? 'kg',
+    yieldEstimated: recipe.yieldEstimated,
     portions: plain(recipe.portions),
     notes: recipe.notes ?? '',
     lines: recipe.lines.map((l) => ({
@@ -141,6 +143,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         type: snapshot.type,
         yieldQuantity: snapshot.yieldQuantity,
         yieldUnit: snapshot.yieldQuantity.trim() ? snapshot.yieldUnit : null,
+        yieldEstimated: snapshot.yieldQuantity.trim() ? snapshot.yieldEstimated : false,
         portions: snapshot.portions,
         notes: snapshot.notes,
         lines: snapshot.lines.map((l) => ({
@@ -208,6 +211,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
       type: draft.type,
       yieldQuantity: draft.yieldQuantity.trim() ? (positive(draft.yieldQuantity) ?? '0') : null,
       yieldUnit: draft.yieldQuantity.trim() ? draft.yieldUnit : null,
+      yieldEstimated: draft.yieldQuantity.trim() ? draft.yieldEstimated : false,
       portions: positive(draft.portions) ?? '0',
       lines: draft.lines.map((l) => ({
         id: l.key,
@@ -383,6 +387,20 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
               </select>
             </div>
           </div>
+          {draft.yieldQuantity.trim() !== '' && (
+            <label className="mt-3 flex items-start gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={draft.yieldEstimated}
+                onChange={(e) => change((d) => ({ ...d, yieldEstimated: e.target.checked }))}
+                className="mt-1 size-4 accent-mazcina-wood"
+              />
+              <span>
+                Estimated, not weighed yet.{' '}
+                <span className={muted}>Untick after weighing a finished batch and typing the real amount; costs that use it then stop showing as estimates.</span>
+              </span>
+            </label>
+          )}
         </section>
 
         <LinesZone active={!!dragging && dragging.startsWith(POOL_PREFIX)}>
@@ -465,7 +483,15 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                 </div>
               )}
             </dl>
-          ) : (
+          ) : null}
+          {cost.status === 'ok' && (cost.estimates.length > 0 || (draft.yieldEstimated && draft.yieldQuantity.trim() !== '')) && (
+            <p className={`mt-3 ${badgeWarn}`}>
+              Estimate:{' '}
+              {[...(draft.yieldEstimated && draft.yieldQuantity.trim() !== '' ? ['this batch'] : []), ...cost.estimates].join(', ')}{' '}
+              {cost.estimates.length + (draft.yieldEstimated ? 1 : 0) === 1 ? 'has' : 'have'} an estimated yield. Weigh a finished batch to make the cost exact.
+            </p>
+          )}
+          {cost.status !== 'ok' && (
             <div className="mt-2">
               <p className={badgeWarn}>Incomplete: no cost shown until this is fixed</p>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
@@ -483,8 +509,8 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
           <textarea
             id="recipe-notes"
             value={draft.notes}
-            maxLength={4000}
-            rows={4}
+            maxLength={12000}
+            rows={Math.min(30, Math.max(4, draft.notes.split('\n').length + 1))}
             onChange={(e) => change((d) => ({ ...d, notes: e.target.value }))}
             className={`mt-2 ${input}`}
           />

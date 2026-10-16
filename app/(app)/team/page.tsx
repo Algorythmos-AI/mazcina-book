@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ActionButton } from '@/components/action-button';
 import { ActionForm } from '@/components/action-form';
@@ -87,7 +88,10 @@ export default async function TeamPage() {
         <p className={`mt-1 ${muted}`}>
           A full copy is saved automatically every night and kept for 30 days. You can also download everything now as one file.
         </p>
-        <a href="/api/export" className={`mt-3 ${secondary}`}>Download all data</a>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a href="/api/export" className={secondary}>Download all data</a>
+          <Link href="/kitchen-data" className={secondary}>Kitchen data: recipes and prices</Link>
+        </div>
       </section>
     </div>
   );

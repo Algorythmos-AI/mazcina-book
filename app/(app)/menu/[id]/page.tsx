@@ -79,6 +79,11 @@ export default async function MenuItemPage({ params }: PageProps<'/menu/[id]'>) 
                 </div>
               )}
             </dl>
+            {costing.estimates.length > 0 && (
+              <p className={`mt-3 ${badgeWarn}`}>
+                Estimate: {costing.estimates.join(', ')} {costing.estimates.length === 1 ? 'has' : 'have'} an estimated batch yield. Weigh a finished batch to make this exact.
+              </p>
+            )}
             <p className={`mt-3 ${muted}`}>Cost and profit are before GST. Profit is before wages, rent and other running costs.</p>
           </>
         )}

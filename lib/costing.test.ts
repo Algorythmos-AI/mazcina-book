@@ -343,3 +343,23 @@ describe('properties', () => {
     );
   });
 });
+
+describe('estimated yields', () => {
+  it('marks a cost as an estimate when a prep it uses has an estimated yield, at any depth', () => {
+    const ctx = createContext({
+      asOf: '2026-10-16',
+      ingredients: [{ id: 'tom', name: 'Tomato', baseUnit: 'g', yieldPct: '100', gramsPerEach: null, gramsPerMl: null, preferredSupplierId: null }],
+      prices: [{ ingredientId: 'tom', supplierId: 's', packSize: '1', packUnit: 'kg', packPrice: '5', priceIncludesGst: false, gstApplicable: false, effectiveDate: '2026-01-01' }],
+      recipes: [
+        { id: 'sauce', name: 'Sauce', portions: '1', yieldQuantity: '800', yieldUnit: 'g', yieldEstimated: true, lines: [{ id: 'a', ingredientId: 'tom', quantity: '1000', unit: 'g' }] },
+        { id: 'base', name: 'Base', portions: '1', yieldQuantity: '500', yieldUnit: 'g', lines: [{ id: 'b', subRecipeId: 'sauce', quantity: '500', unit: 'g' }] },
+        { id: 'dish', name: 'Dish', portions: '1', lines: [{ id: 'c', subRecipeId: 'base', quantity: '100', unit: 'g' }, { id: 'd', ingredientId: 'tom', quantity: '10', unit: 'g' }] },
+        { id: 'plain', name: 'Plain', portions: '1', lines: [{ id: 'e', ingredientId: 'tom', quantity: '10', unit: 'g' }] },
+      ],
+    });
+    const dish = costRecipe('dish', ctx);
+    expect(dish.status === 'ok' && dish.estimates).toEqual(['Sauce']);
+    const plain = costRecipe('plain', ctx);
+    expect(plain.status === 'ok' && plain.estimates).toEqual([]);
+  });
+});

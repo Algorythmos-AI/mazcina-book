@@ -13,6 +13,8 @@ export type ItemCosting =
       suggestedCents: number | null;
       /** How the food cost % sits against the target. */
       rating: 'good' | 'watch' | 'high' | 'none';
+      /** Preps whose yield is still an estimate; non-empty means the cost is an estimate too. */
+      estimates: string[];
     };
 
 /** Points above target that still count as "watch" rather than "high". */
@@ -32,6 +34,7 @@ export function costMenuItem(item: MenuItemDto, ctx: CostingContext, settings: S
     grossProfit: metrics.grossProfit,
     suggestedCents: suggestedSellPriceCents(recipe.costPerPortion, settings.targetFoodCostPct, settings.gstRegistered),
     rating: !pct ? 'none' : pct.lte(target) ? 'good' : pct.lte(target.plus(WATCH_BAND)) ? 'watch' : 'high',
+    estimates: recipe.estimates,
   };
 }
 

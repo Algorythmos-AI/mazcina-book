@@ -1,0 +1,1395 @@
+[
+ {
+  "name": "Barros Luco Mazcina",
+  "section": "Sándwiches",
+  "page": 41,
+  "use": "Sándwich de carne y queso.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pan Mazcina grande",
+    "quantityText": "1 unidad / 150 g",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Rump steak laminado fino",
+    "quantityText": "130 g",
+    "noteText": null,
+    "quantity": 130,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "3/4 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Queso Gouda",
+    "quantityText": "50-60 g",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Papas fritas",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa a elección",
+    "quantityText": "25-30 g",
+    "noteText": null,
+    "quantity": 27.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Sartén",
+   "Freidora"
+  ],
+  "method": [
+   "Condimentar carne con ajo, sal y aceite. Sellar en sartén muy caliente.",
+   "Tostar ligeramente el pan. Fundir Gouda en el mismo sartén.",
+   "Montar carne y queso en el pan.",
+   "Servir con 200 g de papas, mini ensalada y salsa a elección."
+  ],
+  "criticalPoints": [
+   "No resecar el pan.",
+   "Servir carne y queso calientes."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Fish Sandwich Mazcina",
+  "section": "Sándwiches",
+  "page": 41,
+  "use": "Sándwich de barramundi frito.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pan Mazcina grande",
+    "quantityText": "1 unidad / 150 g",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Barramundi",
+    "quantityText": "80-100 g",
+    "noteText": null,
+    "quantity": 90,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Adobo para Pescado",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Batido para Pescado",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Ensalada Chilena Mazcina",
+    "quantityText": "1 porción",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa Tártara Mazcina",
+    "quantityText": "20 g",
+    "noteText": "10 g por tapa",
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Papas fritas",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa Tártara Mazcina",
+    "quantityText": "25-30 g",
+    "noteText": "Pocillo",
+    "quantity": 27.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "Equipo para tostar pan"
+  ],
+  "method": [
+   "Adobar barramundi, cubrir con batido frío y freír hasta dorado, crujiente y cocido.",
+   "Tostar ligeramente pan. Preparar ensalada chilena.",
+   "Untar 10 g de tártara en base; disponer láminas de tomate, pescado, cebolla/cilantro de la ensalada y 10 g de tártara en tapa superior.",
+   "Servir con 200 g de papas y pocillo de tártara."
+  ],
+  "criticalPoints": [
+   "Batido siempre frío.",
+   "Montar inmediatamente para conservar crocancia."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Mechada Italiana Mazcina",
+  "section": "Sándwiches",
+  "page": 42,
+  "use": "Sándwich de mechada, tomate, mayonesa y palta.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pan Mazcina grande",
+    "quantityText": "1 unidad / 150 g",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mechada Mazcina",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Líquido de Mechada",
+    "quantityText": "Muy poca cantidad",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Palta molida",
+    "quantityText": "80-100 g",
+    "noteText": "1/2 unidad aprox.",
+    "quantity": 90,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Tomate fresco",
+    "quantityText": "50-60 g",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Mayonesa",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Papas fritas",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa a elección",
+    "quantityText": "25-30 g",
+    "noteText": "Alioli recomendado",
+    "quantity": 27.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla pequeña",
+   "Bowl",
+   "Freidora"
+  ],
+  "method": [
+   "Regenerar mechada con muy poco líquido para mantener consistencia espesa.",
+   "Moler palta y cortar tomate fino.",
+   "Montar: base del pan, mechada, tomate, mayonesa; palta en la tapa superior.",
+   "Servir con papas, mini ensalada y salsa."
+  ],
+  "criticalPoints": [
+   "La mechada debe quedar jugosa pero espesa para no mojar el pan."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Estándar de Extras para Sándwiches Mazcina",
+  "section": "Sándwiches",
+  "page": 43,
+  "use": "Opciones adicionales según comanda.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Cebolla Estofada Mazcina",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Tomate fresco",
+    "quantityText": "50-60 g",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Queso Gouda derretido",
+    "quantityText": "50-60 g",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevo frito",
+    "quantityText": "1 unidad",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Palta molida",
+    "quantityText": "80-100 g",
+    "noteText": null,
+    "quantity": 90,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cambio a Papas Provenzal",
+    "quantityText": "1 porción",
+    "noteText": "Extra según carta",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Revisar comanda"
+  ],
+  "method": [
+   "Revisar siempre la comanda antes de comenzar el armado.",
+   "Agregar los extras solicitados respetando los gramajes estándar y manteniendo un armado estable.",
+   "Todos los sándwiches se sirven con 200 g de papas, Mini Ensalada Mazcina y 1 pocillo de salsa, salvo modificación solicitada."
+  ],
+  "criticalPoints": [
+   "La comanda manda sobre la receta base."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Ensalada Chilena Mazcina - Servicio",
+  "section": "Ensaladas",
+  "page": 44,
+  "use": "Versión de carta servida en pocillo de loza.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Ensalada Chilena Mazcina",
+    "quantityText": "1 porción",
+    "noteText": "60 g tomate + 30 g cebolla + 10 g cilantro",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Pocillo de loza"
+  ],
+  "method": [
+   "Preparar Ensalada Chilena Mazcina y servir inmediatamente en pocillo de loza."
+  ],
+  "criticalPoints": [
+   "Condimentar al momento."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Mazcina Salad",
+  "section": "Ensaladas",
+  "page": 44,
+  "use": "Ensalada de la casa.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Rocket",
+    "quantityText": "40-50 g",
+    "noteText": null,
+    "quantity": 45,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla Encurtida Mazcina",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Confitado de Cherry y Pimentones",
+    "quantityText": "100 g",
+    "noteText": "Frío",
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Queso feta Danish Style",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Palta",
+    "quantityText": "1/2 unidad",
+    "noteText": "80-100 g aprox.",
+    "quantity": 90,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Dressing de Limón",
+    "quantityText": "10-20 ml",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Salt flakes",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra gruesa",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Bowl",
+   "Plato/bowl de presentación"
+  ],
+  "method": [
+   "Mezclar rocket, cebolla encurtida, confitado frío y dressing.",
+   "Montar. Agregar palta en láminas finas y feta desmenuzado en crumbles.",
+   "Terminar sobre la palta con salt flakes y pimienta negra."
+  ],
+  "criticalPoints": [
+   "No saturar hojas con dressing."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Queen Avo Salad Mazcina",
+  "section": "Ensaladas",
+  "page": 45,
+  "use": "Ensalada con timbal de camarón y palta.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Rocket",
+    "quantityText": "40-50 g",
+    "noteText": null,
+    "quantity": 45,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla Encurtida Mazcina",
+    "quantityText": "25-30 g",
+    "noteText": null,
+    "quantity": 27.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Dressing de Limón",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Camarones cocidos picados",
+    "quantityText": "7 unidades",
+    "noteText": null,
+    "quantity": 7,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Palta en cubos",
+    "quantityText": "80-90 g",
+    "noteText": "1/2 unidad aprox.",
+    "quantity": 85,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Mayonesa",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de limón",
+    "quantityText": "5 ml",
+    "noteText": null,
+    "quantity": 5,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "8 g aprox.",
+    "noteText": "Por confirmar",
+    "quantity": 8,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentón rojo en cubos",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cilantro fresco",
+    "quantityText": "3-5 g",
+    "noteText": null,
+    "quantity": 4,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Camarón cocido con cola",
+    "quantityText": "1 unidad",
+    "noteText": "Para coronar",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "2 bowls",
+   "Molde de timbal"
+  ],
+  "method": [
+   "Mezclar rocket, cebolla encurtida y dressing; disponer como base.",
+   "Mezclar camarones picados, palta, mayonesa, limón, sal, pimentón y cilantro.",
+   "Formar timbal sobre la base y coronar con camarón cocido con cola."
+  ],
+  "criticalPoints": [
+   "No convertir la palta en puré.",
+   "8 g de sal queda pendiente de verificación."
+  ],
+  "pending": [
+   "Sal 8 g aprox.: Por confirmar",
+   "8 g de sal queda pendiente de verificación."
+  ]
+ },
+ {
+  "name": "Proteínas Adicionales para Ensaladas",
+  "section": "Ensaladas",
+  "page": 46,
+  "use": "Opciones según elección del cliente.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Grilled chicken",
+    "quantityText": "1 porción",
+    "noteText": "Pollo laminado + 1 cdta ajo en polvo + 3/4 cdta sal + aceite",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Barramundi bites",
+    "quantityText": "1 porción",
+    "noteText": "Adobado; dorado en mantequilla clarificada + aceite de oliva 1:1",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Garlic prawns",
+    "quantityText": "1 porción",
+    "noteText": "Camarones + ajo + aceite de oliva + vino blanco; sin salsa de tomate",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Wok o sartén"
+  ],
+  "method": [
+   "Grilled chicken: cocinar pollo laminado a fuego alto hasta dorado y cocción completa.",
+   "Barramundi bites: cortar en trozos, adobar y dorar sin batido en mezcla 1:1 de mantequilla clarificada y aceite.",
+   "Garlic prawns: saltear camarones con ajo y aceite; agregar vino y reducir.",
+   "Servir la proteína caliente sobre la ensalada elegida."
+  ],
+  "criticalPoints": [
+   "No sobrecocinar pescado o camarones.",
+   "Revisar comanda."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Kids Crispy Chicken Mazcina",
+  "section": "Menú de niños",
+  "page": 47,
+  "use": "Menú infantil.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pollo Apanado Mazcina",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Papas fritas",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Ketchup",
+    "quantityText": "25 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "Pocillo"
+  ],
+  "method": [
+   "Freír pollo hasta dorado, crujiente y completamente cocido.",
+   "Freír papas. Montar con mini ensalada y pocillo de ketchup."
+  ],
+  "criticalPoints": [
+   "Verificar cocción completa del pollo."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Kids Crispy Barramundi Mazcina",
+  "section": "Menú de niños",
+  "page": 47,
+  "use": "Menú infantil.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Barramundi",
+    "quantityText": "80-100 g",
+    "noteText": null,
+    "quantity": 90,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Adobo para Pescado",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Batido para Pescado",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Papas fritas",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "30-40 g",
+    "noteText": null,
+    "quantity": 35,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa Tártara",
+    "quantityText": "25 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "Pocillo"
+  ],
+  "method": [
+   "Adobar barramundi, pasar por batido frío y freír hasta dorado y cocido.",
+   "Freír papas y montar con mini ensalada y tártara."
+  ],
+  "criticalPoints": [
+   "Batido bien frío.",
+   "No sobrecocinar pescado."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Crumble Mazcina",
+  "section": "Postres y bases de postre",
+  "page": 49,
+  "use": "Componente para Pudín de Sémola.",
+  "yieldText": "Aprox. 600 g.",
+  "lines": [
+   {
+    "item": "Harina",
+    "quantityText": "300 g",
+    "noteText": "2 1/2 tazas aprox.",
+    "quantity": 300,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mantequilla",
+    "quantityText": "200 g",
+    "noteText": "14 cucharadas aprox.",
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar granulada",
+    "quantityText": "100 g",
+    "noteText": "1/2 taza aprox.",
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Solo si la mezcla lo requiere",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Bowl",
+   "Bandeja de horno",
+   "Papel de hornear"
+  ],
+  "method": [
+   "Mezclar con las manos harina, mantequilla y azúcar hasta formar gránulos. Agregar muy poca agua solo si hace falta.",
+   "Hornear a 180 °C durante 6-10 minutos, removiendo cada 3 minutos para cocción pareja.",
+   "Enfriar completamente y almacenar en contenedor seco."
+  ],
+  "criticalPoints": [
+   "No convertir en masa compacta.",
+   "Enfriar antes de guardar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Manjar / Dulce de Leche Mazcina",
+  "section": "Postres y bases de postre",
+  "page": 49,
+  "use": "Base para Celestinos y Cuatro Leches.",
+  "yieldText": "Variable.",
+  "lines": [
+   {
+    "item": "Leche condensada en lata",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Slow cooker",
+   "Pinzas",
+   "Manga pastelera"
+  ],
+  "method": [
+   "Colocar latas cerradas en slow cooker y mantener cubiertas con agua.",
+   "Cocinar en HIGH aproximadamente 4-5 horas.",
+   "Retirar y dejar enfriar completamente antes de abrir.",
+   "Pasar manjar a manga pastelera."
+  ],
+  "criticalPoints": [
+   "Las latas deben permanecer cubiertas por agua durante toda la cocción.",
+   "Nunca abrir latas calientes."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Celestinos Mazcina",
+  "section": "Postres y bases de postre",
+  "page": 50,
+  "use": "Postre de panqueque, manjar y helado.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Panqueque Mazcina",
+    "quantityText": "1 unidad",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Manjar Mazcina",
+    "quantityText": "50-60 g",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Azúcar granulada",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Para caramelizar",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de chocolate Hershey's",
+    "quantityText": "10-20 ml",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Crema chantilly",
+    "quantityText": "10 g aprox.",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Helado de vainilla",
+    "quantityText": "1 scoop",
+    "noteText": "50 ml aprox., por confirmar",
+    "quantity": 1,
+    "unit": "each",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Menta fresca",
+    "quantityText": "1 hoja/ramita",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Microondas",
+   "Soplete",
+   "Plato",
+   "Scoop"
+  ],
+  "method": [
+   "Rellenar panqueque con manjar, enrollar y calentar 30 segundos en microondas.",
+   "Cortar a la mitad, espolvorear azúcar y caramelizar con soplete.",
+   "Rayar plato con salsa de chocolate. Disponer celestinos, chantilly, 1 scoop de helado y menta."
+  ],
+  "criticalPoints": [
+   "Agregar helado al final.",
+   "No quemar el azúcar."
+  ],
+  "pending": [
+   "Helado de vainilla 1 scoop: 50 ml aprox., por confirmar"
+  ]
+ },
+ {
+  "name": "Pudín de Sémola Mazcina",
+  "section": "Postres y bases de postre",
+  "page": 50,
+  "use": "Base del postre de sémola con berries y vino tinto.",
+  "yieldText": "6 porciones; estándar provisional 230-250 g por pocillo.",
+  "lines": [
+   {
+    "item": "Leche entera",
+    "quantityText": "3 tazas",
+    "noteText": "750 ml aprox.",
+    "quantity": 750,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Crema",
+    "quantityText": "2 tazas",
+    "noteText": "500 ml aprox.",
+    "quantity": 500,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Esencia de vainilla",
+    "quantityText": "1 cucharadita",
+    "noteText": "5 ml",
+    "quantity": 5,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ralladura de naranja",
+    "quantityText": "1/2 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Canela",
+    "quantityText": "1 rama",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Clavos de olor",
+    "quantityText": "10 unidades aprox.",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "each",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar",
+    "quantityText": "1/2 taza",
+    "noteText": "100 g aprox.",
+    "quantity": 100,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sémola",
+    "quantityText": "1 taza",
+    "noteText": "160-170 g aprox.",
+    "quantity": 165,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla",
+   "Batidor",
+   "Colador",
+   "6 pocillos de loza",
+   "Film"
+  ],
+  "method": [
+   "Hervir leche, crema, vainilla, ralladura, canela, clavos y azúcar para infusionar.",
+   "Filtrar y volver el líquido a la olla.",
+   "Agregar sémola en forma de lluvia, batiendo constantemente hasta cocer y espesar.",
+   "Porcionar inmediatamente en 6 pocillos; referencia provisional 230-250 g. Enfriar, cubrir y refrigerar."
+  ],
+  "criticalPoints": [
+   "Batir constantemente para evitar grumos.",
+   "Gramaje por pocillo pendiente de confirmar en producción."
+  ],
+  "pending": [
+   "estándar provisional 230-250 g por pocillo",
+   "Gramaje por pocillo pendiente de confirmar en producción."
+  ]
+ },
+ {
+  "name": "Salsa de Berries y Vino Tinto Mazcina",
+  "section": "Postres y bases de postre",
+  "page": 51,
+  "use": "Salsa para Pudín de Sémola.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Berries congelados",
+    "quantityText": "500 g",
+    "noteText": null,
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vino tinto",
+    "quantityText": "200 ml",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Naranja",
+    "quantityText": "1 unidad",
+    "noteText": "Jugo y ralladura",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Canela",
+    "quantityText": "1 rama",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla"
+  ],
+  "method": [
+   "Cocinar todos los ingredientes a fuego medio-bajo hasta reducir aproximadamente a la mitad y perder el sabor fuerte a vino.",
+   "Retirar canela, enfriar y reservar."
+  ],
+  "criticalPoints": [
+   "Reducir sin quemar; debe quedar frutal y ligeramente espesa."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Pudín de Sémola con Berries y Vino Tinto",
+  "section": "Postres y bases de postre",
+  "page": 52,
+  "use": "Postre de carta.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pudín de Sémola Mazcina",
+    "quantityText": "1 porción",
+    "noteText": "230-250 g aprox.",
+    "quantity": 1,
+    "unit": "each",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Crumble Mazcina",
+    "quantityText": "50-60 g",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa de Berries y Vino Tinto",
+    "quantityText": "40 ml",
+    "noteText": "Sobre postre",
+    "quantity": 40,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa adicional",
+    "quantityText": "30 ml",
+    "noteText": "Pocillo",
+    "quantity": 30,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Menta",
+    "quantityText": "1 hoja/ramita",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Naranja deshidratada",
+    "quantityText": "1 rodaja",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Plato",
+   "Pocillo de salsa"
+  ],
+  "method": [
+   "Disponer crumble como base. Desmoldar pudín encima.",
+   "Bañar con 40 ml de salsa y servir 30 ml adicionales en pocillo.",
+   "Decorar con menta y naranja deshidratada."
+  ],
+  "criticalPoints": [
+   "Pudín completamente frío y firme antes de desmoldar."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Cuatro Leches Mazcina",
+  "section": "Postres y bases de postre",
+  "page": 52,
+  "use": "Postre estrella de Mazcina.",
+  "yieldText": "8 porciones.",
+  "lines": [
+   {
+    "item": "Huevos",
+    "quantityText": "6 unidades",
+    "noteText": "Separar claras/yemas",
+    "quantity": 6,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Harina",
+    "quantityText": "180 g",
+    "noteText": "Cernida",
+    "quantity": 180,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar",
+    "quantityText": "180 g",
+    "noteText": null,
+    "quantity": 180,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Esencia de vainilla",
+    "quantityText": "1 cucharadita",
+    "noteText": "5 ml",
+    "quantity": 5,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Polvo de hornear",
+    "quantityText": "1/2 cucharada",
+    "noteText": "1 1/2 cucharaditas",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Leche condensada",
+    "quantityText": "2 latas",
+    "noteText": "Tamaño exacto por confirmar",
+    "quantity": 2,
+    "unit": "each",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Leche evaporada",
+    "quantityText": "2 latas",
+    "noteText": "Aprox. 400 ml c/u",
+    "quantity": 2,
+    "unit": "each",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Crema",
+    "quantityText": "1 lata de leche condensada como medida",
+    "noteText": "Aprox. 300-400 ml",
+    "quantity": 350,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Leche entera",
+    "quantityText": "1 lata de leche condensada como medida",
+    "noteText": "Aprox. 300-400 ml",
+    "quantity": 350,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Vainilla para remojo",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Manjar Mazcina",
+    "quantityText": "20-30 g por porción",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Crema chantilly",
+    "quantityText": "20 ml aprox. por porción",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Menta",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Batidora",
+   "Tamiz",
+   "Espátula",
+   "Bandeja aprox. 30 x 20 x 5 cm",
+   "Horno",
+   "Palillo",
+   "Olla",
+   "Contenedores",
+   "Vasos de presentación"
+  ],
+  "method": [
+   "Bizcocho: batir claras a punto nieve, agregando azúcar gradualmente. Mezclar yemas con vainilla e incorporarlas hasta punto letra.",
+   "Mezclar harina cernida con polvo de hornear e incorporar de forma envolvente.",
+   "Hornear en bandeja a 180 °C. Revisar desde 15 minutos; cocción total referencial 20-25 minutos. Retirar cuando el palillo salga seco. Enfriar y cortar en 8.",
+   "Remojo: hervir leche condensada, evaporada, crema, leche entera y vainilla; retirar al primer hervor. Distribuir en partes iguales sobre las 8 porciones. Referencia provisional 250-275 ml por porción. Refrigerar.",
+   "Montaje: dividir cada porción remojada en 2. Colocar mitad en vaso, agregar 20-30 g de manjar, cubrir con segunda mitad y terminar con chantilly, manjar decorativo y menta."
+  ],
+  "criticalPoints": [
+   "Incorporar secos con movimientos envolventes.",
+   "El palillo seco determina la cocción del bizcocho.",
+   "Volumen exacto de latas y remojo por porción pendientes de confirmación.",
+   "Manipular con cuidado el bizcocho remojado."
+  ],
+  "pending": [
+   "Leche condensada 2 latas: Tamaño exacto por confirmar",
+   "Volumen exacto de latas y remojo por porción pendientes de confirmación.",
+   "Referencia provisional 250-275 ml por porción (remojo)"
+  ]
+ }
+]

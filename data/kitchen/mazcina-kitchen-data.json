@@ -1,0 +1,5645 @@
+{
+ "format": "mazcina-kitchen-data",
+ "version": 1,
+ "updated": "2026-10-16",
+ "sources": [
+  {
+   "key": "manual-recetas-2026-08",
+   "kind": "recipe-manual",
+   "title": "Manual de Recetas de Cocina Mazcina, versión de trabajo agosto 2026 (54 páginas)",
+   "date": "2026-08-01",
+   "reference": "Manual_de_Recetas_Mazcina.pdf, sent by Nacha 2026-10-15"
+  },
+  {
+   "key": "bidfood-i71906625",
+   "kind": "invoice",
+   "title": "Bidfood Botany tax invoice I71906625.BOT",
+   "date": "2026-10-15",
+   "supplier": "Bidfood",
+   "reference": "goods prices from bidfood.pdf"
+  },
+  {
+   "key": "house-free-items",
+   "kind": "note",
+   "title": "Items with no purchase cost (tap water)",
+   "date": "2026-10-16"
+  },
+  {
+   "key": "mickeys-inv-23412",
+   "kind": "invoice",
+   "title": "Mickey's Fruit & Veg tax invoice INV-23412",
+   "date": "2026-08-31",
+   "supplier": "Mickey's Fruit & Veg",
+   "reference": "veggies prices.pdf"
+  }
+ ],
+ "suppliers": [
+  {
+   "name": "Bidfood",
+   "contact": "Bidfood Botany, 14 McPherson St, Banksmeadow NSW 2019 · (02) 8199 5499 · customer 435720"
+  },
+  {
+   "name": "Mickey's Fruit & Veg",
+   "contact": "86 Pitt St, Redfern NSW 2016 · +61 2 9719 9022"
+  },
+  {
+   "name": "Mazcina (in house)",
+   "contact": "Things that cost nothing to buy, such as tap water"
+  }
+ ],
+ "ingredients": [
+  {
+   "name": "Flour, plain",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Harina"
+  },
+  {
+   "name": "Semolina",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Sémola"
+  },
+  {
+   "name": "Salt",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Sal"
+  },
+  {
+   "name": "Salt flakes",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Salt flakes"
+  },
+  {
+   "name": "Sugar",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Azúcar"
+  },
+  {
+   "name": "Sugar syrup",
+   "category": "Dry goods",
+   "baseUnit": "ml",
+   "nameEs": "Syrup de azúcar"
+  },
+  {
+   "name": "Yeast, dry instant",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Levadura seca",
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Baking powder",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Polvos de hornear"
+  },
+  {
+   "name": "Rice",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Arroz"
+  },
+  {
+   "name": "Vegetable stock powder",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Caldo de verduras en polvo"
+  },
+  {
+   "name": "Cornflakes",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Cornflakes triturados"
+  },
+  {
+   "name": "Toasted corn (canchita)",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Canchita"
+  },
+  {
+   "name": "Cashew nuts",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Castañas de cajú"
+  },
+  {
+   "name": "Raisins",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Pasas"
+  },
+  {
+   "name": "Pumpkin seeds",
+   "category": "Dry goods",
+   "baseUnit": "g",
+   "nameEs": "Semillas de calabaza"
+  },
+  {
+   "name": "Flour tortillas",
+   "category": "Dry goods",
+   "baseUnit": "each",
+   "nameEs": "Tortillas de harina"
+  },
+  {
+   "name": "Vanilla essence",
+   "category": "Dry goods",
+   "baseUnit": "ml",
+   "nameEs": "Esencia de vainilla"
+  },
+  {
+   "name": "Chocolate sauce (Hershey's)",
+   "category": "Dry goods",
+   "baseUnit": "ml",
+   "nameEs": "Salsa de chocolate Hershey's"
+  },
+  {
+   "name": "Garlic powder",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Ajo en polvo"
+  },
+  {
+   "name": "Onion powder",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Cebolla en polvo"
+  },
+  {
+   "name": "Smoked paprika",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Paprika ahumada"
+  },
+  {
+   "name": "Sweet paprika",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Paprika dulce"
+  },
+  {
+   "name": "Cayenne or chilli powder",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Cayena o chili powder"
+  },
+  {
+   "name": "Ground cumin",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Comino molido"
+  },
+  {
+   "name": "Dried oregano",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Orégano seco"
+  },
+  {
+   "name": "Dried thyme",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Tomillo seco"
+  },
+  {
+   "name": "Dried coriander",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Cilantro seco"
+  },
+  {
+   "name": "Coriander seeds",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Semillas de cilantro"
+  },
+  {
+   "name": "Black pepper, cracked",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Pimienta negra gruesa"
+  },
+  {
+   "name": "Black pepper, ground",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Pimienta negra molida"
+  },
+  {
+   "name": "Rosemary",
+   "category": "Spices",
+   "baseUnit": "g",
+   "nameEs": "Romero"
+  },
+  {
+   "name": "Bay leaves",
+   "category": "Spices",
+   "baseUnit": "each",
+   "nameEs": "Laurel"
+  },
+  {
+   "name": "Saffron",
+   "category": "Spices",
+   "baseUnit": "each",
+   "nameEs": "Azafrán (paquete)"
+  },
+  {
+   "name": "Cinnamon sticks",
+   "category": "Spices",
+   "baseUnit": "each",
+   "nameEs": "Canela (rama)"
+  },
+  {
+   "name": "Cloves",
+   "category": "Spices",
+   "baseUnit": "each",
+   "nameEs": "Clavos de olor"
+  },
+  {
+   "name": "Olive oil",
+   "category": "Oils & vinegars",
+   "baseUnit": "ml",
+   "nameEs": "Aceite de oliva"
+  },
+  {
+   "name": "Canola oil",
+   "category": "Oils & vinegars",
+   "baseUnit": "ml",
+   "nameEs": "Aceite de canola / aceite"
+  },
+  {
+   "name": "Frying oil",
+   "category": "Oils & vinegars",
+   "baseUnit": "ml",
+   "nameEs": "Aceite para freír"
+  },
+  {
+   "name": "Red wine vinegar",
+   "category": "Oils & vinegars",
+   "baseUnit": "ml",
+   "nameEs": "Vinagre de vino tinto"
+  },
+  {
+   "name": "Malt vinegar",
+   "category": "Oils & vinegars",
+   "baseUnit": "ml",
+   "nameEs": "Vinagre de malta"
+  },
+  {
+   "name": "Balsamic vinegar",
+   "category": "Oils & vinegars",
+   "baseUnit": "ml",
+   "nameEs": "Vinagre balsámico"
+  },
+  {
+   "name": "Soy sauce",
+   "category": "Sauces & condiments",
+   "baseUnit": "ml",
+   "nameEs": "Salsa de soya regular"
+  },
+  {
+   "name": "Dark soy sauce",
+   "category": "Sauces & condiments",
+   "baseUnit": "ml",
+   "nameEs": "Salsa de soya negra"
+  },
+  {
+   "name": "Mayonnaise",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Mayonesa"
+  },
+  {
+   "name": "Dijon mustard",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Mostaza Dijon"
+  },
+  {
+   "name": "Tomato ketchup",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Ketchup",
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Tomato paste",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Concentrado de tomate"
+  },
+  {
+   "name": "Tomatoes, peeled, canned",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Tomates enlatados",
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Red peppers, roasted, canned",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Pimentones rojos rostizados (enlatados)",
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Dill pickles",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Pepinillos dill"
+  },
+  {
+   "name": "Capers",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Alcaparras"
+  },
+  {
+   "name": "Black olives",
+   "category": "Sauces & condiments",
+   "baseUnit": "g",
+   "nameEs": "Aceitunas negras"
+  },
+  {
+   "name": "Eggs",
+   "category": "Dairy & eggs",
+   "baseUnit": "each",
+   "nameEs": "Huevos"
+  },
+  {
+   "name": "Milk, full cream",
+   "category": "Dairy & eggs",
+   "baseUnit": "ml",
+   "nameEs": "Leche (entera)"
+  },
+  {
+   "name": "Cream",
+   "category": "Dairy & eggs",
+   "baseUnit": "ml",
+   "nameEs": "Crema"
+  },
+  {
+   "name": "Whipped cream (chantilly)",
+   "category": "Dairy & eggs",
+   "baseUnit": "g",
+   "nameEs": "Crema chantilly"
+  },
+  {
+   "name": "Condensed milk, can",
+   "category": "Dairy & eggs",
+   "baseUnit": "each",
+   "nameEs": "Leche condensada (lata)"
+  },
+  {
+   "name": "Evaporated milk",
+   "category": "Dairy & eggs",
+   "baseUnit": "ml",
+   "nameEs": "Leche evaporada"
+  },
+  {
+   "name": "Butter",
+   "category": "Dairy & eggs",
+   "baseUnit": "g",
+   "nameEs": "Mantequilla"
+  },
+  {
+   "name": "Clarified butter",
+   "category": "Dairy & eggs",
+   "baseUnit": "g",
+   "nameEs": "Mantequilla clarificada"
+  },
+  {
+   "name": "Gouda cheese",
+   "category": "Dairy & eggs",
+   "baseUnit": "g",
+   "nameEs": "Queso Gouda"
+  },
+  {
+   "name": "Parmesan",
+   "category": "Dairy & eggs",
+   "baseUnit": "g",
+   "nameEs": "Parmesano"
+  },
+  {
+   "name": "Feta, Danish style",
+   "category": "Dairy & eggs",
+   "baseUnit": "g",
+   "nameEs": "Queso feta Danish Style"
+  },
+  {
+   "name": "Vanilla ice cream",
+   "category": "Dairy & eggs",
+   "baseUnit": "each",
+   "nameEs": "Helado de vainilla (scoop)"
+  },
+  {
+   "name": "Dulce de leche (manjar)",
+   "category": "Dairy & eggs",
+   "baseUnit": "g",
+   "nameEs": "Manjar / Dulce de leche"
+  },
+  {
+   "name": "Rump steak",
+   "category": "Meat",
+   "baseUnit": "g",
+   "nameEs": "Rump steak"
+  },
+  {
+   "name": "Roast beef (beef for mechada)",
+   "category": "Meat",
+   "baseUnit": "g",
+   "nameEs": "Roast beef"
+  },
+  {
+   "name": "Chicken breast",
+   "category": "Meat",
+   "baseUnit": "g",
+   "nameEs": "Pechuga de pollo / pollo"
+  },
+  {
+   "name": "Chorizo",
+   "category": "Meat",
+   "baseUnit": "g",
+   "nameEs": "Chorizo"
+  },
+  {
+   "name": "Beef fat, rendered (manteca)",
+   "category": "Meat",
+   "baseUnit": "g",
+   "nameEs": "Manteca de Carne (de recortes de grasa)"
+  },
+  {
+   "name": "Prawn meat, raw 26/30",
+   "category": "Seafood",
+   "baseUnit": "g",
+   "nameEs": "Camarones pelados y desvenados",
+   "gramsPerEach": 16,
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Prawn cutlets, raw 26/30 (tail on)",
+   "category": "Seafood",
+   "baseUnit": "g",
+   "nameEs": "Camarón con cola",
+   "gramsPerEach": 16,
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Tiger prawns, whole",
+   "category": "Seafood",
+   "baseUnit": "each",
+   "nameEs": "Tiger prawns enteros"
+  },
+  {
+   "name": "Salmon portions, skinless 200 g",
+   "category": "Seafood",
+   "baseUnit": "g",
+   "nameEs": "Salmón",
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Barramundi",
+   "category": "Seafood",
+   "baseUnit": "g",
+   "nameEs": "Barramundi"
+  },
+  {
+   "name": "Crab meat",
+   "category": "Seafood",
+   "baseUnit": "g",
+   "nameEs": "Carne de cangrejo limpia"
+  },
+  {
+   "name": "Mussels, frozen, cleaned",
+   "category": "Seafood",
+   "baseUnit": "g",
+   "nameEs": "Choritos congelados limpios"
+  },
+  {
+   "name": "Fish frames and heads",
+   "category": "Seafood",
+   "baseUnit": "g",
+   "nameEs": "Cabezas/espinas/colas de pescado"
+  },
+  {
+   "name": "Scallop shell (garnish)",
+   "category": "Seafood",
+   "baseUnit": "each",
+   "nameEs": "Concha de ostión"
+  },
+  {
+   "name": "Tomatoes, round",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Tomate fresco",
+   "preferredSupplier": "Mickey's Fruit & Veg"
+  },
+  {
+   "name": "Cherry tomatoes",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Tomates cherry"
+  },
+  {
+   "name": "Red onion",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Cebolla roja / morada"
+  },
+  {
+   "name": "Brown onion",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Cebolla blanca"
+  },
+  {
+   "name": "Spring onions (shallots)",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Cebollín"
+  },
+  {
+   "name": "Garlic, peeled",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Ajo pelado / ajo fresco"
+  },
+  {
+   "name": "Ginger",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Jengibre fresco",
+   "preferredSupplier": "Mickey's Fruit & Veg"
+  },
+  {
+   "name": "Red capsicum",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Pimentón rojo",
+   "preferredSupplier": "Mickey's Fruit & Veg"
+  },
+  {
+   "name": "Button mushrooms",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Champiñones",
+   "preferredSupplier": "Mickey's Fruit & Veg"
+  },
+  {
+   "name": "Rocket",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Rocket",
+   "preferredSupplier": "Mickey's Fruit & Veg"
+  },
+  {
+   "name": "Coriander, fresh",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Cilantro fresco"
+  },
+  {
+   "name": "Parsley, fresh",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Perejil fresco"
+  },
+  {
+   "name": "Basil, fresh",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Albahaca fresca"
+  },
+  {
+   "name": "Mint, fresh",
+   "category": "Fruit & veg",
+   "baseUnit": "each",
+   "nameEs": "Menta (hoja/ramita)"
+  },
+  {
+   "name": "Rosemary, fresh",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Romero fresco"
+  },
+  {
+   "name": "Spinach",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Espinaca fresca"
+  },
+  {
+   "name": "Avocado",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Palta"
+  },
+  {
+   "name": "Potatoes",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Papas frescas"
+  },
+  {
+   "name": "Butternut pumpkin, cooked",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Zapallo camote cocido"
+  },
+  {
+   "name": "Sweet potato, cooked (piece)",
+   "category": "Fruit & veg",
+   "baseUnit": "each",
+   "nameEs": "Camote cocido (trozo)"
+  },
+  {
+   "name": "Lemon juice",
+   "category": "Fruit & veg",
+   "baseUnit": "ml",
+   "nameEs": "Jugo de limón"
+  },
+  {
+   "name": "Lemon wedge",
+   "category": "Fruit & veg",
+   "baseUnit": "each",
+   "nameEs": "Limón (gajo)"
+  },
+  {
+   "name": "Orange",
+   "category": "Fruit & veg",
+   "baseUnit": "each",
+   "nameEs": "Naranja",
+   "preferredSupplier": "Mickey's Fruit & Veg"
+  },
+  {
+   "name": "Dehydrated orange slice",
+   "category": "Fruit & veg",
+   "baseUnit": "each",
+   "nameEs": "Naranja deshidratada (rodaja)"
+  },
+  {
+   "name": "Green peas",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Arvejas"
+  },
+  {
+   "name": "Vegetable trimmings",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Recortes de verduras limpios"
+  },
+  {
+   "name": "Frozen berries",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Berries congelados",
+   "preferredSupplier": "Bidfood"
+  },
+  {
+   "name": "Frozen chips (fries)",
+   "category": "Fruit & veg",
+   "baseUnit": "g",
+   "nameEs": "Papas fritas (congeladas)"
+  },
+  {
+   "name": "Bread",
+   "category": "Bakery",
+   "baseUnit": "g",
+   "nameEs": "Pan"
+  },
+  {
+   "name": "Baguette slices, toasted",
+   "category": "Bakery",
+   "baseUnit": "each",
+   "nameEs": "Tostadas de baguette"
+  },
+  {
+   "name": "White wine",
+   "category": "Drinks",
+   "baseUnit": "ml",
+   "nameEs": "Vino blanco"
+  },
+  {
+   "name": "Red wine",
+   "category": "Drinks",
+   "baseUnit": "ml",
+   "nameEs": "Vino tinto"
+  },
+  {
+   "name": "Beer",
+   "category": "Drinks",
+   "baseUnit": "ml",
+   "nameEs": "Cerveza"
+  },
+  {
+   "name": "Water",
+   "category": "Other",
+   "baseUnit": "ml",
+   "nameEs": "Agua"
+  }
+ ],
+ "prices": [
+  {
+   "ingredient": "Prawn meat, raw 26/30",
+   "supplier": "Bidfood",
+   "packSize": 800,
+   "packUnit": "g",
+   "packPrice": 19.73,
+   "productCode": "181868",
+   "description": "PRAWN MEAT RAW 26/30 VANNAMEI (SEAFROST) (I), SEACREST 800gr PKT",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Prawn cutlets, raw 26/30 (tail on)",
+   "supplier": "Bidfood",
+   "packSize": 700,
+   "packUnit": "g",
+   "packPrice": 12.5,
+   "productCode": "181866",
+   "description": "PRAWN CUTLET RAW 26/30 VANNAMEI (SEAFROST) (I), SEACREST 700gr PKT",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Salmon portions, skinless 200 g",
+   "supplier": "Bidfood",
+   "packSize": 5,
+   "packUnit": "kg",
+   "packPrice": 157.5,
+   "productCode": "80731",
+   "description": "SALMON PORTIONS S/LESS 200GR (APP 25/CTN) (I), SEAFROST 5kg CTN",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Frozen berries",
+   "supplier": "Bidfood",
+   "packSize": 1,
+   "packUnit": "kg",
+   "packPrice": 4.84,
+   "productCode": "210882",
+   "description": "STRAWBERRIES WHOLE IQF, ENTYCE 1kg PKT",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Tomato ketchup",
+   "supplier": "Bidfood",
+   "packSize": 4,
+   "packUnit": "kg",
+   "packPrice": 22.93,
+   "productCode": "508",
+   "description": "KETCHUP TOMATO, HEINZ 4lt BTL (costed as 4 kg; ketchup is a little heavier than water)",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Red peppers, roasted, canned",
+   "supplier": "Bidfood",
+   "packSize": 4.15,
+   "packUnit": "kg",
+   "packPrice": 18.52,
+   "productCode": "222234",
+   "description": "PEPPERS RED ROASTED WHOLE, LA CARONA 4.15kg CAN",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Tomatoes, peeled, canned",
+   "supplier": "Bidfood",
+   "packSize": 2.5,
+   "packUnit": "kg",
+   "packPrice": 7.59,
+   "productCode": "222500",
+   "description": "TOMATOES PEELED ITALIAN, MAMA LATIN 2.5kg CAN",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Yeast, dry instant",
+   "supplier": "Bidfood",
+   "packSize": 500,
+   "packUnit": "g",
+   "packPrice": 3.7,
+   "productCode": "11553",
+   "description": "YEAST DRY INSTANT 500gr PKT",
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-10-15",
+   "source": "bidfood-i71906625"
+  },
+  {
+   "ingredient": "Tomatoes, round",
+   "supplier": "Mickey's Fruit & Veg",
+   "packSize": 1,
+   "packUnit": "kg",
+   "packPrice": 5.5,
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-08-31",
+   "source": "mickeys-inv-23412",
+   "description": "Round Tomato Kg"
+  },
+  {
+   "ingredient": "Button mushrooms",
+   "supplier": "Mickey's Fruit & Veg",
+   "packSize": 1,
+   "packUnit": "kg",
+   "packPrice": 12.0,
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-08-31",
+   "source": "mickeys-inv-23412",
+   "description": "Button Mushroom Kg"
+  },
+  {
+   "ingredient": "Ginger",
+   "supplier": "Mickey's Fruit & Veg",
+   "packSize": 1,
+   "packUnit": "kg",
+   "packPrice": 28.0,
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-08-31",
+   "source": "mickeys-inv-23412",
+   "description": "Ginger Kg"
+  },
+  {
+   "ingredient": "Rocket",
+   "supplier": "Mickey's Fruit & Veg",
+   "packSize": 1,
+   "packUnit": "kg",
+   "packPrice": 25.0,
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-08-31",
+   "source": "mickeys-inv-23412",
+   "description": "Rocket Kg"
+  },
+  {
+   "ingredient": "Red capsicum",
+   "supplier": "Mickey's Fruit & Veg",
+   "packSize": 1,
+   "packUnit": "kg",
+   "packPrice": 7.0,
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-08-31",
+   "source": "mickeys-inv-23412",
+   "description": "Red Capsicum Kg"
+  },
+  {
+   "ingredient": "Water",
+   "supplier": "Mazcina (in house)",
+   "packSize": 1,
+   "packUnit": "l",
+   "packPrice": 0,
+   "gstApplicable": false,
+   "priceIncludesGst": false,
+   "effectiveDate": "2026-01-01",
+   "source": "house-free-items",
+   "description": "Tap water"
+  }
+ ],
+ "recipes": [
+  {
+   "name": "Pan Mazcina",
+   "type": "prep",
+   "section": "Masas y panes",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 5,
+   "use": "Pan grande de 150 g y pan pequeño de 40 g. Base para sándwiches y acompañamientos.",
+   "yieldText": "1 masa, aprox. 1,75 kg.",
+   "equipment": [
+    "Máquina amasadora",
+    "Bowl pequeño",
+    "Balanza",
+    "Bandejas de horno",
+    "Papel de hornear",
+    "Aceite en spray",
+    "Film plástico",
+    "Brocha de cocina"
+   ],
+   "method": [
+    "Colocar harina, sal y aceite de oliva en el bowl de la amasadora.",
+    "Aparte, mezclar agua tibia, azúcar y levadura seca. Dejar hasta que la levadura se active y la mezcla esté espumosa.",
+    "Con la amasadora a velocidad baja, incorporar gradualmente la mezcla de levadura. Amasar 5-6 minutos hasta obtener una masa lisa y homogénea.",
+    "Porcionar: pan grande 150 g; pan pequeño 40 g. Formar bollos y aplastar suavemente.",
+    "Disponer sobre bandeja con papel de hornear rociado con aceite. Cubrir con film y fermentar 15-25 minutos, según temperatura ambiente, hasta que aumenten visiblemente de volumen.",
+    "Mezclar 2 huevos con 100 ml de leche para la dora. Pintar los panes y terminar con semillas de calabaza.",
+    "Hornear a 180-200 °C durante 15-20 minutos. Revisar a los 12 minutos y girar la bandeja cada 2 minutos restantes para lograr cocción pareja."
+   ],
+   "criticalPoints": [
+    "El agua debe estar tibia; evitar agua muy caliente.",
+    "Mantener gramajes uniformes en el porcionado.",
+    "El tiempo de fermentación depende de la temperatura ambiente.",
+    "Girar la bandeja durante la etapa final por las características del horno de Mazcina."
+   ],
+   "asNeeded": [
+    "Semillas de calabaza (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 35,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 100,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 580,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Yeast, dry instant",
+     "quantity": 40,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 40,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Eggs",
+     "quantity": 2,
+     "unit": "each",
+     "original": "2 unidades",
+     "approx": false
+    },
+    {
+     "ingredient": "Milk, full cream",
+     "quantity": 100,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1750,
+   "yieldUnit": "g",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Sopaipillas Mazcina",
+   "type": "prep",
+   "section": "Masas y panes",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 6,
+   "use": "Acompañamiento y base para servicio con Pebre Mazcina.",
+   "yieldText": "1 masa, aprox. 1,6 kg.",
+   "equipment": [
+    "Amasadora",
+    "Balanza",
+    "Rodillos laminadores",
+    "Cortador redondo 6-8 cm (por confirmar)",
+    "Freidora"
+   ],
+   "method": [
+    "Cocinar el zapallo en agua con sal; como referencia, usar 20 g de sal por cada 1 kg de zapallo crudo. Escurrir y reservar parte del agua de cocción.",
+    "Mezclar harina, sal, zapallo, mantequilla clarificada y polvos de hornear a velocidad media hasta obtener masa homogénea. Agregar agua reservada solo si hace falta.",
+    "Refrigerar al menos 30 minutos.",
+    "Laminar, enharinando entre pasadas, hasta 8 mm de espesor.",
+    "Cortar discos y realizar 2 perforaciones en el centro.",
+    "Freír en aceite profundo por aproximadamente 2 minutos o hasta dorar y cocinar."
+   ],
+   "criticalPoints": [
+    "Escurrir bien el zapallo.",
+    "Mantener espesor uniforme de 8 mm.",
+    "Diámetro exacto del cortador pendiente de confirmación."
+   ],
+   "asNeeded": [
+    "Agua de cocción del zapallo (Cantidad necesaria; Solo si la masa lo requiere)"
+   ],
+   "pending": [
+    "Cortador redondo 6-8 cm (por confirmar)",
+    "Diámetro exacto del cortador pendiente de confirmación."
+   ],
+   "lines": [
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Butternut pumpkin, cooked",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Clarified butter",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Baking powder",
+     "quantity": 8,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1600,
+   "yieldUnit": "g",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Masa de Empanadas Mazcina",
+   "type": "prep",
+   "section": "Masas y panes",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 6,
+   "use": "Base para empanadas de carne, camarón-queso y queso.",
+   "yieldText": "Aprox. 35-40 tapas por receta.",
+   "equipment": [
+    "Amasadora",
+    "Balanza",
+    "Film plástico",
+    "Rodillos laminadores",
+    "Cortador redondo de 10 cm",
+    "Bandejas",
+    "Papel de hornear",
+    "Freidora"
+   ],
+   "method": [
+    "Mezclar todos los ingredientes en la amasadora a velocidad media hasta obtener una masa homogénea.",
+    "Envolver en film y refrigerar al menos 30 minutos.",
+    "Laminar enharinando ligeramente en cada pasada hasta 4 mm de espesor.",
+    "Cortar discos de 10 cm y disponerlos en bandejas separados con papel de hornear.",
+    "Rellenar, cerrar según la forma estándar de cada empanada y congelar.",
+    "Freír directamente desde congeladas durante aproximadamente 5 minutos."
+   ],
+   "criticalPoints": [
+    "Mantener 4 mm de espesor.",
+    "Enharinar entre pasadas para evitar adherencia.",
+    "Separar tapas con papel de hornear.",
+    "Freír desde congelado."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Clarified butter",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Eggs",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad",
+     "approx": false
+    },
+    {
+     "ingredient": "White wine",
+     "quantity": 30,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 450,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 37.5,
+   "yieldUnit": "each",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Panqueques Mazcina",
+   "type": "prep",
+   "section": "Masas y panes",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 7,
+   "use": "Base para Celestinos Mazcina.",
+   "yieldText": "5-6 panqueques.",
+   "equipment": [
+    "Bowl",
+    "Hand blender",
+    "Sartén antiadherente",
+    "Espátula",
+    "Cucharón"
+   ],
+   "method": [
+    "Procesar harina, leche y huevos con hand blender hasta obtener mezcla líquida, homogénea y sin grumos.",
+    "Calentar sartén antiadherente y aplicar una fina capa de aceite de canola.",
+    "Verter una porción, distribuir y cocinar por ambos lados hasta dorado suave. Repetir, agregando una pequeña cantidad de aceite en cada panqueque."
+   ],
+   "criticalPoints": [
+    "La mezcla debe estar lisa y sin grumos.",
+    "Usar solo una fina capa de aceite."
+   ],
+   "asNeeded": [
+    "Aceite de canola (Cantidad necesaria; Para cocción)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 250,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Milk, full cream",
+     "quantity": 500,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Eggs",
+     "quantity": 2,
+     "unit": "each",
+     "original": "2 unidades",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 5.5,
+   "yieldUnit": "each",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Pasta Fresca Mazcina",
+   "type": "prep",
+   "section": "Masas y panes",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 8,
+   "use": "Base para Red Mechada Pasta y Green Creamy Pasta.",
+   "yieldText": "Porciones de 150 g.",
+   "equipment": [
+    "Amasadora",
+    "Bowls",
+    "Balanza",
+    "Film",
+    "Rodillos laminadores",
+    "Cuchillo",
+    "Contenedores",
+    "Papel de hornear"
+   ],
+   "method": [
+    "Mezclar harina, sal y aceite en el bowl. Aparte, quebrar y mezclar los huevos, verificando que no haya cáscaras.",
+    "Incorporar huevos y amasar a velocidad baja hasta unir. Agregar muy poca agua solo si la masa lo requiere.",
+    "Terminar el amasado a mano sobre el mesón. Envolver y refrigerar mínimo 30 minutos.",
+    "Laminar hasta 2 mm. Cortar láminas de aprox. 20 x 10 cm. Enharinar con mezcla de harina y sémola.",
+    "Cortar a cuchillo tiras de aprox. 1 cm de ancho. Enharinar bien.",
+    "Porcionar 150 g; guardar 2 porciones por contenedor separadas con papel de hornear. Congelar.",
+    "Para servicio, cocinar directamente desde congelada en agua hirviendo con sal 2-3 minutos, separando con tenazas."
+   ],
+   "criticalPoints": [
+    "Agregar agua solo si es necesario.",
+    "Mantener 2 mm de espesor y 1 cm de ancho.",
+    "Enharinar bien para evitar adherencia.",
+    "Cocinar desde congelado."
+   ],
+   "asNeeded": [
+    "Agua (Cantidad necesaria; Solo si la masa lo requiere)",
+    "Harina + sémola (Cantidad necesaria; Para laminado y corte)"
+   ],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Eggs",
+     "quantity": 10,
+     "unit": "each",
+     "original": "10 unidades",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 15,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1525,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Ajo Confitado Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 9,
+   "use": "Base para Mantequilla de Ajo, Mayonesa de Ajo y aceite aromatizado.",
+   "equipment": [
+    "Olla",
+    "Colador",
+    "Bowl",
+    "Hand blender/procesador",
+    "Contenedores"
+   ],
+   "method": [
+    "Cocinar todos los ingredientes en olla a fuego muy bajo durante 25-30 minutos, hasta que el ajo esté completamente blando.",
+    "Dejar enfriar. Filtrar, separando ajo y hierbas del aceite.",
+    "Retirar hierbas y procesar el ajo hasta obtener puré homogéneo.",
+    "Reservar el puré y, por separado, el aceite aromatizado."
+   ],
+   "criticalPoints": [
+    "El ajo debe confitarse, no freírse ni dorarse.",
+    "No desechar el aceite aromatizado."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Estimado como el puré de ajo; el costo incluye todo el aceite, que también se usa aparte como aceite aromatizado.",
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Garlic, peeled",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 1000,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Bay leaves",
+     "quantity": 3,
+     "unit": "each",
+     "original": "3 hojas",
+     "approx": false
+    },
+    {
+     "ingredient": "Rosemary",
+     "quantity": 6,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Dried oregano",
+     "quantity": 6,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Dried thyme",
+     "quantity": 6,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 15,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Black pepper, cracked",
+     "quantity": 3,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1000,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Mantequilla de Ajo Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 10,
+   "use": "Para tostadas de baguette usadas en tablas y entradas.",
+   "equipment": [
+    "Bowl",
+    "Espátula",
+    "Microondas si se requiere"
+   ],
+   "method": [
+    "Ablandar la mantequilla a temperatura ambiente. Si está refrigerada, calentar en microondas en intervalos de 30 segundos hasta que sea trabajable, sin sobrecalentar.",
+    "Mezclar con el resto de ingredientes hasta homogeneizar.",
+    "Para tostadas: cortar baguette en diagonal, untar una cara y tostar según servicio."
+   ],
+   "criticalPoints": [
+    "La mantequilla debe estar blanda, no líquida.",
+    "Distribuir condimentos uniformemente."
+   ],
+   "asNeeded": [
+    "Pimienta negra molida (1/4 cucharadita)"
+   ],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Clarified butter",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Ajo Confitado Mazcina",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Garlic powder",
+     "quantity": 9,
+     "unit": "g",
+     "original": "1 cucharada (8-10 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 5.5,
+     "unit": "g",
+     "original": "1 cucharadita (5-6 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Dried coriander",
+     "quantity": 2.5,
+     "unit": "g",
+     "original": "1 cucharada (2-3 g aprox.)",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 567,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Mayonesa de Ajo (Alioli) Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 10,
+   "use": "Base para tártara y salsa de acompañamiento.",
+   "yieldText": "Aprox. 1 kg + agregados.",
+   "equipment": [
+    "Bowl",
+    "Espátula",
+    "Contenedor"
+   ],
+   "method": [
+    "Mezclar todos los ingredientes hasta obtener una salsa lisa y homogénea.",
+    "Traspasar a contenedor limpio."
+   ],
+   "criticalPoints": [
+    "Mezclar muy bien para evitar concentraciones de condimento."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Mayonnaise",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Ajo Confitado Mazcina",
+     "quantity": 45,
+     "unit": "g",
+     "original": "3 cucharadas (45 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Garlic powder",
+     "quantity": 9,
+     "unit": "g",
+     "original": "1 cucharada (8-10 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 5.5,
+     "unit": "g",
+     "original": "1 cucharadita (5-6 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Lemon juice",
+     "quantity": 15,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1074,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Salsa Tártara Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 11,
+   "use": "Para Fish Sandwich, Kids Crispy Barramundi y otros platos.",
+   "equipment": [
+    "Procesador",
+    "Bowl",
+    "Espátula"
+   ],
+   "method": [
+    "Procesar pepinillos, cebolla encurtida, perejil y alcaparras hasta picado fino, sin hacer puré.",
+    "Mezclar con la Mayonesa de Ajo hasta homogeneizar."
+   ],
+   "criticalPoints": [
+    "Evitar exceso de líquido de los encurtidos.",
+    "Mantener textura fina pero visible."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "recipe": "Mayonesa de Ajo (Alioli) Mazcina",
+     "quantity": 1074,
+     "unit": "g",
+     "original": "1 receta (aprox. 1 kg)",
+     "approx": false
+    },
+    {
+     "ingredient": "Dill pickles",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Cebolla Encurtida Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Parsley, fresh",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Capers",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1434,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Cebolla Encurtida Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 12,
+   "use": "Base para mini ensalada, ensaladas, tártara y decoración.",
+   "equipment": [
+    "Cuchillo",
+    "Olla",
+    "Frasco/contenedor resistente al calor"
+   ],
+   "method": [
+    "Cortar cebolla en pluma fina y disponer en el contenedor.",
+    "Hervir vinagre, agua, sal, azúcar y semillas de cilantro hasta disolver.",
+    "Verter el líquido hirviendo sobre la cebolla hasta cubrir. Dejar enfriar antes de usar."
+   ],
+   "criticalPoints": [
+    "Corte uniforme.",
+    "Cubrir completamente la cebolla con el líquido."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Estimado como el peso de la cebolla escurrida (el líquido de encurtido no se sirve).",
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Red onion",
+     "quantity": 2000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red wine vinegar",
+     "quantity": 800,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 800,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Coriander seeds",
+     "quantity": 7,
+     "unit": "g",
+     "original": "1 cucharada (6-8 g aprox.)",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 2000,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Salsa de Tomate Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 12,
+   "use": "Base para pastas, Garlic Prawns, mechada, Baked Feta y otras preparaciones.",
+   "equipment": [
+    "Cuchillo",
+    "Bandeja de horno grande y profunda",
+    "Espátula",
+    "Hand blender",
+    "Contenedores"
+   ],
+   "method": [
+    "Picar cebolla y ajo en cubos pequeños. Deshojar romero.",
+    "Mezclar todos los ingredientes en bandeja grande.",
+    "Hornear a 250 °C o temperatura máxima disponible durante aprox. 1 hora, removiendo cada 20 minutos.",
+    "Dejar enfriar y triturar con hand blender hasta textura homogénea. Porcionar."
+   ],
+   "criticalPoints": [
+    "Remover cada 20 minutos.",
+    "Usar bandeja profunda para evitar derrames."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Tomatoes, peeled, canned",
+     "quantity": 2500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red peppers, roasted, canned",
+     "quantity": 1500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Brown onion",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Garlic, peeled",
+     "quantity": 80,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Rosemary, fresh",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Black pepper, cracked",
+     "quantity": 3,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 300,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 4933,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Confitado de Tomates Cherry y Pimentones Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 13,
+   "use": "Para Baked Feta Pot y Mazcina Salad.",
+   "equipment": [
+    "Olla",
+    "Espátula"
+   ],
+   "method": [
+    "Cocinar todos los ingredientes a fuego bajo-medio.",
+    "Reducir aproximadamente 1/4 del líquido inicial, mezclando con cuidado.",
+    "Dejar enfriar y porcionar."
+   ],
+   "criticalPoints": [
+    "Evitar quemar el azúcar.",
+    "No romper excesivamente los tomates."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Cherry tomatoes",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red peppers, roasted, canned",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 180,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 80,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Black pepper, cracked",
+     "quantity": 2,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1272,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Salsa Brava Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 13,
+   "use": "Para Mazcina Bravas.",
+   "equipment": [
+    "Olla",
+    "Cuchillo",
+    "Hand blender"
+   ],
+   "method": [
+    "Calentar aceite y dorar ajo finamente picado junto con el concentrado de tomate.",
+    "Agregar especias y mezclar evitando que se quemen.",
+    "Agregar pimentones y cocinar 15-20 minutos a fuego medio.",
+    "Triturar con hand blender. Probar y rectificar sal o líquido según necesidad."
+   ],
+   "criticalPoints": [
+    "Cocinar bien el concentrado de tomate.",
+    "Evitar quemar especias."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Red peppers, roasted, canned",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Tomato paste",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Garlic, peeled",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Smoked paprika",
+     "quantity": 14,
+     "unit": "g",
+     "original": "2 cucharadas (14 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Sweet paprika",
+     "quantity": 14,
+     "unit": "g",
+     "original": "2 cucharadas (14 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Cayenne or chilli powder",
+     "quantity": 6,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 50,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1354,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Fumet de Pescado Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 14,
+   "use": "Fondo para Mediterranean Rice.",
+   "equipment": [
+    "Olla grande",
+    "Sartén/olla pequeña",
+    "Colador"
+   ],
+   "method": [
+    "Tostar suavemente el azafrán y desglasar/activar con el vino blanco. Reservar.",
+    "En olla grande, dorar pescado, verduras y ajo con un poco de aceite.",
+    "Agregar vino con azafrán, agua, caldo, sal y pimienta. Llevar a hervor y cocinar a fuego bajo aprox. 1 hora.",
+    "Filtrar completamente y reservar solo el líquido."
+   ],
+   "criticalPoints": [
+    "No quemar el azafrán.",
+    "Usar recortes vegetales limpios y aptos.",
+    "Mantener hervor suave."
+   ],
+   "asNeeded": [
+    "Caldo de verduras en polvo (1 cucharada)",
+    "Aceite (Cantidad necesaria; Para dorar)"
+   ],
+   "pending": [
+    "Estimado como el líquido (agua + vino); se filtran los sólidos.",
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Fish frames and heads",
+     "quantity": 2000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Vegetable trimmings",
+     "quantity": 800,
+     "unit": "g",
+     "original": "800 g aprox.",
+     "approx": true
+    },
+    {
+     "ingredient": "Garlic, peeled",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "White wine",
+     "quantity": 1000,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 3000,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Saffron",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 paquete",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 40,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Black pepper, cracked",
+     "quantity": 3,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 4000,
+   "yieldUnit": "ml",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Pesto Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 15,
+   "use": "Base para Green Creamy Pasta.",
+   "equipment": [
+    "Olla",
+    "Bowl con hielo",
+    "Colador",
+    "Procesador"
+   ],
+   "method": [
+    "Blanquear brevemente espinaca y albahaca en agua hirviendo.",
+    "Pasar inmediatamente a agua con hielo para cortar cocción.",
+    "Escurrir y retirar la mayor cantidad posible de agua.",
+    "Procesar con el resto de ingredientes hasta obtener mezcla homogénea y pastosa."
+   ],
+   "criticalPoints": [
+    "Blanqueado breve.",
+    "Escurrir muy bien antes de procesar."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Spinach",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Basil, fresh",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Cashew nuts",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 50,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Garlic powder",
+     "quantity": 5,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Onion powder",
+     "quantity": 5,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 15,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Black pepper, ground",
+     "quantity": 3,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Garlic, peeled",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 358,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Jugo Concentrado de Jengibre Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 16,
+   "use": "Base para ceviche de salmón y ceviche de champiñones.",
+   "yieldText": "Proporción 1:1.",
+   "equipment": [
+    "Pelador",
+    "Procesador",
+    "Colador fino"
+   ],
+   "method": [
+    "Pelar y trocear jengibre.",
+    "Procesar con agua en proporción 1:1.",
+    "Filtrar presionando la pulpa para extraer el máximo líquido. Reservar el jugo concentrado."
+   ],
+   "criticalPoints": [
+    "Mantener siempre la proporción 1:1."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Estimado como el agua usada (proporción 1:1); se filtra la pulpa.",
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Ginger",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 1000,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1000,
+   "yieldUnit": "ml",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Dressing de Limón Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 16,
+   "use": "Dressing base para ensaladas y Mini Ensalada Mazcina.",
+   "equipment": [
+    "Mamadera plástica"
+   ],
+   "method": [
+    "Colocar todos los ingredientes en la mamadera, cerrar y agitar enérgicamente.",
+    "Agitar muy bien antes de cada uso."
+   ],
+   "criticalPoints": [
+    "La mezcla se separa naturalmente; agitar siempre antes de usar."
+   ],
+   "asNeeded": [
+    "Sal (1 cucharadita)",
+    "Pimienta negra molida (1/4 cucharadita)"
+   ],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Olive oil",
+     "quantity": 100,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Lemon juice",
+     "quantity": 60,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 20,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 180,
+   "yieldUnit": "ml",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Adobo para Pescado Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 17,
+   "use": "Condimento seco para barramundi y salmón.",
+   "equipment": [
+    "Bowl",
+    "Contenedor seco"
+   ],
+   "method": [
+    "Mezclar todos los condimentos hasta homogeneizar. Guardar en contenedor limpio y seco."
+   ],
+   "criticalPoints": [
+    "Mantener completamente seco.",
+    "Gramaje de uso por filete debe verificarse en estandarización final."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Gramaje de uso por filete debe verificarse en estandarización final.",
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Dried oregano",
+     "quantity": 12,
+     "unit": "g",
+     "original": "4 cucharadas (12 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Garlic powder",
+     "quantity": 18,
+     "unit": "g",
+     "original": "2 cucharadas (16-20 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Onion powder",
+     "quantity": 15,
+     "unit": "g",
+     "original": "2 cucharadas (14-16 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Ground cumin",
+     "quantity": 13,
+     "unit": "g",
+     "original": "2 cucharadas (12-14 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 33,
+     "unit": "g",
+     "original": "2 cucharadas (30-36 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Black pepper, ground",
+     "quantity": 3.5,
+     "unit": "g",
+     "original": "1/2 cucharada (3-4 g aprox.)",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 94,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Batido para Pescado Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 17,
+   "use": "Rebozado para barramundi frito.",
+   "equipment": [
+    "Bowl",
+    "Batidor manual",
+    "Contenedor refrigerado"
+   ],
+   "method": [
+    "Mezclar ingredientes secos.",
+    "Agregar huevo, vinagre y cerveza.",
+    "Incorporar 200 ml de agua y continuar agregando gradualmente hasta lograr consistencia adecuada; máximo referencial 400 ml.",
+    "Refrigerar y mantener frío hasta y durante el uso."
+   ],
+   "criticalPoints": [
+    "El batido debe estar bien frío para favorecer una cobertura crujiente.",
+    "Agregar agua gradualmente."
+   ],
+   "asNeeded": [
+    "Sal (1 cucharadita)",
+    "Pimienta negra molida (1/4 cucharadita)"
+   ],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Baking powder",
+     "quantity": 12,
+     "unit": "g",
+     "original": "1 cucharada (12 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Eggs",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad",
+     "approx": false
+    },
+    {
+     "ingredient": "Malt vinegar",
+     "quantity": 100,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Beer",
+     "quantity": 200,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 300,
+     "unit": "ml",
+     "original": "200-400 ml aprox. (Ajustar consistencia)",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 1162,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Arroz Blanco Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 18,
+   "use": "Base para Lomo Saltado y Mediterranean Rice.",
+   "yieldText": "Porciones de 150 g.",
+   "equipment": [
+    "Arrocera",
+    "Balanza",
+    "Bandeja de enfriado",
+    "Contenedores"
+   ],
+   "method": [
+    "Colocar todos los ingredientes en la arrocera y mezclar. Cocinar en ciclo normal.",
+    "Al finalizar, mezclar suavemente. Retirar, enfriar completamente y porcionar en 150 g."
+   ],
+   "criticalPoints": [
+    "Respetar proporción 1 kg arroz : 1,5 L agua.",
+    "Enfriar antes de porcionar."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Rice",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 1500,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 40,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 40,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 2580,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Homemade Potatoes Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 19,
+   "use": "Base para Mazcina Bravas y Papas Provenzal.",
+   "yieldText": "Porciones de 200 g.",
+   "equipment": [
+    "Olla",
+    "Colador",
+    "Freidora",
+    "Bandeja de enfriado",
+    "Balanza"
+   ],
+   "method": [
+    "Cortar papas en cubos uniformes.",
+    "Hervir en agua con sal aprox. 15-20 minutos, o hasta que estén blandas pero sin deshacerse.",
+    "Escurrir y enfriar completamente.",
+    "Dar una primera fritura, retirar y enfriar nuevamente.",
+    "Porcionar en 200 g para servicio."
+   ],
+   "criticalPoints": [
+    "El tiempo de hervor es referencial; manda la textura.",
+    "Enfriar completamente antes y después de la primera fritura."
+   ],
+   "asNeeded": [
+    "Agua (Cantidad necesaria)",
+    "Sal (Cantidad necesaria)",
+    "Aceite para freír (Cantidad necesaria)"
+   ],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Potatoes",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1000,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Papas Provenzal Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 19,
+   "use": "Acompañamiento para Grilled Barramundi y Salmón Cancato.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "Bowl"
+   ],
+   "method": [
+    "Freír 200 g de Homemade Potatoes hasta doradas y crujientes.",
+    "En bowl mezclar ajo, perejil y parmesano. Incorporar papas calientes, salar ligeramente y mezclar."
+   ],
+   "criticalPoints": [
+    "Mezclar inmediatamente después de freír para que el condimento se adhiera."
+   ],
+   "asNeeded": [
+    "Ajo fresco picado (1 cucharadita)",
+    "Sal (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Homemade Potatoes Mazcina",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Parsley, fresh",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Parmesan",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1,
+   "yieldUnit": "each",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Cebolla Estofada Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 20,
+   "use": "Base para Chorrillana y extra de sándwiches.",
+   "equipment": [
+    "Olla o sartén grande"
+   ],
+   "method": [
+    "Cortar cebolla en pluma uniforme.",
+    "Cocinar lentamente con aceite hasta que quede muy blanda y comience a caramelizar.",
+    "Agregar sal al final, probar y rectificar."
+   ],
+   "criticalPoints": [
+    "Buscar caramelización suave sin quemar."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Brown onion",
+     "quantity": 2000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Canola oil",
+     "quantity": 40,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 16.5,
+     "unit": "g",
+     "original": "1 cucharada (15-18 g aprox.)",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 2056,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Salsa de Lomo Saltado Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 20,
+   "use": "Salsa para Lomo Saltado.",
+   "equipment": [
+    "Mamadera plástica"
+   ],
+   "method": [
+    "Mezclar todos los ingredientes en la mamadera y agitar bien. Agitar antes de cada uso."
+   ],
+   "criticalPoints": [
+    "Respetar proporciones."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Sugar syrup",
+     "quantity": 50,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Balsamic vinegar",
+     "quantity": 50,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Soy sauce",
+     "quantity": 100,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Dark soy sauce",
+     "quantity": 50,
+     "unit": "ml",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 250,
+   "yieldUnit": "ml",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Tortillas de Harina Fritas Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 21,
+   "use": "Acompañamiento para tablas y entradas.",
+   "equipment": [
+    "Cuchillo",
+    "Freidora",
+    "Bowl",
+    "Contenedor seco"
+   ],
+   "method": [
+    "Cortar cada tortilla circular en 8 triángulos.",
+    "Freír hasta doradas y crujientes.",
+    "Mientras estén calientes, mezclar con paprika, tomillo y sal.",
+    "Enfriar completamente y almacenar en lugar fresco y seco."
+   ],
+   "criticalPoints": [
+    "Condimentar inmediatamente al salir de la freidora.",
+    "Enfriar antes de guardar."
+   ],
+   "asNeeded": [
+    "Paprika ahumada (1 cucharadita)",
+    "Tomillo seco (1 cucharadita)",
+    "Sal (A gusto)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Flour tortillas",
+     "quantity": 1,
+     "unit": "each",
+     "original": "cada tortilla se corta en 8",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 8,
+   "yieldUnit": "each",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Pebre Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 21,
+   "use": "Acompañamiento para empanadas, sopaipillas y panes de 40 g.",
+   "equipment": [
+    "Procesador",
+    "Colador",
+    "Cuchillo",
+    "Bowl"
+   ],
+   "method": [
+    "Procesar tomate brevemente, manteniendo textura.",
+    "Procesar cebolla por separado, lavar suavemente con agua y escurrir muy bien.",
+    "Picar cilantro a cuchillo. Mezclar todo con vinagre, limón, aceite y sal.",
+    "Probar y rectificar. Mantener refrigerado."
+   ],
+   "criticalPoints": [
+    "No hacer puré.",
+    "Cantidad definitiva de sal pendiente de estandarización."
+   ],
+   "asNeeded": [
+    "Sal (1 cucharadita-1 cucharada; Por confirmar)"
+   ],
+   "pending": [
+    "Sal: Por confirmar",
+    "Cantidad definitiva de sal pendiente de estandarización.",
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Tomatoes, round",
+     "quantity": 200,
+     "unit": "g",
+     "original": "200 g aprox.",
+     "approx": true
+    },
+    {
+     "ingredient": "Red onion",
+     "quantity": 125,
+     "unit": "g",
+     "original": "100-150 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Coriander, fresh",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red wine vinegar",
+     "quantity": 30,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Lemon juice",
+     "quantity": 3.75,
+     "unit": "ml",
+     "original": "2,5-5 ml (1/2-1 cucharadita)",
+     "approx": true
+    },
+    {
+     "ingredient": "Canola oil",
+     "quantity": 40,
+     "unit": "ml",
+     "original": "40 ml aprox.",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 409,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Ensalada Chilena Mazcina",
+   "type": "prep",
+   "section": "Bases, fondos y preparaciones intermedias",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 22,
+   "use": "Acompañamiento y ensalada de carta.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Cuchillo",
+    "Bowl"
+   ],
+   "method": [
+    "Mezclar suavemente tomate, cebolla y cilantro. Condimentar con sal y aceite justo antes de servir."
+   ],
+   "criticalPoints": [
+    "Mantener el tomate entero y fresco."
+   ],
+   "asNeeded": [
+    "Sal (Cantidad necesaria)",
+    "Aceite (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Tomatoes, round",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red onion",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Coriander, fresh",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1,
+   "yieldUnit": "each",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Pino de Carne para Empanadas Mazcina",
+   "type": "prep",
+   "section": "Rellenos y proteínas de producción",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 24,
+   "use": "Relleno para empanadas de carne de cóctel.",
+   "yieldText": "52-60 empanadas aprox.; 25-30 g por unidad.",
+   "equipment": [
+    "Olla grande",
+    "Cuchillo",
+    "Balanza"
+   ],
+   "method": [
+    "Cortar carne y cebolla en cubos pequeños.",
+    "Derretir manteca y cocinar cebolla hasta muy blanda. Agregar condimentos.",
+    "Agregar vino y dejar evaporar alcohol. Incorporar carne y cocinar completamente.",
+    "Espolvorear harina en forma de velo y mezclar hasta espesar ligeramente los jugos.",
+    "Enfriar y refrigerar de un día para otro.",
+    "Mezclar con huevo duro y aceitunas picadas. Usar 1 cucharada colmada (25-30 g) por tapa y agregar 2 pasas."
+   ],
+   "criticalPoints": [
+    "La cebolla debe estar muy blanda antes de la carne.",
+    "Pino frío para armado.",
+    "No sobrecargar las tapas."
+   ],
+   "asNeeded": [
+    "Ajo en polvo (1/2 cucharada)",
+    "Orégano (1 cucharadita)",
+    "Comino (1/2 cucharadita)",
+    "Paprika dulce (1/2 cucharadita)",
+    "Pimienta negra (1/4 cucharadita)",
+    "Pasas (2 por empanada)"
+   ],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Rump steak",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Brown onion",
+     "quantity": 800,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Beef fat, rendered (manteca)",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red wine",
+     "quantity": 50,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 13.5,
+     "unit": "g",
+     "original": "1 cucharada (12-15 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 16.5,
+     "unit": "g",
+     "original": "1 cucharada (15-18 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 18,
+     "unit": "g",
+     "original": "2 cucharadas (16-20 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Eggs",
+     "quantity": 5,
+     "unit": "each",
+     "original": "5 unidades (Para armado)",
+     "approx": false
+    },
+    {
+     "ingredient": "Black olives",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 1540.0,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Pino de Camarón y Queso Mazcina",
+   "type": "prep",
+   "section": "Rellenos y proteínas de producción",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 25,
+   "use": "Relleno para empanadas de camarón-queso.",
+   "yieldText": "40-45 empanadas aprox.; 30 g por unidad.",
+   "equipment": [
+    "Procesador",
+    "Sartén/olla",
+    "Bowl"
+   ],
+   "method": [
+    "Descongelar y escurrir camarones. Procesar hasta picado muy fino, sin hacer pasta.",
+    "Cocinar a fuego alto con aceite, ajo y sal hasta evaporar la mayor cantidad de líquido.",
+    "Agregar vino al final y reducir completamente. Enfriar.",
+    "Mezclar 1:1 con queso Gouda rallado. Usar 30 g por tapa."
+   ],
+   "criticalPoints": [
+    "Eliminar humedad antes de mezclar con queso.",
+    "No hacer pasta con el camarón."
+   ],
+   "asNeeded": [
+    "Ajo fresco picado (1 cucharadita)",
+    "Aceite de oliva (Cantidad necesaria)"
+   ],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Prawn meat, raw 26/30",
+     "quantity": 800,
+     "unit": "g",
+     "original": "800 g aprox. (1 bolsa)",
+     "approx": true
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 800,
+     "unit": "g",
+     "original": "800 g aprox. (Proporción 1:1 con camarón)",
+     "approx": true
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "White wine",
+     "quantity": 7.5,
+     "unit": "ml",
+     "original": "5-10 ml (1-2 cucharaditas)",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 1275.0,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Mechada / Carne a la Cacerola Mazcina",
+   "type": "prep",
+   "section": "Rellenos y proteínas de producción",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 25,
+   "use": "Base para pastas, chorrillana y sándwiches.",
+   "yieldText": "Porciones de 150 g.",
+   "equipment": [
+    "Olla grande con tapa",
+    "Pinzas",
+    "Colador",
+    "Balanza"
+   ],
+   "method": [
+    "Limpiar roast beef, reservando recortes de grasa para Manteca de Carne.",
+    "Derretir manteca y sellar la carne por todos sus lados.",
+    "Agregar ajo, condimentos, concentrado y harina; mezclar bien evitando grumos.",
+    "Agregar salsa de tomate, vino, aceite y 400 ml de agua. Cocinar a fuego bajo 4-5 horas, agregando agua si hace falta.",
+    "Cuando la carne esté muy blanda, enfriar y separar carne del líquido. Desmechar.",
+    "Reincorporar suficiente líquido para que quede jugosa pero no líquida. Reservar el resto para regeneración.",
+    "Enfriar y porcionar en 150 g."
+   ],
+   "criticalPoints": [
+    "No desechar el líquido de cocción.",
+    "Cocción lenta hasta desmechar con facilidad.",
+    "Para sándwich usar muy poco líquido; para chorrillana/pasta se puede regenerar con más."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Roast beef (beef for mechada)",
+     "quantity": 1000,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa de Tomate Mazcina",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Beef fat, rendered (manteca)",
+     "quantity": 150,
+     "unit": "g",
+     "original": "100-200 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Red wine",
+     "quantity": 200,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Water",
+     "quantity": 450,
+     "unit": "ml",
+     "original": "400-500 ml",
+     "approx": true
+    },
+    {
+     "ingredient": "Vegetable stock powder",
+     "quantity": 8,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Garlic, peeled",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Garlic powder",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Onion powder",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 15,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Black pepper, ground",
+     "quantity": 3,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 20,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Tomato paste",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 2036,
+   "yieldUnit": "g",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Pollo Apanado Mazcina",
+   "type": "dish",
+   "section": "Rellenos y proteínas de producción",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 26,
+   "use": "Base para Napo Chicken Bites y Kids Crispy Chicken.",
+   "yieldText": "Porción de servicio habitual: 200 g.",
+   "equipment": [
+    "3 bowls",
+    "Freidora"
+   ],
+   "method": [
+    "Pasar pollo por harina con sal.",
+    "Mezclar huevos, perejil, ajo y Dijon; pasar el pollo enharinado por esta mezcla.",
+    "Cubrir con cornflakes triturados. Reservar para fritura.",
+    "Freír porción de 200 g aprox. 2-2 1/2 minutos o hasta dorado y cocción completa."
+   ],
+   "criticalPoints": [
+    "Orden de apanado: harina -> huevo/Dijon -> cornflakes.",
+    "Verificar cocción completa del pollo."
+   ],
+   "asNeeded": [
+    "Pechuga de pollo en cubos (Cantidad necesaria)",
+    "Harina + sal (Cantidad necesaria; Primera capa)",
+    "Ajo fresco picado (1/2 cucharadita)",
+    "Cornflakes triturados (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Eggs",
+     "quantity": 2,
+     "unit": "each",
+     "original": "2 unidades",
+     "approx": false
+    },
+    {
+     "ingredient": "Parsley, fresh",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Dijon mustard",
+     "quantity": 30,
+     "unit": "g",
+     "original": "2 cucharadas (30 g aprox.)",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Ceviche de Champiñones Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 28,
+   "use": "Entrada fría.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "2 bowls, uno con hielo",
+    "Bowl pequeño de loza"
+   ],
+   "method": [
+    "Cortar champiñones en cuartos y dar fritura muy breve. Escurrir y enfriar inmediatamente sobre bowl con hielo.",
+    "Agregar palta en cubos, pimentón, cebolla escurrida, cilantro, limón, jengibre, aceite y sal. Mezclar sobre hielo.",
+    "Servir en bowl pequeño, terminar con canchita y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "Mantener muy frío.",
+    "No sobrecocinar champiñones.",
+    "Manipular palta con cuidado."
+   ],
+   "asNeeded": [
+    "Sal (1 cucharadita)",
+    "Mini Ensalada Mazcina (Cantidad pequeña; Para decoración)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Button mushrooms",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Avocado",
+     "quantity": 125,
+     "unit": "g",
+     "original": "1/2 unidad (120-130 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Red capsicum",
+     "quantity": 45,
+     "unit": "g",
+     "original": "40-50 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Red onion",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Lemon juice",
+     "quantity": 60,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Coriander, fresh",
+     "quantity": 15,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Jugo Concentrado de Jengibre Mazcina",
+     "quantity": 30,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 15,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Toasted corn (canchita)",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Napo Chicken Bites Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 28,
+   "use": "Entrada caliente.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "Gratinador",
+    "Bandeja pequeña",
+    "Plato"
+   ],
+   "method": [
+    "Gratinar 60 g de salsa de tomate con 30-40 g de Gouda.",
+    "Freír 200 g de pollo apanado 2-2 1/2 minutos o hasta cocción completa.",
+    "Disponer pollo en plato y cubrir con salsa/queso gratinado.",
+    "Acompañar con alioli y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "Servir inmediatamente para conservar crocancia."
+   ],
+   "asNeeded": [
+    "Mini Ensalada Mazcina (20 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Chicken breast",
+     "quantity": 200,
+     "unit": "g",
+     "original": "200 g de Pollo Apanado Mazcina: se costea el pollo; el apanado no se costea",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa de Tomate Mazcina",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 35,
+     "unit": "g",
+     "original": "30-40 g",
+     "approx": true
+    },
+    {
+     "recipe": "Mayonesa de Ajo (Alioli) Mazcina",
+     "quantity": 27.5,
+     "unit": "g",
+     "original": "25-30 g (Pocillo)",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Baked Feta Pot Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 29,
+   "use": "Entrada caliente.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Pocillo de greda",
+    "Gratinador",
+    "Soplete"
+   ],
+   "method": [
+    "Precalentar pocillo de greda. Calentar confitado + salsa de tomate.",
+    "Disponer mezcla caliente en pocillo y agregar feta en cubos grandes irregulares.",
+    "Gratinar; terminar con soplete para dorado intenso.",
+    "Servir con 5 tostadas, 6 tortillas fritas y mini ensalada."
+   ],
+   "criticalPoints": [
+    "Pocillo muy caliente.",
+    "Mantener feta en trozos grandes."
+   ],
+   "asNeeded": [
+    "Mini Ensalada Mazcina (20 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Confitado de Tomates Cherry y Pimentones Mazcina",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa de Tomate Mazcina",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Feta, Danish style",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Baguette slices, toasted",
+     "quantity": 5,
+     "unit": "each",
+     "original": "5 unidades",
+     "approx": false
+    },
+    {
+     "recipe": "Tortillas de Harina Fritas Mazcina",
+     "quantity": 6,
+     "unit": "each",
+     "original": "6 unidades",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Ceviche de Salmón Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 30,
+   "use": "Entrada fría.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "2 bowls, uno con hielo",
+    "Copa",
+    "Plato pequeño"
+   ],
+   "method": [
+    "Mantener bowl de mezcla sobre hielo. Mezclar salmón con sal, cebolla, pimentón y cilantro.",
+    "Agregar limón, jugo de jengibre y leche evaporada. Mezclar y rectificar sal/acidez.",
+    "Servir en copa, terminar con canchita y camarón. Decorar plato con canchita, salt flakes, camote, limón y concha."
+   ],
+   "criticalPoints": [
+    "Mantener muy frío.",
+    "Rectificar sabor antes de servir.",
+    "Gramaje de sal pendiente de revisión."
+   ],
+   "asNeeded": [
+    "Sal (1 1/2 cucharaditas aprox.; Por confirmar)",
+    "Canchita (Cantidad necesaria)",
+    "Salt flakes (Cantidad necesaria)"
+   ],
+   "pending": [
+    "Sal: Por confirmar",
+    "Gramaje de sal pendiente de revisión."
+   ],
+   "lines": [
+    {
+     "ingredient": "Salmon portions, skinless 200 g",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red onion",
+     "quantity": 55,
+     "unit": "g",
+     "original": "50-60 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Red capsicum",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Coriander, fresh",
+     "quantity": 15,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Lemon juice",
+     "quantity": 60,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "recipe": "Jugo Concentrado de Jengibre Mazcina",
+     "quantity": 30,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Evaporated milk",
+     "quantity": 30,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Prawn cutlets, raw 26/30 (tail on)",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad (Para coronar)",
+     "approx": false
+    },
+    {
+     "ingredient": "Sweet potato, cooked (piece)",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 trozo",
+     "approx": false
+    },
+    {
+     "ingredient": "Lemon wedge",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 gajo",
+     "approx": false
+    },
+    {
+     "ingredient": "Scallop shell (garnish)",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad (Decoración)",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Mazcina Bravas",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 31,
+   "use": "Entrada caliente.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "Pocillo de loza",
+    "Plato",
+    "Pocillo de salsa"
+   ],
+   "method": [
+    "Freír papas hasta doradas y crujientes. Salar.",
+    "Disponer en pocillo de loza, agregar Gouda, salsa brava y 10 g de alioli. Terminar con perejil.",
+    "Servir con pocillo de 25 g de alioli y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "Servir inmediatamente."
+   ],
+   "asNeeded": [
+    "Perejil fresco (Cantidad necesaria)",
+    "Mini Ensalada Mazcina (20 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Homemade Potatoes Mazcina",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 25,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa Brava Mazcina",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Mayonesa de Ajo (Alioli) Mazcina",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Mayonesa de Ajo (Alioli) Mazcina",
+     "quantity": 25,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Garlic Prawns Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 31,
+   "use": "Entrada caliente.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Sartén",
+    "Bowl pequeño de loza",
+    "Tabla de madera"
+   ],
+   "method": [
+    "Sofreír ajo en aceite y agregar camarones y tiger prawn.",
+    "Agregar vino y reducir; incorporar salsa de tomate y terminar cocción.",
+    "Servir 7 camarones con salsa en bowl; coronar con tiger prawn y perejil.",
+    "Acompañar con tostadas, tortillas y mini ensalada."
+   ],
+   "criticalPoints": [
+    "No quemar ajo.",
+    "No sobrecocinar camarones."
+   ],
+   "asNeeded": [
+    "Ajo fresco picado (1 cucharadita)",
+    "Perejil fresco (Cantidad necesaria)",
+    "Mini Ensalada Mazcina (20 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Prawn meat, raw 26/30",
+     "quantity": 7,
+     "unit": "each",
+     "original": "7 unidades",
+     "approx": false
+    },
+    {
+     "ingredient": "Tiger prawns, whole",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad (Cabeza y cola intactas; parte de carcasa retirada)",
+     "approx": false
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 20,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "White wine",
+     "quantity": 55,
+     "unit": "ml",
+     "original": "50-60 ml",
+     "approx": true
+    },
+    {
+     "recipe": "Salsa de Tomate Mazcina",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Baguette slices, toasted",
+     "quantity": 5,
+     "unit": "each",
+     "original": "5 unidades",
+     "approx": false
+    },
+    {
+     "recipe": "Tortillas de Harina Fritas Mazcina",
+     "quantity": 6,
+     "unit": "each",
+     "original": "6 unidades",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Crab Gratin Mazcina (Chupe de Jaiba)",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 32,
+   "use": "Entrada caliente; se produce, porciona y congela.",
+   "yieldText": "Porciones de 200 g.",
+   "equipment": [
+    "Olla/sartén",
+    "Procesador",
+    "Pocillos de greda",
+    "Microondas",
+    "Gratinador"
+   ],
+   "method": [
+    "Procesar pan con leche hasta pasta.",
+    "Sofreír cebolla, pimentón y ajo en aceite. Agregar condimentos y vino.",
+    "Agregar cangrejo, cocinar y reducir. Incorporar pasta de pan y 100 g de Gouda. Cocinar hasta mezcla cremosa y espesa.",
+    "Enfriar, porcionar 200 g y congelar.",
+    "Servicio: calentar 1-2 minutos en microondas hasta muy caliente, pasar a pocillo de greda precalentado, cubrir con 30 g de Gouda y gratinar.",
+    "Servir con 5 tostadas de baguette, 6 tortillas fritas y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "Revisar que no haya restos de caparazón.",
+    "Reducir exceso de líquido.",
+    "Servir muy caliente."
+   ],
+   "asNeeded": [
+    "Ajo fresco picado (1 cucharada)",
+    "Sal (1 cucharadita)",
+    "Pimienta negra molida (1/4 cucharada; 3/4 cucharadita aprox.)",
+    "Comino (1 cucharadita)",
+    "Orégano (2 cucharadas)",
+    "Paprika ahumada (1 cucharadita)",
+    "Cebolla en polvo (1 cucharadita)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Crab meat",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Brown onion",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red capsicum",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "White wine",
+     "quantity": 245,
+     "unit": "ml",
+     "original": "1 taza (240-250 ml)",
+     "approx": true
+    },
+    {
+     "ingredient": "Olive oil",
+     "quantity": 80,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Milk, full cream",
+     "quantity": 150,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Bread",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Chorrillana Mazcina",
+   "type": "dish",
+   "section": "Platos principales",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 35,
+   "use": "Plato principal.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "Sartén",
+    "Olla pequeña",
+    "2 pocillos"
+   ],
+   "method": [
+    "Freír papas hasta doradas y crujientes.",
+    "Regenerar mechada con suficiente jugo para que quede muy jugosa. Calentar cebolla. Freír chorizo y 2 huevos.",
+    "Montar papas, mechada, cebolla, chorizo y huevos. Terminar con sal y perejil.",
+    "Servir con alioli y ketchup."
+   ],
+   "criticalPoints": [
+    "Todos los componentes deben llegar calientes al montaje."
+   ],
+   "asNeeded": [
+    "Líquido de Mechada (Cantidad necesaria; Para dejarla muy jugosa)",
+    "Sal y perejil (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Frozen chips (fries)",
+     "quantity": 400,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Mechada / Carne a la Cacerola Mazcina",
+     "quantity": 140,
+     "unit": "g",
+     "original": "130-150 g",
+     "approx": true
+    },
+    {
+     "recipe": "Cebolla Estofada Mazcina",
+     "quantity": 90,
+     "unit": "g",
+     "original": "80-100 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Chorizo",
+     "quantity": 70,
+     "unit": "g",
+     "original": "60-80 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Eggs",
+     "quantity": 2,
+     "unit": "each",
+     "original": "2 unidades",
+     "approx": false
+    },
+    {
+     "recipe": "Mayonesa de Ajo (Alioli) Mazcina",
+     "quantity": 25,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Tomato ketchup",
+     "quantity": 25,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Red Mechada Pasta Mazcina",
+   "type": "dish",
+   "section": "Platos principales",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 35,
+   "use": "Pasta principal.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Sartén",
+    "Olla",
+    "Colador",
+    "Bowl negro"
+   ],
+   "method": [
+    "Calentar mechada, líquido y salsa de tomate hasta integrar.",
+    "Cocinar pasta desde congelada 2-3 minutos en agua hirviendo con sal. Escurrir.",
+    "Agregar pasta a la salsa y mezclar hasta cubrir.",
+    "Servir en bowl negro con parmesano y mini ensalada."
+   ],
+   "criticalPoints": [
+    "No sobrecocinar pasta.",
+    "La salsa debe quedar jugosa, no aguada."
+   ],
+   "asNeeded": [
+    "Líquido de Mechada (60 ml)",
+    "Mini Ensalada Mazcina (20-30 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Pasta Fresca Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Mechada / Carne a la Cacerola Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa de Tomate Mazcina",
+     "quantity": 90,
+     "unit": "g",
+     "approx": true,
+     "original": "90 ml"
+    },
+    {
+     "ingredient": "Parmesan",
+     "quantity": 17.5,
+     "unit": "g",
+     "original": "15-20 g",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Green Creamy Pasta Mazcina",
+   "type": "dish",
+   "section": "Platos principales",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 36,
+   "use": "Pasta principal.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Sartén",
+    "Olla",
+    "Colador"
+   ],
+   "method": [
+    "Sofreír brevemente ajo en aceite. Agregar pimentón y arvejas.",
+    "Agregar pesto y crema; reducir hasta salsa cremosa y espesa.",
+    "Cocinar pasta desde congelada 2-3 minutos, escurrir e integrar en sartén.",
+    "Servir con parmesano y mini ensalada."
+   ],
+   "criticalPoints": [
+    "No quemar ajo.",
+    "No reducir en exceso la crema."
+   ],
+   "asNeeded": [
+    "Ajo fresco picado (1 cucharadita)",
+    "Aceite de oliva (Cantidad necesaria)",
+    "Mini Ensalada Mazcina (20-30 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Pasta Fresca Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Pesto Mazcina",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Cream",
+     "quantity": 60,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Red capsicum",
+     "quantity": 25,
+     "unit": "g",
+     "original": "20-30 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Green peas",
+     "quantity": 25,
+     "unit": "g",
+     "original": "20-30 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Parmesan",
+     "quantity": 17.5,
+     "unit": "g",
+     "original": "15-20 g",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Grilled Barramundi Mazcina",
+   "type": "dish",
+   "section": "Platos principales",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 37,
+   "use": "Pescado principal.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Sartén",
+    "Freidora",
+    "Pocillo de salsa"
+   ],
+   "method": [
+    "Condimentar barramundi y sellar en mezcla 1:1 de mantequilla clarificada y aceite de oliva. Cocinar aprox. 4-5 minutos por lado, ajustando por grosor.",
+    "Preparar Papas Provenzal y Ensalada Chilena.",
+    "Montar papas como base, barramundi encima, ensalada chilena, mini ensalada, tártara y gajo de limón."
+   ],
+   "criticalPoints": [
+    "Verificar cocción sin resecar.",
+    "Gramaje de adobo pendiente de revisión."
+   ],
+   "asNeeded": [
+    "Mantequilla clarificada + aceite de oliva (Partes iguales; Para sellar)",
+    "Mini Ensalada Mazcina (40 g)"
+   ],
+   "pending": [
+    "Adobo para Pescado Mazcina: Por confirmar",
+    "Gramaje de adobo pendiente de revisión."
+   ],
+   "lines": [
+    {
+     "ingredient": "Barramundi",
+     "quantity": 190,
+     "unit": "g",
+     "original": "180-200 g",
+     "approx": true
+    },
+    {
+     "recipe": "Adobo para Pescado Mazcina",
+     "quantity": 30,
+     "unit": "g",
+     "original": "30 g aprox. (Por confirmar)",
+     "approx": true
+    },
+    {
+     "recipe": "Papas Provenzal Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 porción (200 g base)",
+     "approx": false
+    },
+    {
+     "recipe": "Ensalada Chilena Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 porción",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa Tártara Mazcina",
+     "quantity": 25,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Lemon wedge",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 gajo",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Lomo Saltado Mazcina",
+   "type": "dish",
+   "section": "Platos principales",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 38,
+   "use": "Plato principal.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Wok",
+    "Freidora"
+   ],
+   "method": [
+    "Marinar carne con ajo en polvo, sal y aceite.",
+    "Calentar wok a fuego muy alto. Sellar carne rápidamente.",
+    "Agregar cebolla, luego tomate y cebollín. Mantener stir-fry rápido.",
+    "Agregar 30 ml de salsa de lomo saltado y mezclar brevemente.",
+    "Servir con 150 g de arroz y 200 g de papas elegidas. Terminar con cilantro."
+   ],
+   "criticalPoints": [
+    "Wok muy caliente.",
+    "Evitar hervir la carne o sobrecocinar vegetales."
+   ],
+   "asNeeded": [
+    "Ajo en polvo (1 cucharadita)",
+    "Sal (3/4 cucharadita)",
+    "Cilantro fresco (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Rump steak",
+     "quantity": 130,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Canola oil",
+     "quantity": 15,
+     "unit": "ml",
+     "original": "10-20 ml",
+     "approx": true
+    },
+    {
+     "ingredient": "Tomatoes, round",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red onion",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Spring onions (shallots)",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa de Lomo Saltado Mazcina",
+     "quantity": 30,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Canola oil",
+     "quantity": 25,
+     "unit": "ml",
+     "original": "20-30 ml",
+     "approx": true
+    },
+    {
+     "recipe": "Arroz Blanco Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Homemade Potatoes Mazcina",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Mediterranean Rice Mazcina (Arroz con Mariscos)",
+   "type": "dish",
+   "section": "Platos principales",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 38,
+   "use": "Arroz principal.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Wok o sartén grande",
+    "Bowl negro"
+   ],
+   "method": [
+    "Saltear pollo y chorizo.",
+    "Agregar camarones, tiger prawns, choritos, pimentón, arvejas y ajo.",
+    "Agregar vino y reducir. Incorporar fumet y salsa de tomate.",
+    "Agregar arroz cocido; mezclar y reducir ligeramente hasta arroz húmedo y bien impregnado. Rectificar sabor.",
+    "Montar en bowl negro y coronar con los 2 tiger prawns. Agregar mini ensalada."
+   ],
+   "criticalPoints": [
+    "Evitar sobrecocinar mariscos.",
+    "Resultado húmedo, no con exceso de líquido."
+   ],
+   "asNeeded": [
+    "Ajo fresco picado (1 cucharadita)",
+    "Mini Ensalada Mazcina (20-30 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Arroz Blanco Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Chicken breast",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Mussels, frozen, cleaned",
+     "quantity": 65,
+     "unit": "g",
+     "original": "50-80 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Prawn meat, raw 26/30",
+     "quantity": 5,
+     "unit": "each",
+     "original": "5 unidades",
+     "approx": false
+    },
+    {
+     "ingredient": "Tiger prawns, whole",
+     "quantity": 2,
+     "unit": "each",
+     "original": "2 unidades (Para cocción y montaje)",
+     "approx": false
+    },
+    {
+     "ingredient": "Chorizo",
+     "quantity": 50,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red capsicum",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Green peas",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Fumet de Pescado Mazcina",
+     "quantity": 80,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "White wine",
+     "quantity": 60,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa de Tomate Mazcina",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Salmón Cancato Mazcina",
+   "type": "dish",
+   "section": "Platos principales",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 39,
+   "use": "Pescado principal gratinado.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Sartén",
+    "Pocillo de loza",
+    "Gratinador"
+   ],
+   "method": [
+    "Condimentar salmón y sellar en mezcla 1:1 de mantequilla clarificada y aceite, dorando sus caras. Tiempo referencial 5-6 minutos por cara según grosor; verificar cocción.",
+    "Sellar chorizo. Colocar salmón en pocillo de loza y montar en capas chorizo, tomate, salsa de tomate y Gouda.",
+    "Gratinar hasta queso fundido y dorado.",
+    "Servir con Papas Provenzal y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "Tiempo de cocción debe ajustarse al grosor.",
+    "Gramaje de adobo pendiente de revisión."
+   ],
+   "asNeeded": [
+    "Mantequilla clarificada + aceite de oliva (Partes iguales)",
+    "Mini Ensalada Mazcina (30-40 g)"
+   ],
+   "pending": [
+    "Adobo para Pescado Mazcina: Por confirmar",
+    "Gramaje de adobo pendiente de revisión."
+   ],
+   "lines": [
+    {
+     "ingredient": "Salmon portions, skinless 200 g",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Adobo para Pescado Mazcina",
+     "quantity": 25,
+     "unit": "g",
+     "original": "20-30 g (Por confirmar)",
+     "approx": true
+    },
+    {
+     "ingredient": "Chorizo",
+     "quantity": 20,
+     "unit": "g",
+     "original": "6 láminas / 20 g",
+     "approx": false
+    },
+    {
+     "ingredient": "Tomatoes, round",
+     "quantity": 25,
+     "unit": "g",
+     "original": "20-30 g",
+     "approx": true
+    },
+    {
+     "recipe": "Salsa de Tomate Mazcina",
+     "quantity": 60,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 40,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Papas Provenzal Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 porción",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Barros Luco Mazcina",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 41,
+   "use": "Sándwich de carne y queso.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Sartén",
+    "Freidora"
+   ],
+   "method": [
+    "Condimentar carne con ajo, sal y aceite. Sellar en sartén muy caliente.",
+    "Tostar ligeramente el pan. Fundir Gouda en el mismo sartén.",
+    "Montar carne y queso en el pan.",
+    "Servir con 200 g de papas, mini ensalada y salsa a elección."
+   ],
+   "criticalPoints": [
+    "No resecar el pan.",
+    "Servir carne y queso calientes."
+   ],
+   "asNeeded": [
+    "Ajo en polvo (1 cucharadita)",
+    "Sal (3/4 cucharadita)",
+    "Aceite (Cantidad necesaria)",
+    "Mini Ensalada Mazcina (20 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Pan Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "original": "1 unidad / 150 g",
+     "approx": false
+    },
+    {
+     "ingredient": "Rump steak",
+     "quantity": 130,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 55,
+     "unit": "g",
+     "original": "50-60 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Frozen chips (fries)",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Mayonesa de Ajo (Alioli) Mazcina",
+     "quantity": 27.5,
+     "unit": "g",
+     "original": "25-30 g",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Fish Sandwich Mazcina",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 41,
+   "use": "Sándwich de barramundi frito.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "Equipo para tostar pan"
+   ],
+   "method": [
+    "Adobar barramundi, cubrir con batido frío y freír hasta dorado, crujiente y cocido.",
+    "Tostar ligeramente pan. Preparar ensalada chilena.",
+    "Untar 10 g de tártara en base; disponer láminas de tomate, pescado, cebolla/cilantro de la ensalada y 10 g de tártara en tapa superior.",
+    "Servir con 200 g de papas y pocillo de tártara."
+   ],
+   "criticalPoints": [
+    "Batido siempre frío.",
+    "Montar inmediatamente para conservar crocancia."
+   ],
+   "asNeeded": [
+    "Adobo para Pescado (Cantidad necesaria)",
+    "Batido para Pescado (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Pan Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "original": "1 unidad / 150 g",
+     "approx": false
+    },
+    {
+     "ingredient": "Barramundi",
+     "quantity": 90,
+     "unit": "g",
+     "original": "80-100 g",
+     "approx": true
+    },
+    {
+     "recipe": "Ensalada Chilena Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 porción",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa Tártara Mazcina",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Frozen chips (fries)",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa Tártara Mazcina",
+     "quantity": 27.5,
+     "unit": "g",
+     "original": "25-30 g (Pocillo)",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Mechada Italiana Mazcina",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 42,
+   "use": "Sándwich de mechada, tomate, mayonesa y palta.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Olla pequeña",
+    "Bowl",
+    "Freidora"
+   ],
+   "method": [
+    "Regenerar mechada con muy poco líquido para mantener consistencia espesa.",
+    "Moler palta y cortar tomate fino.",
+    "Montar: base del pan, mechada, tomate, mayonesa; palta en la tapa superior.",
+    "Servir con papas, mini ensalada y salsa."
+   ],
+   "criticalPoints": [
+    "La mechada debe quedar jugosa pero espesa para no mojar el pan."
+   ],
+   "asNeeded": [
+    "Líquido de Mechada (Muy poca cantidad)",
+    "Mini Ensalada Mazcina (20 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Pan Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "original": "1 unidad / 150 g",
+     "approx": false
+    },
+    {
+     "recipe": "Mechada / Carne a la Cacerola Mazcina",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Avocado",
+     "quantity": 90,
+     "unit": "g",
+     "original": "80-100 g (1/2 unidad aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Tomatoes, round",
+     "quantity": 55,
+     "unit": "g",
+     "original": "50-60 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Mayonnaise",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Frozen chips (fries)",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Mayonesa de Ajo (Alioli) Mazcina",
+     "quantity": 27.5,
+     "unit": "g",
+     "original": "25-30 g (Alioli recomendado)",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Ensalada Chilena Mazcina - Servicio",
+   "type": "dish",
+   "section": "Ensaladas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 44,
+   "use": "Versión de carta servida en pocillo de loza.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Pocillo de loza"
+   ],
+   "method": [
+    "Preparar Ensalada Chilena Mazcina y servir inmediatamente en pocillo de loza."
+   ],
+   "criticalPoints": [
+    "Condimentar al momento."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Ensalada Chilena Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 porción (60 g tomate + 30 g cebolla + 10 g cilantro)",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Mazcina Salad",
+   "type": "dish",
+   "section": "Ensaladas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 44,
+   "use": "Ensalada de la casa.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Bowl",
+    "Plato/bowl de presentación"
+   ],
+   "method": [
+    "Mezclar rocket, cebolla encurtida, confitado frío y dressing.",
+    "Montar. Agregar palta en láminas finas y feta desmenuzado en crumbles.",
+    "Terminar sobre la palta con salt flakes y pimienta negra."
+   ],
+   "criticalPoints": [
+    "No saturar hojas con dressing."
+   ],
+   "asNeeded": [
+    "Salt flakes (Cantidad necesaria)",
+    "Pimienta negra gruesa (Cantidad necesaria)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Rocket",
+     "quantity": 45,
+     "unit": "g",
+     "original": "40-50 g",
+     "approx": true
+    },
+    {
+     "recipe": "Cebolla Encurtida Mazcina",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Confitado de Tomates Cherry y Pimentones Mazcina",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Feta, Danish style",
+     "quantity": 30,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Avocado",
+     "quantity": 90,
+     "unit": "g",
+     "original": "1/2 unidad (80-100 g aprox.)",
+     "approx": true
+    },
+    {
+     "recipe": "Dressing de Limón Mazcina",
+     "quantity": 15,
+     "unit": "ml",
+     "original": "10-20 ml",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Queen Avo Salad Mazcina",
+   "type": "dish",
+   "section": "Ensaladas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 45,
+   "use": "Ensalada con timbal de camarón y palta.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "2 bowls",
+    "Molde de timbal"
+   ],
+   "method": [
+    "Mezclar rocket, cebolla encurtida y dressing; disponer como base.",
+    "Mezclar camarones picados, palta, mayonesa, limón, sal, pimentón y cilantro.",
+    "Formar timbal sobre la base y coronar con camarón cocido con cola."
+   ],
+   "criticalPoints": [
+    "No convertir la palta en puré.",
+    "8 g de sal queda pendiente de verificación."
+   ],
+   "asNeeded": [
+    "Dressing de Limón (Cantidad necesaria)"
+   ],
+   "pending": [
+    "Sal 8 g aprox.: Por confirmar",
+    "8 g de sal queda pendiente de verificación."
+   ],
+   "lines": [
+    {
+     "ingredient": "Rocket",
+     "quantity": 45,
+     "unit": "g",
+     "original": "40-50 g",
+     "approx": true
+    },
+    {
+     "recipe": "Cebolla Encurtida Mazcina",
+     "quantity": 27.5,
+     "unit": "g",
+     "original": "25-30 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Prawn meat, raw 26/30",
+     "quantity": 7,
+     "unit": "each",
+     "original": "7 unidades",
+     "approx": false
+    },
+    {
+     "ingredient": "Avocado",
+     "quantity": 85,
+     "unit": "g",
+     "original": "80-90 g (1/2 unidad aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Mayonnaise",
+     "quantity": 20,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Lemon juice",
+     "quantity": 5,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Salt",
+     "quantity": 8,
+     "unit": "g",
+     "original": "8 g aprox. (Por confirmar)",
+     "approx": true
+    },
+    {
+     "ingredient": "Red capsicum",
+     "quantity": 10,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Coriander, fresh",
+     "quantity": 4,
+     "unit": "g",
+     "original": "3-5 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Prawn cutlets, raw 26/30 (tail on)",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad (Para coronar)",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Kids Crispy Chicken Mazcina",
+   "type": "dish",
+   "section": "Menú de niños",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 47,
+   "use": "Menú infantil.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "Pocillo"
+   ],
+   "method": [
+    "Freír pollo hasta dorado, crujiente y completamente cocido.",
+    "Freír papas. Montar con mini ensalada y pocillo de ketchup."
+   ],
+   "criticalPoints": [
+    "Verificar cocción completa del pollo."
+   ],
+   "asNeeded": [
+    "Mini Ensalada Mazcina (30 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Chicken breast",
+     "quantity": 200,
+     "unit": "g",
+     "original": "200 g de Pollo Apanado Mazcina: se costea el pollo; el apanado no se costea",
+     "approx": false
+    },
+    {
+     "ingredient": "Frozen chips (fries)",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Tomato ketchup",
+     "quantity": 25,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Kids Crispy Barramundi Mazcina",
+   "type": "dish",
+   "section": "Menú de niños",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 47,
+   "use": "Menú infantil.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Freidora",
+    "Pocillo"
+   ],
+   "method": [
+    "Adobar barramundi, pasar por batido frío y freír hasta dorado y cocido.",
+    "Freír papas y montar con mini ensalada y tártara."
+   ],
+   "criticalPoints": [
+    "Batido bien frío.",
+    "No sobrecocinar pescado."
+   ],
+   "asNeeded": [
+    "Adobo para Pescado (Cantidad necesaria)",
+    "Batido para Pescado (Cantidad necesaria)",
+    "Mini Ensalada Mazcina (30-40 g)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Barramundi",
+     "quantity": 90,
+     "unit": "g",
+     "original": "80-100 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Frozen chips (fries)",
+     "quantity": 150,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa Tártara Mazcina",
+     "quantity": 25,
+     "unit": "g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Crumble Mazcina",
+   "type": "prep",
+   "section": "Postres y bases de postre",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 49,
+   "use": "Componente para Pudín de Sémola.",
+   "yieldText": "Aprox. 600 g.",
+   "equipment": [
+    "Bowl",
+    "Bandeja de horno",
+    "Papel de hornear"
+   ],
+   "method": [
+    "Mezclar con las manos harina, mantequilla y azúcar hasta formar gránulos. Agregar muy poca agua solo si hace falta.",
+    "Hornear a 180 °C durante 6-10 minutos, removiendo cada 3 minutos para cocción pareja.",
+    "Enfriar completamente y almacenar en contenedor seco."
+   ],
+   "criticalPoints": [
+    "No convertir en masa compacta.",
+    "Enfriar antes de guardar."
+   ],
+   "asNeeded": [
+    "Agua (Cantidad necesaria; Solo si la mezcla lo requiere)"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 300,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Butter",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 100,
+     "unit": "g",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 600,
+   "yieldUnit": "g",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Celestinos Mazcina",
+   "type": "dish",
+   "section": "Postres y bases de postre",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 50,
+   "use": "Postre de panqueque, manjar y helado.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Microondas",
+    "Soplete",
+    "Plato",
+    "Scoop"
+   ],
+   "method": [
+    "Rellenar panqueque con manjar, enrollar y calentar 30 segundos en microondas.",
+    "Cortar a la mitad, espolvorear azúcar y caramelizar con soplete.",
+    "Rayar plato con salsa de chocolate. Disponer celestinos, chantilly, 1 scoop de helado y menta."
+   ],
+   "criticalPoints": [
+    "Agregar helado al final.",
+    "No quemar el azúcar."
+   ],
+   "asNeeded": [
+    "Azúcar granulada (Cantidad necesaria; Para caramelizar)"
+   ],
+   "pending": [
+    "Helado de vainilla 1 scoop: 50 ml aprox., por confirmar"
+   ],
+   "lines": [
+    {
+     "recipe": "Panqueques Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad",
+     "approx": false
+    },
+    {
+     "ingredient": "Dulce de leche (manjar)",
+     "quantity": 55,
+     "unit": "g",
+     "original": "50-60 g",
+     "approx": true
+    },
+    {
+     "ingredient": "Chocolate sauce (Hershey's)",
+     "quantity": 15,
+     "unit": "ml",
+     "original": "10-20 ml",
+     "approx": true
+    },
+    {
+     "ingredient": "Whipped cream (chantilly)",
+     "quantity": 10,
+     "unit": "g",
+     "original": "10 g aprox.",
+     "approx": true
+    },
+    {
+     "ingredient": "Vanilla ice cream",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 scoop (50 ml aprox., por confirmar)",
+     "approx": true
+    },
+    {
+     "ingredient": "Mint, fresh",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 hoja/ramita",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Pudín de Sémola Mazcina",
+   "type": "prep",
+   "section": "Postres y bases de postre",
+   "portions": 6,
+   "source": "manual-recetas-2026-08",
+   "page": 50,
+   "use": "Base del postre de sémola con berries y vino tinto.",
+   "yieldText": "6 porciones; estándar provisional 230-250 g por pocillo.",
+   "equipment": [
+    "Olla",
+    "Batidor",
+    "Colador",
+    "6 pocillos de loza",
+    "Film"
+   ],
+   "method": [
+    "Hervir leche, crema, vainilla, ralladura, canela, clavos y azúcar para infusionar.",
+    "Filtrar y volver el líquido a la olla.",
+    "Agregar sémola en forma de lluvia, batiendo constantemente hasta cocer y espesar.",
+    "Porcionar inmediatamente en 6 pocillos; referencia provisional 230-250 g. Enfriar, cubrir y refrigerar."
+   ],
+   "criticalPoints": [
+    "Batir constantemente para evitar grumos.",
+    "Gramaje por pocillo pendiente de confirmar en producción."
+   ],
+   "asNeeded": [
+    "Ralladura de naranja (1/2 cucharadita)"
+   ],
+   "pending": [
+    "estándar provisional 230-250 g por pocillo",
+    "Gramaje por pocillo pendiente de confirmar en producción."
+   ],
+   "lines": [
+    {
+     "ingredient": "Milk, full cream",
+     "quantity": 750,
+     "unit": "ml",
+     "original": "3 tazas (750 ml aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Cream",
+     "quantity": 500,
+     "unit": "ml",
+     "original": "2 tazas (500 ml aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Vanilla essence",
+     "quantity": 5,
+     "unit": "ml",
+     "original": "1 cucharadita (5 ml)",
+     "approx": false
+    },
+    {
+     "ingredient": "Cinnamon sticks",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 rama",
+     "approx": false
+    },
+    {
+     "ingredient": "Cloves",
+     "quantity": 10,
+     "unit": "each",
+     "original": "10 unidades aprox.",
+     "approx": true
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 100,
+     "unit": "g",
+     "original": "1/2 taza (100 g aprox.)",
+     "approx": true
+    },
+    {
+     "ingredient": "Semolina",
+     "quantity": 165,
+     "unit": "g",
+     "original": "1 taza (160-170 g aprox.)",
+     "approx": true
+    }
+   ],
+   "yieldQuantity": 6,
+   "yieldUnit": "each",
+   "yieldEstimated": false
+  },
+  {
+   "name": "Salsa de Berries y Vino Tinto Mazcina",
+   "type": "prep",
+   "section": "Postres y bases de postre",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 51,
+   "use": "Salsa para Pudín de Sémola.",
+   "equipment": [
+    "Olla"
+   ],
+   "method": [
+    "Cocinar todos los ingredientes a fuego medio-bajo hasta reducir aproximadamente a la mitad y perder el sabor fuerte a vino.",
+    "Retirar canela, enfriar y reservar."
+   ],
+   "criticalPoints": [
+    "Reducir sin quemar; debe quedar frutal y ligeramente espesa."
+   ],
+   "asNeeded": [],
+   "pending": [
+    "Estimado a la mitad del total, porque el manual indica reducir a la mitad.",
+    "Rendimiento estimado: pesar una producción completa y anotar el peso final."
+   ],
+   "lines": [
+    {
+     "ingredient": "Frozen berries",
+     "quantity": 500,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Red wine",
+     "quantity": 200,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 200,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Orange",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad (Jugo y ralladura)",
+     "approx": false
+    },
+    {
+     "ingredient": "Cinnamon sticks",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 rama",
+     "approx": false
+    }
+   ],
+   "yieldQuantity": 450,
+   "yieldUnit": "ml",
+   "yieldEstimated": true
+  },
+  {
+   "name": "Pudín de Sémola con Berries y Vino Tinto",
+   "type": "dish",
+   "section": "Postres y bases de postre",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 52,
+   "use": "Postre de carta.",
+   "yieldText": "1 porción.",
+   "equipment": [
+    "Plato",
+    "Pocillo de salsa"
+   ],
+   "method": [
+    "Disponer crumble como base. Desmoldar pudín encima.",
+    "Bañar con 40 ml de salsa y servir 30 ml adicionales en pocillo.",
+    "Decorar con menta y naranja deshidratada."
+   ],
+   "criticalPoints": [
+    "Pudín completamente frío y firme antes de desmoldar."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Pudín de Sémola Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 porción (230-250 g aprox.)",
+     "approx": true
+    },
+    {
+     "recipe": "Crumble Mazcina",
+     "quantity": 55,
+     "unit": "g",
+     "original": "50-60 g",
+     "approx": true
+    },
+    {
+     "recipe": "Salsa de Berries y Vino Tinto Mazcina",
+     "quantity": 40,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "recipe": "Salsa de Berries y Vino Tinto Mazcina",
+     "quantity": 30,
+     "unit": "ml",
+     "approx": false
+    },
+    {
+     "ingredient": "Mint, fresh",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 hoja/ramita",
+     "approx": false
+    },
+    {
+     "ingredient": "Dehydrated orange slice",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 rodaja",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Cuatro Leches Mazcina",
+   "type": "dish",
+   "section": "Postres y bases de postre",
+   "portions": 8,
+   "source": "manual-recetas-2026-08",
+   "page": 52,
+   "use": "Postre estrella de Mazcina.",
+   "yieldText": "8 porciones.",
+   "equipment": [
+    "Batidora",
+    "Tamiz",
+    "Espátula",
+    "Bandeja aprox. 30 x 20 x 5 cm",
+    "Horno",
+    "Palillo",
+    "Olla",
+    "Contenedores",
+    "Vasos de presentación"
+   ],
+   "method": [
+    "Bizcocho: batir claras a punto nieve, agregando azúcar gradualmente. Mezclar yemas con vainilla e incorporarlas hasta punto letra.",
+    "Mezclar harina cernida con polvo de hornear e incorporar de forma envolvente.",
+    "Hornear en bandeja a 180 °C. Revisar desde 15 minutos; cocción total referencial 20-25 minutos. Retirar cuando el palillo salga seco. Enfriar y cortar en 8.",
+    "Remojo: hervir leche condensada, evaporada, crema, leche entera y vainilla; retirar al primer hervor. Distribuir en partes iguales sobre las 8 porciones. Referencia provisional 250-275 ml por porción. Refrigerar.",
+    "Montaje: dividir cada porción remojada en 2. Colocar mitad en vaso, agregar 20-30 g de manjar, cubrir con segunda mitad y terminar con chantilly, manjar decorativo y menta."
+   ],
+   "criticalPoints": [
+    "Incorporar secos con movimientos envolventes.",
+    "El palillo seco determina la cocción del bizcocho.",
+    "Volumen exacto de latas y remojo por porción pendientes de confirmación.",
+    "Manipular con cuidado el bizcocho remojado."
+   ],
+   "asNeeded": [
+    "Polvo de hornear (1/2 cucharada; 1 1/2 cucharaditas)",
+    "Vainilla para remojo (1 cucharadita)",
+    "Menta (Cantidad necesaria)"
+   ],
+   "pending": [
+    "Leche condensada 2 latas: Tamaño exacto por confirmar",
+    "Volumen exacto de latas y remojo por porción pendientes de confirmación.",
+    "Referencia provisional 250-275 ml por porción (remojo)"
+   ],
+   "lines": [
+    {
+     "ingredient": "Eggs",
+     "quantity": 6,
+     "unit": "each",
+     "original": "6 unidades (Separar claras/yemas)",
+     "approx": false
+    },
+    {
+     "ingredient": "Flour, plain",
+     "quantity": 180,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Sugar",
+     "quantity": 180,
+     "unit": "g",
+     "approx": false
+    },
+    {
+     "ingredient": "Vanilla essence",
+     "quantity": 5,
+     "unit": "ml",
+     "original": "1 cucharadita (5 ml)",
+     "approx": false
+    },
+    {
+     "ingredient": "Condensed milk, can",
+     "quantity": 2,
+     "unit": "each",
+     "original": "2 latas (Tamaño exacto por confirmar)",
+     "approx": true
+    },
+    {
+     "ingredient": "Evaporated milk",
+     "quantity": 800,
+     "unit": "ml",
+     "original": "2 latas, aprox. 400 ml c/u",
+     "approx": true
+    },
+    {
+     "ingredient": "Cream",
+     "quantity": 350,
+     "unit": "ml",
+     "original": "1 lata de leche condensada como medida (Aprox. 300-400 ml)",
+     "approx": true
+    },
+    {
+     "ingredient": "Milk, full cream",
+     "quantity": 350,
+     "unit": "ml",
+     "original": "1 lata de leche condensada como medida (Aprox. 300-400 ml)",
+     "approx": true
+    },
+    {
+     "ingredient": "Dulce de leche (manjar)",
+     "quantity": 200,
+     "unit": "g",
+     "original": "20-30 g por porción × 8 porciones",
+     "approx": true
+    },
+    {
+     "ingredient": "Whipped cream (chantilly)",
+     "quantity": 160,
+     "unit": "g",
+     "original": "20 ml aprox. por porción × 8 porciones",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Empanada de Carne Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 33,
+   "use": "Empanada de cóctel. Cierre de 4 puntas.",
+   "yieldText": "1 empanada",
+   "equipment": [
+    "Balanza",
+    "Tenedor",
+    "Bandejas",
+    "Freidora"
+   ],
+   "method": [
+    "Rellenar cada tapa con el gramaje correspondiente. Cerrar con la forma estándar de cada sabor.",
+    "Congelar las empanadas armadas.",
+    "Freír directamente desde congeladas durante aproximadamente 5 minutos.",
+    "Servir con Pebre Mazcina y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "La forma permite identificar el relleno durante almacenamiento y servicio.",
+    "Sellar completamente para evitar aperturas."
+   ],
+   "asNeeded": [
+    "Pebre Mazcina (1 pocillo, acompañamiento)",
+    "Mini Ensalada Mazcina (cantidad pequeña)",
+    "Aceite para freír"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Masa de Empanadas Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 tapa de 10 cm",
+     "approx": false
+    },
+    {
+     "recipe": "Pino de Carne para Empanadas Mazcina",
+     "quantity": 27.5,
+     "unit": "g",
+     "original": "25-30 g de pino",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Empanada de Camarón y Queso Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 33,
+   "use": "Empanada de cóctel. Cierre triangular.",
+   "yieldText": "1 empanada",
+   "equipment": [
+    "Balanza",
+    "Tenedor",
+    "Bandejas",
+    "Freidora"
+   ],
+   "method": [
+    "Rellenar cada tapa con el gramaje correspondiente. Cerrar con la forma estándar de cada sabor.",
+    "Congelar las empanadas armadas.",
+    "Freír directamente desde congeladas durante aproximadamente 5 minutos.",
+    "Servir con Pebre Mazcina y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "La forma permite identificar el relleno durante almacenamiento y servicio.",
+    "Sellar completamente para evitar aperturas."
+   ],
+   "asNeeded": [
+    "Pebre Mazcina (1 pocillo, acompañamiento)",
+    "Mini Ensalada Mazcina (cantidad pequeña)",
+    "Aceite para freír"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Masa de Empanadas Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 tapa de 10 cm",
+     "approx": false
+    },
+    {
+     "recipe": "Pino de Camarón y Queso Mazcina",
+     "quantity": 30,
+     "unit": "g",
+     "original": "30 g de relleno",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Empanada de Queso Mazcina",
+   "type": "dish",
+   "section": "Entradas",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 33,
+   "use": "Empanada de cóctel. Semiesfera / media luna sellada con tenedor.",
+   "yieldText": "1 empanada",
+   "equipment": [
+    "Balanza",
+    "Tenedor",
+    "Bandejas",
+    "Freidora"
+   ],
+   "method": [
+    "Rellenar cada tapa con el gramaje correspondiente. Cerrar con la forma estándar de cada sabor.",
+    "Congelar las empanadas armadas.",
+    "Freír directamente desde congeladas durante aproximadamente 5 minutos.",
+    "Servir con Pebre Mazcina y Mini Ensalada Mazcina."
+   ],
+   "criticalPoints": [
+    "La forma permite identificar el relleno durante almacenamiento y servicio.",
+    "Sellar completamente para evitar aperturas."
+   ],
+   "asNeeded": [
+    "Pebre Mazcina (1 pocillo, acompañamiento)",
+    "Mini Ensalada Mazcina (cantidad pequeña)",
+    "Aceite para freír"
+   ],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Masa de Empanadas Mazcina",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 tapa de 10 cm",
+     "approx": false
+    },
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 37.5,
+     "unit": "g",
+     "original": "35-40 g de Gouda",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Extra: Cebolla Estofada",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 43,
+   "use": "Extra para sándwiches.",
+   "yieldText": "1 porción",
+   "equipment": [],
+   "method": [
+    "Revisar siempre la comanda antes de comenzar el armado.",
+    "Agregar los extras solicitados respetando los gramajes estándar y manteniendo un armado estable.",
+    "Todos los sándwiches se sirven con 200 g de papas, Mini Ensalada Mazcina y 1 pocillo de salsa, salvo modificación solicitada."
+   ],
+   "criticalPoints": [
+    "La comanda manda sobre la receta base."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "recipe": "Cebolla Estofada Mazcina",
+     "quantity": 20,
+     "unit": "g",
+     "original": "20 g",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Extra: Tomate fresco",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 43,
+   "use": "Extra para sándwiches.",
+   "yieldText": "1 porción",
+   "equipment": [],
+   "method": [
+    "Revisar siempre la comanda antes de comenzar el armado.",
+    "Agregar los extras solicitados respetando los gramajes estándar y manteniendo un armado estable.",
+    "Todos los sándwiches se sirven con 200 g de papas, Mini Ensalada Mazcina y 1 pocillo de salsa, salvo modificación solicitada."
+   ],
+   "criticalPoints": [
+    "La comanda manda sobre la receta base."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Tomatoes, round",
+     "quantity": 55,
+     "unit": "g",
+     "original": "50-60 g",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Extra: Queso Gouda derretido",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 43,
+   "use": "Extra para sándwiches.",
+   "yieldText": "1 porción",
+   "equipment": [],
+   "method": [
+    "Revisar siempre la comanda antes de comenzar el armado.",
+    "Agregar los extras solicitados respetando los gramajes estándar y manteniendo un armado estable.",
+    "Todos los sándwiches se sirven con 200 g de papas, Mini Ensalada Mazcina y 1 pocillo de salsa, salvo modificación solicitada."
+   ],
+   "criticalPoints": [
+    "La comanda manda sobre la receta base."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Gouda cheese",
+     "quantity": 55,
+     "unit": "g",
+     "original": "50-60 g",
+     "approx": true
+    }
+   ]
+  },
+  {
+   "name": "Extra: Huevo frito",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 43,
+   "use": "Extra para sándwiches.",
+   "yieldText": "1 porción",
+   "equipment": [],
+   "method": [
+    "Revisar siempre la comanda antes de comenzar el armado.",
+    "Agregar los extras solicitados respetando los gramajes estándar y manteniendo un armado estable.",
+    "Todos los sándwiches se sirven con 200 g de papas, Mini Ensalada Mazcina y 1 pocillo de salsa, salvo modificación solicitada."
+   ],
+   "criticalPoints": [
+    "La comanda manda sobre la receta base."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Eggs",
+     "quantity": 1,
+     "unit": "each",
+     "original": "1 unidad",
+     "approx": false
+    }
+   ]
+  },
+  {
+   "name": "Extra: Palta molida",
+   "type": "dish",
+   "section": "Sándwiches",
+   "portions": 1,
+   "source": "manual-recetas-2026-08",
+   "page": 43,
+   "use": "Extra para sándwiches.",
+   "yieldText": "1 porción",
+   "equipment": [],
+   "method": [
+    "Revisar siempre la comanda antes de comenzar el armado.",
+    "Agregar los extras solicitados respetando los gramajes estándar y manteniendo un armado estable.",
+    "Todos los sándwiches se sirven con 200 g de papas, Mini Ensalada Mazcina y 1 pocillo de salsa, salvo modificación solicitada."
+   ],
+   "criticalPoints": [
+    "La comanda manda sobre la receta base."
+   ],
+   "asNeeded": [],
+   "pending": [],
+   "lines": [
+    {
+     "ingredient": "Avocado",
+     "quantity": 90,
+     "unit": "g",
+     "original": "80-100 g",
+     "approx": true
+    }
+   ]
+  }
+ ],
+ "menuLinks": [
+  {
+   "menuItem": "Mushroom Ceviche",
+   "recipe": "Ceviche de Champiñones Mazcina"
+  },
+  {
+   "menuItem": "Napo Chicken Bites",
+   "recipe": "Napo Chicken Bites Mazcina"
+  },
+  {
+   "menuItem": "Baked Feta Pot",
+   "recipe": "Baked Feta Pot Mazcina"
+  },
+  {
+   "menuItem": "Mazcina Salmon Ceviche",
+   "recipe": "Ceviche de Salmón Mazcina"
+  },
+  {
+   "menuItem": "Mazcina Bravas",
+   "recipe": "Mazcina Bravas"
+  },
+  {
+   "menuItem": "Mazcina Garlic Prawns",
+   "recipe": "Garlic Prawns Mazcina"
+  },
+  {
+   "menuItem": "Crab Gratin",
+   "recipe": "Crab Gratin Mazcina (Chupe de Jaiba)"
+  },
+  {
+   "menuItem": "Cocktail Empanada: Beef",
+   "recipe": "Empanada de Carne Mazcina"
+  },
+  {
+   "menuItem": "Cocktail Empanada: Cheese",
+   "recipe": "Empanada de Queso Mazcina"
+  },
+  {
+   "menuItem": "Cocktail Empanada: Prawn & Cheese",
+   "recipe": "Empanada de Camarón y Queso Mazcina"
+  },
+  {
+   "menuItem": "Chorrillana",
+   "recipe": "Chorrillana Mazcina"
+  },
+  {
+   "menuItem": "Red Mechada Pasta",
+   "recipe": "Red Mechada Pasta Mazcina"
+  },
+  {
+   "menuItem": "Green Creamy Pasta",
+   "recipe": "Green Creamy Pasta Mazcina"
+  },
+  {
+   "menuItem": "Mazcina Grilled Barramundi",
+   "recipe": "Grilled Barramundi Mazcina"
+  },
+  {
+   "menuItem": "Saltado",
+   "recipe": "Lomo Saltado Mazcina"
+  },
+  {
+   "menuItem": "Mazcina Mediterranean Rice",
+   "recipe": "Mediterranean Rice Mazcina (Arroz con Mariscos)"
+  },
+  {
+   "menuItem": "Mazcina Salmon Cancato",
+   "recipe": "Salmón Cancato Mazcina"
+  },
+  {
+   "menuItem": "Barros Luco",
+   "recipe": "Barros Luco Mazcina"
+  },
+  {
+   "menuItem": "Fish Sandwich",
+   "recipe": "Fish Sandwich Mazcina"
+  },
+  {
+   "menuItem": "Mechada Sandwich",
+   "recipe": "Mechada Italiana Mazcina"
+  },
+  {
+   "menuItem": "Chilena Salad",
+   "recipe": "Ensalada Chilena Mazcina - Servicio"
+  },
+  {
+   "menuItem": "Mazcina Salad",
+   "recipe": "Mazcina Salad"
+  },
+  {
+   "menuItem": "Queen Avo Salad",
+   "recipe": "Queen Avo Salad Mazcina"
+  },
+  {
+   "menuItem": "Provenzal Potatoes",
+   "recipe": "Papas Provenzal Mazcina"
+  },
+  {
+   "menuItem": "Chicken, Fries and Salad",
+   "recipe": "Kids Crispy Chicken Mazcina"
+  },
+  {
+   "menuItem": "Fish Bites, Fries and Salad",
+   "recipe": "Kids Crispy Barramundi Mazcina"
+  },
+  {
+   "menuItem": "Four Milks",
+   "recipe": "Cuatro Leches Mazcina"
+  },
+  {
+   "menuItem": "Semolina Pudding",
+   "recipe": "Pudín de Sémola con Berries y Vino Tinto"
+  },
+  {
+   "menuItem": "Celestinos",
+   "recipe": "Celestinos Mazcina"
+  },
+  {
+   "menuItem": "Sandwich: Caramelized onion",
+   "recipe": "Extra: Cebolla Estofada"
+  },
+  {
+   "menuItem": "Sandwich: Fresh tomato slices",
+   "recipe": "Extra: Tomate fresco"
+  },
+  {
+   "menuItem": "Sandwich: Melted cheese",
+   "recipe": "Extra: Queso Gouda derretido"
+  },
+  {
+   "menuItem": "Sandwich: Fried egg",
+   "recipe": "Extra: Huevo frito"
+  },
+  {
+   "menuItem": "Sandwich: Smashed avocado",
+   "recipe": "Extra: Palta molida"
+  }
+ ],
+ "openQuestions": [
+  {
+   "topic": "Mini Ensalada Mazcina",
+   "question": "What is the mix by weight for 100 g of mini salad (rocket, pickled onion, lemon dressing)?",
+   "why": "It is on 15 dishes at 20 to 40 g but the manual gives no proportions, so it is not costed yet."
+  },
+  {
+   "topic": "Batch yields",
+   "question": "Please weigh one finished batch of each base marked \"Rendimiento estimado\" (sauces, stocks, dressings, potatoes, rice, pasta, garlic confit, pickled onion and others).",
+   "why": "Their yields are estimated from the raw ingredient weights. Cooking loses water, so the real cost per gram is probably higher."
+  },
+  {
+   "topic": "Manteca de Carne",
+   "question": "Should rendered beef fat from trimmings be costed at $0, or at a price?",
+   "why": "It comes from trimmings (\"cantidad disponible\"), so it has no purchase price."
+  },
+  {
+   "topic": "Manjar / dulce de leche",
+   "question": "What size of condensed milk can is used, and how much manjar does one can make?",
+   "why": "Celestinos and Cuatro Leches use manjar by weight; the manual only says \"cantidad necesaria\" of condensed milk."
+  },
+  {
+   "topic": "Cuatro Leches",
+   "question": "Exact sizes of the condensed and evaporated milk cans, and the tray size.",
+   "why": "Listed as pending in the manual."
+  },
+  {
+   "topic": "Mickey's invoice",
+   "question": "How many kg are in the \"Red Potato Bag\" ($35) and in the \"Lemon Box\" ($50)?",
+   "why": "Without the size these two prices cannot be costed."
+  },
+  {
+   "topic": "Bunches",
+   "question": "Roughly how many grams is one bunch of coriander, mint and shallots from Mickey's ($1.50, $1.50, $2.50)?",
+   "why": "Recipes use grams; the invoice sells by the bunch. One weighing per herb fixes it."
+  },
+  {
+   "topic": "Lemons and limes",
+   "question": "Is \"limón\" in the manual a lemon or a lime? And roughly how much juice do you get from 1 kg?",
+   "why": "Mickey's sells both; lemon juice is used in ml in many recipes."
+  },
+  {
+   "topic": "Orange",
+   "question": "Roughly how many grams is one orange?",
+   "why": "Recipes count oranges; Mickey's sells them by the kg."
+  },
+  {
+   "topic": "Avocado",
+   "question": "Where do avocados come from and at what price (each or per kg)?",
+   "why": "Avocado is in four dishes and has no price yet."
+  },
+  {
+   "topic": "Berries",
+   "question": "Is the \"berries congelados\" in the berry sauce the Bidfood IQF strawberries, or a mixed berry pack?",
+   "why": "The data uses the Bidfood strawberries price for now."
+  },
+  {
+   "topic": "Prawns",
+   "question": "Are the \"camarón cocido con cola\" garnishes the Bidfood 26/30 raw cutlets, cooked in house?",
+   "why": "The data assumes so, at about 16 g per prawn (26/30 per pound)."
+  },
+  {
+   "topic": "Salad proteins",
+   "question": "How many grams of chicken, barramundi and prawns go in each salad add-on (Grilled chicken $9, Barramundi bites $9, Garlic prawns $10.50)?",
+   "why": "The manual says \"1 porción\" without a weight, so these add-ons are not costed."
+  },
+  {
+   "topic": "Boards and sides",
+   "question": "Recipes for the Mazcina Earth Board, Ocean Board, a side of Chips, and one Sopaipilla (grams per piece).",
+   "why": "They are on the menu but not in the manual."
+  },
+  {
+   "topic": "Other suppliers",
+   "question": "Invoices or price lists for meat (rump, roast beef, chicken, chorizo), dairy (Gouda, cream, milk, butter), dry goods, oils and wine.",
+   "why": "Most ingredients have no price yet, so most dishes show as incomplete until these arrive."
+  }
+ ],
+ "serviceConventions": [
+  "Mini Ensalada Mazcina estándar: rocket + Cebolla Encurtida Mazcina + Dressing de Limón. Porción habitual 20 g; algunos platos usan 30-40 g.",
+  "Sándwiches: 200 g de papas fritas como acompañamiento estándar. Cambio a Papas Provenzal disponible como extra según carta.",
+  "Empanadas: carne = 4 puntas; camarón-queso = triangular; queso = media luna/semiesfera sellada con tenedor.",
+  "Pasta fresca: porción estándar 150 g congelada; cocción directa desde congelado 2-3 minutos.",
+  "Arroz blanco: porción estándar 150 g.",
+  "Homemade Potatoes: porción estándar 200 g."
+ ]
+}
