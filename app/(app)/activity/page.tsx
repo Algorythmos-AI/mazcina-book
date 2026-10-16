@@ -16,6 +16,7 @@ const ENTITY: Record<string, string> = {
   prices: 'price list',
   stock: 'stock record',
   gift_card: 'gift card',
+  kitchen_data: 'kitchen data pack',
 };
 
 const VERB: Record<string, string> = {
