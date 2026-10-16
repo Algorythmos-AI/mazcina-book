@@ -72,6 +72,8 @@ export interface Recipe {
   /** What one batch makes, e.g. 2 l of sauce. Required for a recipe used as a sub-recipe. */
   yieldQuantity?: Numeric | null;
   yieldUnit?: Unit | null;
+  /** True while the yield is worked out from the ingredients rather than weighed: costs that use it are estimates. */
+  yieldEstimated?: boolean;
   portions: Numeric;
   lines: RecipeLine[];
   archived?: boolean;
@@ -116,6 +118,8 @@ export type RecipeCost =
       /** Cost per base unit (g, ml or each) of yield; null when the recipe has no yield set. */
       costPerYieldUnit: Decimal | null;
       lines: LineCost[];
+      /** Preps used (at any depth) whose batch yield is an estimate. Empty when every number is measured. */
+      estimates: string[];
     }
   | { status: 'incomplete'; issues: Issue[]; lines: LineCost[] };
 
@@ -223,7 +227,7 @@ export function packPriceExGst(price: IngredientPrice): Decimal | null {
   return price.priceIncludesGst && price.gstApplicable ? amount.div(GST_DIVISOR) : amount;
 }
 
-type Partial_<T> = { ok: true; value: T } | { ok: false; issue: Issue };
+type Partial_<T> = { ok: true; value: T; estimates?: string[] } | { ok: false; issue: Issue };
 
 /** Cost ex GST of one base unit (1 g, 1 ml or 1 each) of the ingredient as bought. */
 function unitCost(ingredient: Ingredient, ctx: CostingContext): Partial_<Decimal> {
@@ -287,7 +291,8 @@ function costSubRecipeLine(
   if (subCost.status !== 'ok' || !subCost.costPerYieldUnit) {
     return { ok: false, issue: { code: 'sub_recipe_incomplete', subject } };
   }
-  return { ok: true, value: qtyInBase.times(subCost.costPerYieldUnit) };
+  const estimates = sub.yieldEstimated ? [sub.name, ...subCost.estimates] : subCost.estimates;
+  return { ok: true, value: qtyInBase.times(subCost.costPerYieldUnit), estimates };
 }
 
 function costRecipeInner(recipe: Recipe, ctx: CostingContext, path: string[]): RecipeCost {
@@ -298,6 +303,7 @@ function costRecipeInner(recipe: Recipe, ctx: CostingContext, path: string[]): R
   const issues: Issue[] = [];
   const lines: LineCost[] = [];
   let total = new D(0);
+  const estimates = new Set<string>();
 
   if (recipe.lines.length === 0) issues.push({ code: 'no_lines' });
 
@@ -314,6 +320,7 @@ function costRecipeInner(recipe: Recipe, ctx: CostingContext, path: string[]): R
       result = costSubRecipeLine(line, qty, ctx, here);
     }
     if (result.ok) {
+      for (const name of result.estimates ?? []) estimates.add(name);
       total = total.plus(result.value);
       lines.push({ lineId: line.id, cost: result.value });
     } else {
@@ -338,7 +345,7 @@ function costRecipeInner(recipe: Recipe, ctx: CostingContext, path: string[]): R
   const result: RecipeCost =
     issues.length > 0 || !portions
       ? { status: 'incomplete', issues, lines }
-      : { status: 'ok', batchCost: total, costPerPortion: total.div(portions), costPerYieldUnit, lines };
+      : { status: 'ok', batchCost: total, costPerPortion: total.div(portions), costPerYieldUnit, lines, estimates: [...estimates].sort() };
 
   // A result reached while walking a cycle depends on the path taken, so only
   // cycle-free results are safe to reuse.

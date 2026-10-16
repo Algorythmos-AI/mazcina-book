@@ -1,0 +1,2136 @@
+[
+ {
+  "name": "Pino de Carne para Empanadas Mazcina",
+  "section": "Rellenos y proteínas de producción",
+  "page": 24,
+  "use": "Relleno para empanadas de carne de cóctel.",
+  "yieldText": "52-60 empanadas aprox.; 25-30 g por unidad.",
+  "lines": [
+   {
+    "item": "Rump steak",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla blanca",
+    "quantityText": "800 g",
+    "noteText": null,
+    "quantity": 800,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Manteca de Carne Mazcina",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Vino tinto",
+    "quantityText": "50 ml",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Azúcar",
+    "quantityText": "1 cucharada",
+    "noteText": "12-15 g aprox.",
+    "quantity": 13.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharada",
+    "noteText": "15-18 g aprox.",
+    "quantity": 16.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Harina",
+    "quantityText": "2 cucharadas",
+    "noteText": "16-20 g aprox.",
+    "quantity": 18,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "1/2 cucharada",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Orégano",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Comino",
+    "quantityText": "1/2 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Paprika dulce",
+    "quantityText": "1/2 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra",
+    "quantityText": "1/4 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevos duros",
+    "quantityText": "5 unidades",
+    "noteText": "Para armado",
+    "quantity": 5,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceitunas negras",
+    "quantityText": "100 g",
+    "noteText": "Para armado",
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pasas",
+    "quantityText": "2 por empanada",
+    "noteText": null,
+    "quantity": 2,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla grande",
+   "Cuchillo",
+   "Balanza"
+  ],
+  "method": [
+   "Cortar carne y cebolla en cubos pequeños.",
+   "Derretir manteca y cocinar cebolla hasta muy blanda. Agregar condimentos.",
+   "Agregar vino y dejar evaporar alcohol. Incorporar carne y cocinar completamente.",
+   "Espolvorear harina en forma de velo y mezclar hasta espesar ligeramente los jugos.",
+   "Enfriar y refrigerar de un día para otro.",
+   "Mezclar con huevo duro y aceitunas picadas. Usar 1 cucharada colmada (25-30 g) por tapa y agregar 2 pasas."
+  ],
+  "criticalPoints": [
+   "La cebolla debe estar muy blanda antes de la carne.",
+   "Pino frío para armado.",
+   "No sobrecargar las tapas."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Pino de Camarón y Queso Mazcina",
+  "section": "Rellenos y proteínas de producción",
+  "page": 25,
+  "use": "Relleno para empanadas de camarón-queso.",
+  "yieldText": "40-45 empanadas aprox.; 30 g por unidad.",
+  "lines": [
+   {
+    "item": "Camarones congelados",
+    "quantityText": "800 g aprox.",
+    "noteText": "1 bolsa",
+    "quantity": 800,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Queso Gouda rallado",
+    "quantityText": "800 g aprox.",
+    "noteText": "Proporción 1:1 con camarón",
+    "quantity": 800,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vino blanco",
+    "quantityText": "5-10 ml",
+    "noteText": "1-2 cucharaditas",
+    "quantity": 7.5,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Procesador",
+   "Sartén/olla",
+   "Bowl"
+  ],
+  "method": [
+   "Descongelar y escurrir camarones. Procesar hasta picado muy fino, sin hacer pasta.",
+   "Cocinar a fuego alto con aceite, ajo y sal hasta evaporar la mayor cantidad de líquido.",
+   "Agregar vino al final y reducir completamente. Enfriar.",
+   "Mezclar 1:1 con queso Gouda rallado. Usar 30 g por tapa."
+  ],
+  "criticalPoints": [
+   "Eliminar humedad antes de mezclar con queso.",
+   "No hacer pasta con el camarón."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Mechada / Carne a la Cacerola Mazcina",
+  "section": "Rellenos y proteínas de producción",
+  "page": 25,
+  "use": "Base para pastas, chorrillana y sándwiches.",
+  "yieldText": "Porciones de 150 g.",
+  "lines": [
+   {
+    "item": "Roast beef",
+    "quantityText": "1.000 g",
+    "noteText": null,
+    "quantity": 1000,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de Tomate Mazcina",
+    "quantityText": "100 g",
+    "noteText": null,
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Manteca de Carne Mazcina",
+    "quantityText": "100-200 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Vino tinto",
+    "quantityText": "200 ml",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Agua",
+    "quantityText": "400-500 ml",
+    "noteText": null,
+    "quantity": 450,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Caldo de verduras en polvo",
+    "quantityText": "8g",
+    "noteText": null,
+    "quantity": 8,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla en polvo",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "15 g",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra",
+    "quantityText": "3g",
+    "noteText": null,
+    "quantity": 3,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "20 ml",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Concentrado de tomate",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Harina",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla grande con tapa",
+   "Pinzas",
+   "Colador",
+   "Balanza"
+  ],
+  "method": [
+   "Limpiar roast beef, reservando recortes de grasa para Manteca de Carne.",
+   "Derretir manteca y sellar la carne por todos sus lados.",
+   "Agregar ajo, condimentos, concentrado y harina; mezclar bien evitando grumos.",
+   "Agregar salsa de tomate, vino, aceite y 400 ml de agua. Cocinar a fuego bajo 4-5 horas, agregando agua si hace falta.",
+   "Cuando la carne esté muy blanda, enfriar y separar carne del líquido. Desmechar.",
+   "Reincorporar suficiente líquido para que quede jugosa pero no líquida. Reservar el resto para regeneración.",
+   "Enfriar y porcionar en 150 g."
+  ],
+  "criticalPoints": [
+   "No desechar el líquido de cocción.",
+   "Cocción lenta hasta desmechar con facilidad.",
+   "Para sándwich usar muy poco líquido; para chorrillana/pasta se puede regenerar con más."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Pollo Apanado Mazcina",
+  "section": "Rellenos y proteínas de producción",
+  "page": 26,
+  "use": "Base para Napo Chicken Bites y Kids Crispy Chicken.",
+  "yieldText": "Porción de servicio habitual: 200 g.",
+  "lines": [
+   {
+    "item": "Pechuga de pollo en cubos",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Harina + sal",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Primera capa",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevos",
+    "quantityText": "2 unidades",
+    "noteText": null,
+    "quantity": 2,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Perejil fresco",
+    "quantityText": "10 g",
+    "noteText": null,
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "1/2 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mostaza Dijon",
+    "quantityText": "2 cucharadas",
+    "noteText": "30 g aprox.",
+    "quantity": 30,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cornflakes triturados",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "3 bowls",
+   "Freidora"
+  ],
+  "method": [
+   "Pasar pollo por harina con sal.",
+   "Mezclar huevos, perejil, ajo y Dijon; pasar el pollo enharinado por esta mezcla.",
+   "Cubrir con cornflakes triturados. Reservar para fritura.",
+   "Freír porción de 200 g aprox. 2-2 1/2 minutos o hasta dorado y cocción completa."
+  ],
+  "criticalPoints": [
+   "Orden de apanado: harina -> huevo/Dijon -> cornflakes.",
+   "Verificar cocción completa del pollo."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Ceviche de Champiñones Mazcina",
+  "section": "Entradas",
+  "page": 28,
+  "use": "Entrada fría.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Champiñones",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Palta",
+    "quantityText": "1/2 unidad",
+    "noteText": "120-130 g aprox.",
+    "quantity": 125,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentón rojo",
+    "quantityText": "40-50 g",
+    "noteText": null,
+    "quantity": 45,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla roja en pluma",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de limón",
+    "quantityText": "60 ml",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cilantro fresco",
+    "quantityText": "15 g",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de Jengibre Mazcina",
+    "quantityText": "30 ml",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "15 ml",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Canchita",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "Cantidad pequeña",
+    "noteText": "Para decoración",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "2 bowls, uno con hielo",
+   "Bowl pequeño de loza"
+  ],
+  "method": [
+   "Cortar champiñones en cuartos y dar fritura muy breve. Escurrir y enfriar inmediatamente sobre bowl con hielo.",
+   "Agregar palta en cubos, pimentón, cebolla escurrida, cilantro, limón, jengibre, aceite y sal. Mezclar sobre hielo.",
+   "Servir en bowl pequeño, terminar con canchita y Mini Ensalada Mazcina."
+  ],
+  "criticalPoints": [
+   "Mantener muy frío.",
+   "No sobrecocinar champiñones.",
+   "Manipular palta con cuidado."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Napo Chicken Bites Mazcina",
+  "section": "Entradas",
+  "page": 28,
+  "use": "Entrada caliente.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pollo Apanado Mazcina",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa de Tomate Mazcina",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Queso Gouda",
+    "quantityText": "30-40 g",
+    "noteText": null,
+    "quantity": 35,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Alioli Mazcina",
+    "quantityText": "25-30 g",
+    "noteText": "Pocillo",
+    "quantity": 27.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "Gratinador",
+   "Bandeja pequeña",
+   "Plato"
+  ],
+  "method": [
+   "Gratinar 60 g de salsa de tomate con 30-40 g de Gouda.",
+   "Freír 200 g de pollo apanado 2-2 1/2 minutos o hasta cocción completa.",
+   "Disponer pollo en plato y cubrir con salsa/queso gratinado.",
+   "Acompañar con alioli y Mini Ensalada Mazcina."
+  ],
+  "criticalPoints": [
+   "Servir inmediatamente para conservar crocancia."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Baked Feta Pot Mazcina",
+  "section": "Entradas",
+  "page": 29,
+  "use": "Entrada caliente.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Confitado de Cherry y Pimentones",
+    "quantityText": "100 g",
+    "noteText": null,
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa de Tomate Mazcina",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Queso feta Danish Style",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Tostadas de baguette con mantequilla de ajo",
+    "quantityText": "5 unidades",
+    "noteText": null,
+    "quantity": 5,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Tortillas de Harina Fritas",
+    "quantityText": "6 unidades",
+    "noteText": null,
+    "quantity": 6,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Pocillo de greda",
+   "Gratinador",
+   "Soplete"
+  ],
+  "method": [
+   "Precalentar pocillo de greda. Calentar confitado + salsa de tomate.",
+   "Disponer mezcla caliente en pocillo y agregar feta en cubos grandes irregulares.",
+   "Gratinar; terminar con soplete para dorado intenso.",
+   "Servir con 5 tostadas, 6 tortillas fritas y mini ensalada."
+  ],
+  "criticalPoints": [
+   "Pocillo muy caliente.",
+   "Mantener feta en trozos grandes."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Ceviche de Salmón Mazcina",
+  "section": "Entradas",
+  "page": 30,
+  "use": "Entrada fría.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Salmón fresco en cubos",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 1/2 cucharaditas aprox.",
+    "noteText": "Por confirmar",
+    "quantity": null,
+    "unit": null,
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla roja en pluma fina",
+    "quantityText": "50-60 g",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentón rojo",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cilantro fresco",
+    "quantityText": "15 g",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de limón",
+    "quantityText": "60 ml",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Jugo de Jengibre Mazcina",
+    "quantityText": "30 ml",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Leche evaporada",
+    "quantityText": "30 ml",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Camarón cocido con cola",
+    "quantityText": "1 unidad",
+    "noteText": "Para coronar",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Canchita",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salt flakes",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Camote cocido",
+    "quantityText": "1 trozo",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Limón fresco",
+    "quantityText": "1 gajo",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Concha de ostión",
+    "quantityText": "1 unidad",
+    "noteText": "Decoración",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "2 bowls, uno con hielo",
+   "Copa",
+   "Plato pequeño"
+  ],
+  "method": [
+   "Mantener bowl de mezcla sobre hielo. Mezclar salmón con sal, cebolla, pimentón y cilantro.",
+   "Agregar limón, jugo de jengibre y leche evaporada. Mezclar y rectificar sal/acidez.",
+   "Servir en copa, terminar con canchita y camarón. Decorar plato con canchita, salt flakes, camote, limón y concha."
+  ],
+  "criticalPoints": [
+   "Mantener muy frío.",
+   "Rectificar sabor antes de servir.",
+   "Gramaje de sal pendiente de revisión."
+  ],
+  "pending": [
+   "Sal: Por confirmar",
+   "Gramaje de sal pendiente de revisión."
+  ]
+ },
+ {
+  "name": "Mazcina Bravas",
+  "section": "Entradas",
+  "page": 31,
+  "use": "Entrada caliente.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Homemade Potatoes Mazcina",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Queso Gouda",
+    "quantityText": "25 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa Brava Mazcina",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Alioli Mazcina",
+    "quantityText": "10 g",
+    "noteText": "Sobre papas",
+    "quantity": 10,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Alioli Mazcina",
+    "quantityText": "25 g",
+    "noteText": "Pocillo",
+    "quantity": 25,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Perejil fresco",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "Pocillo de loza",
+   "Plato",
+   "Pocillo de salsa"
+  ],
+  "method": [
+   "Freír papas hasta doradas y crujientes. Salar.",
+   "Disponer en pocillo de loza, agregar Gouda, salsa brava y 10 g de alioli. Terminar con perejil.",
+   "Servir con pocillo de 25 g de alioli y Mini Ensalada Mazcina."
+  ],
+  "criticalPoints": [
+   "Servir inmediatamente."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Garlic Prawns Mazcina",
+  "section": "Entradas",
+  "page": 31,
+  "use": "Entrada caliente.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Camarones pelados y desvenados",
+    "quantityText": "7 unidades",
+    "noteText": null,
+    "quantity": 7,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Tiger prawn",
+    "quantityText": "1 unidad",
+    "noteText": "Cabeza y cola intactas; parte de carcasa retirada",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "20 ml",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vino blanco",
+    "quantityText": "50-60 ml",
+    "noteText": null,
+    "quantity": 55,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de Tomate Mazcina",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Perejil fresco",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Tostadas de baguette con mantequilla de ajo",
+    "quantityText": "5 unidades",
+    "noteText": null,
+    "quantity": 5,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Tortillas fritas",
+    "quantityText": "6 unidades",
+    "noteText": null,
+    "quantity": 6,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Sartén",
+   "Bowl pequeño de loza",
+   "Tabla de madera"
+  ],
+  "method": [
+   "Sofreír ajo en aceite y agregar camarones y tiger prawn.",
+   "Agregar vino y reducir; incorporar salsa de tomate y terminar cocción.",
+   "Servir 7 camarones con salsa en bowl; coronar con tiger prawn y perejil.",
+   "Acompañar con tostadas, tortillas y mini ensalada."
+  ],
+  "criticalPoints": [
+   "No quemar ajo.",
+   "No sobrecocinar camarones."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Crab Gratin Mazcina (Chupe de Jaiba)",
+  "section": "Entradas",
+  "page": 32,
+  "use": "Entrada caliente; se produce, porciona y congela.",
+  "yieldText": "Porciones de 200 g.",
+  "lines": [
+   {
+    "item": "Carne de cangrejo limpia",
+    "quantityText": "500 g",
+    "noteText": null,
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla",
+    "quantityText": "500 g",
+    "noteText": null,
+    "quantity": 500,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "1 cucharada",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentón rojo",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Vino blanco",
+    "quantityText": "1 taza",
+    "noteText": "240-250 ml",
+    "quantity": 245,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimienta negra molida",
+    "quantityText": "1/4 cucharada",
+    "noteText": "3/4 cucharadita aprox.",
+    "quantity": null,
+    "unit": null,
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Comino",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Orégano",
+    "quantityText": "2 cucharadas",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Paprika ahumada",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla en polvo",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "80 ml",
+    "noteText": null,
+    "quantity": 80,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Leche",
+    "quantityText": "150 ml",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pan",
+    "quantityText": "100 g",
+    "noteText": null,
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Queso Gouda",
+    "quantityText": "100 g",
+    "noteText": "En mezcla",
+    "quantity": 100,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Queso Gouda",
+    "quantityText": "30 g",
+    "noteText": "Para gratinar por porción",
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Olla/sartén",
+   "Procesador",
+   "Pocillos de greda",
+   "Microondas",
+   "Gratinador"
+  ],
+  "method": [
+   "Procesar pan con leche hasta pasta.",
+   "Sofreír cebolla, pimentón y ajo en aceite. Agregar condimentos y vino.",
+   "Agregar cangrejo, cocinar y reducir. Incorporar pasta de pan y 100 g de Gouda. Cocinar hasta mezcla cremosa y espesa.",
+   "Enfriar, porcionar 200 g y congelar.",
+   "Servicio: calentar 1-2 minutos en microondas hasta muy caliente, pasar a pocillo de greda precalentado, cubrir con 30 g de Gouda y gratinar.",
+   "Servir con 5 tostadas de baguette, 6 tortillas fritas y Mini Ensalada Mazcina."
+  ],
+  "criticalPoints": [
+   "Revisar que no haya restos de caparazón.",
+   "Reducir exceso de líquido.",
+   "Servir muy caliente."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Empanadas Mazcina - Armado, Formas y Servicio",
+  "section": "Entradas",
+  "page": 33,
+  "use": "Estándar de armado para empanadas de carne, camarón-queso y queso.",
+  "yieldText": null,
+  "lines": [
+   {
+    "item": "Empanada de carne",
+    "quantityText": "25-30 g de pino",
+    "noteText": "Cierre de 4 puntas",
+    "quantity": 27.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Empanada camarón-queso",
+    "quantityText": "30 g de relleno",
+    "noteText": "Cierre triangular",
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Empanada de queso",
+    "quantityText": "35-40 g de Gouda",
+    "noteText": "Semiesfera/media luna sellada con tenedor",
+    "quantity": 37.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Pebre Mazcina",
+    "quantityText": "1 pocillo",
+    "noteText": "Acompañamiento",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "Cantidad pequeña",
+    "noteText": "Acompañamiento",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Balanza",
+   "Tenedor",
+   "Bandejas",
+   "Freidora"
+  ],
+  "method": [
+   "Rellenar cada tapa con el gramaje correspondiente. Cerrar con la forma estándar de cada sabor.",
+   "Congelar las empanadas armadas.",
+   "Freír directamente desde congeladas durante aproximadamente 5 minutos.",
+   "Servir con Pebre Mazcina y Mini Ensalada Mazcina."
+  ],
+  "criticalPoints": [
+   "La forma permite identificar el relleno durante almacenamiento y servicio.",
+   "Sellar completamente para evitar aperturas."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Chorrillana Mazcina",
+  "section": "Platos principales",
+  "page": 35,
+  "use": "Plato principal.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Papas fritas congeladas",
+    "quantityText": "400 g",
+    "noteText": null,
+    "quantity": 400,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mechada Mazcina",
+    "quantityText": "130-150 g",
+    "noteText": null,
+    "quantity": 140,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Líquido de Mechada",
+    "quantityText": "Cantidad necesaria",
+    "noteText": "Para dejarla muy jugosa",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Cebolla Estofada Mazcina",
+    "quantityText": "80-100 g",
+    "noteText": null,
+    "quantity": 90,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Chorizo",
+    "quantityText": "60-80 g",
+    "noteText": null,
+    "quantity": 70,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Huevos",
+    "quantityText": "2 unidades",
+    "noteText": null,
+    "quantity": 2,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal y perejil",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Alioli Mazcina",
+    "quantityText": "25 g",
+    "noteText": "Pocillo",
+    "quantity": 25,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Ketchup",
+    "quantityText": "25 g",
+    "noteText": "Pocillo",
+    "quantity": 25,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Freidora",
+   "Sartén",
+   "Olla pequeña",
+   "2 pocillos"
+  ],
+  "method": [
+   "Freír papas hasta doradas y crujientes.",
+   "Regenerar mechada con suficiente jugo para que quede muy jugosa. Calentar cebolla. Freír chorizo y 2 huevos.",
+   "Montar papas, mechada, cebolla, chorizo y huevos. Terminar con sal y perejil.",
+   "Servir con alioli y ketchup."
+  ],
+  "criticalPoints": [
+   "Todos los componentes deben llegar calientes al montaje."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Red Mechada Pasta Mazcina",
+  "section": "Platos principales",
+  "page": 35,
+  "use": "Pasta principal.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pasta Fresca Mazcina congelada",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Mechada Mazcina",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Líquido de Mechada",
+    "quantityText": "60 ml",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa de Tomate Mazcina",
+    "quantityText": "90 ml",
+    "noteText": null,
+    "quantity": 90,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Parmesano",
+    "quantityText": "15-20 g",
+    "noteText": null,
+    "quantity": 17.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20-30 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Sartén",
+   "Olla",
+   "Colador",
+   "Bowl negro"
+  ],
+  "method": [
+   "Calentar mechada, líquido y salsa de tomate hasta integrar.",
+   "Cocinar pasta desde congelada 2-3 minutos en agua hirviendo con sal. Escurrir.",
+   "Agregar pasta a la salsa y mezclar hasta cubrir.",
+   "Servir en bowl negro con parmesano y mini ensalada."
+  ],
+  "criticalPoints": [
+   "No sobrecocinar pasta.",
+   "La salsa debe quedar jugosa, no aguada."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Green Creamy Pasta Mazcina",
+  "section": "Platos principales",
+  "page": 36,
+  "use": "Pasta principal.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Pasta Fresca Mazcina congelada",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Pesto Mazcina",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Crema",
+    "quantityText": "60 ml",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentón rojo en cubos",
+    "quantityText": "20-30 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Arvejas verdes",
+    "quantityText": "20-30 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de oliva",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Parmesano",
+    "quantityText": "15-20 g",
+    "noteText": null,
+    "quantity": 17.5,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20-30 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Sartén",
+   "Olla",
+   "Colador"
+  ],
+  "method": [
+   "Sofreír brevemente ajo en aceite. Agregar pimentón y arvejas.",
+   "Agregar pesto y crema; reducir hasta salsa cremosa y espesa.",
+   "Cocinar pasta desde congelada 2-3 minutos, escurrir e integrar en sartén.",
+   "Servir con parmesano y mini ensalada."
+  ],
+  "criticalPoints": [
+   "No quemar ajo.",
+   "No reducir en exceso la crema."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Grilled Barramundi Mazcina",
+  "section": "Platos principales",
+  "page": 37,
+  "use": "Pescado principal.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Barramundi",
+    "quantityText": "180-200 g",
+    "noteText": null,
+    "quantity": 190,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Adobo para Pescado Mazcina",
+    "quantityText": "30 g aprox.",
+    "noteText": "Por confirmar",
+    "quantity": 30,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Mantequilla clarificada + aceite de oliva",
+    "quantityText": "Partes iguales",
+    "noteText": "Para sellar",
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Papas Provenzal Mazcina",
+    "quantityText": "1 porción",
+    "noteText": "200 g base",
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Ensalada Chilena Mazcina",
+    "quantityText": "1 porción",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "40 g",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Salsa Tártara Mazcina",
+    "quantityText": "25 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Limón",
+    "quantityText": "1 gajo",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Sartén",
+   "Freidora",
+   "Pocillo de salsa"
+  ],
+  "method": [
+   "Condimentar barramundi y sellar en mezcla 1:1 de mantequilla clarificada y aceite de oliva. Cocinar aprox. 4-5 minutos por lado, ajustando por grosor.",
+   "Preparar Papas Provenzal y Ensalada Chilena.",
+   "Montar papas como base, barramundi encima, ensalada chilena, mini ensalada, tártara y gajo de limón."
+  ],
+  "criticalPoints": [
+   "Verificar cocción sin resecar.",
+   "Gramaje de adobo pendiente de revisión."
+  ],
+  "pending": [
+   "Adobo para Pescado Mazcina: Por confirmar",
+   "Gramaje de adobo pendiente de revisión."
+  ]
+ },
+ {
+  "name": "Lomo Saltado Mazcina",
+  "section": "Platos principales",
+  "page": 38,
+  "use": "Plato principal.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Rump steak laminado fino",
+    "quantityText": "130 g",
+    "noteText": null,
+    "quantity": 130,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Ajo en polvo",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Sal",
+    "quantityText": "3/4 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Aceite de canola para marinar",
+    "quantityText": "10-20 ml",
+    "noteText": null,
+    "quantity": 15,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Tomate en gajos grandes",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebolla roja en gajos",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Cebollín",
+    "quantityText": "20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de Lomo Saltado Mazcina",
+    "quantityText": "30 ml",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Aceite de canola para wok",
+    "quantityText": "20-30 ml",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "ml",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Arroz Blanco Mazcina",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Homemade Potatoes o papas fritas",
+    "quantityText": "200 g",
+    "noteText": "A elección",
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Cilantro fresco",
+    "quantityText": "Cantidad necesaria",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   }
+  ],
+  "equipment": [
+   "Wok",
+   "Freidora"
+  ],
+  "method": [
+   "Marinar carne con ajo en polvo, sal y aceite.",
+   "Calentar wok a fuego muy alto. Sellar carne rápidamente.",
+   "Agregar cebolla, luego tomate y cebollín. Mantener stir-fry rápido.",
+   "Agregar 30 ml de salsa de lomo saltado y mezclar brevemente.",
+   "Servir con 150 g de arroz y 200 g de papas elegidas. Terminar con cilantro."
+  ],
+  "criticalPoints": [
+   "Wok muy caliente.",
+   "Evitar hervir la carne o sobrecocinar vegetales."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Mediterranean Rice Mazcina (Arroz con Mariscos)",
+  "section": "Platos principales",
+  "page": 38,
+  "use": "Arroz principal.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Arroz Blanco Mazcina",
+    "quantityText": "150 g",
+    "noteText": null,
+    "quantity": 150,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Pollo",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Choritos congelados limpios",
+    "quantityText": "50-80 g",
+    "noteText": null,
+    "quantity": 65,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Camarones pelados/desvenados",
+    "quantityText": "5 unidades",
+    "noteText": null,
+    "quantity": 5,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Tiger prawns enteros",
+    "quantityText": "2 unidades",
+    "noteText": "Para cocción y montaje",
+    "quantity": 2,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Chorizo",
+    "quantityText": "50 g",
+    "noteText": null,
+    "quantity": 50,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Pimentón rojo en tiras",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Arvejas",
+    "quantityText": "30 g",
+    "noteText": null,
+    "quantity": 30,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Fumet de Pescado Mazcina",
+    "quantityText": "80 ml",
+    "noteText": null,
+    "quantity": 80,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Vino blanco",
+    "quantityText": "60 ml",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "ml",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de Tomate Mazcina",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Ajo fresco picado",
+    "quantityText": "1 cucharadita",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "20-30 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Wok o sartén grande",
+   "Bowl negro"
+  ],
+  "method": [
+   "Saltear pollo y chorizo.",
+   "Agregar camarones, tiger prawns, choritos, pimentón, arvejas y ajo.",
+   "Agregar vino y reducir. Incorporar fumet y salsa de tomate.",
+   "Agregar arroz cocido; mezclar y reducir ligeramente hasta arroz húmedo y bien impregnado. Rectificar sabor.",
+   "Montar en bowl negro y coronar con los 2 tiger prawns. Agregar mini ensalada."
+  ],
+  "criticalPoints": [
+   "Evitar sobrecocinar mariscos.",
+   "Resultado húmedo, no con exceso de líquido."
+  ],
+  "pending": []
+ },
+ {
+  "name": "Salmón Cancato Mazcina",
+  "section": "Platos principales",
+  "page": 39,
+  "use": "Pescado principal gratinado.",
+  "yieldText": "1 porción.",
+  "lines": [
+   {
+    "item": "Salmón",
+    "quantityText": "200 g",
+    "noteText": null,
+    "quantity": 200,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Adobo para Pescado Mazcina",
+    "quantityText": "20-30 g",
+    "noteText": "Por confirmar",
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   },
+   {
+    "item": "Mantequilla clarificada + aceite de oliva",
+    "quantityText": "Partes iguales",
+    "noteText": null,
+    "quantity": null,
+    "unit": null,
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Chorizo",
+    "quantityText": "6 láminas / 20 g",
+    "noteText": null,
+    "quantity": 20,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Tomate fresco en láminas",
+    "quantityText": "20-30 g",
+    "noteText": null,
+    "quantity": 25,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": false
+   },
+   {
+    "item": "Salsa de Tomate Mazcina",
+    "quantityText": "60 g",
+    "noteText": null,
+    "quantity": 60,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Queso Gouda",
+    "quantityText": "40 g",
+    "noteText": null,
+    "quantity": 40,
+    "unit": "g",
+    "approx": false,
+    "isPreparation": false
+   },
+   {
+    "item": "Papas Provenzal Mazcina",
+    "quantityText": "1 porción",
+    "noteText": null,
+    "quantity": 1,
+    "unit": "each",
+    "approx": false,
+    "isPreparation": true
+   },
+   {
+    "item": "Mini Ensalada Mazcina",
+    "quantityText": "30-40 g",
+    "noteText": null,
+    "quantity": 35,
+    "unit": "g",
+    "approx": true,
+    "isPreparation": true
+   }
+  ],
+  "equipment": [
+   "Sartén",
+   "Pocillo de loza",
+   "Gratinador"
+  ],
+  "method": [
+   "Condimentar salmón y sellar en mezcla 1:1 de mantequilla clarificada y aceite, dorando sus caras. Tiempo referencial 5-6 minutos por cara según grosor; verificar cocción.",
+   "Sellar chorizo. Colocar salmón en pocillo de loza y montar en capas chorizo, tomate, salsa de tomate y Gouda.",
+   "Gratinar hasta queso fundido y dorado.",
+   "Servir con Papas Provenzal y Mini Ensalada Mazcina."
+  ],
+  "criticalPoints": [
+   "Tiempo de cocción debe ajustarse al grosor.",
+   "Gramaje de adobo pendiente de revisión."
+  ],
+  "pending": [
+   "Adobo para Pescado Mazcina: Por confirmar",
+   "Gramaje de adobo pendiente de revisión."
+  ]
+ }
+]

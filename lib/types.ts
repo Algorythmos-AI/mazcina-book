@@ -32,6 +32,7 @@ export interface RecipeDto extends Recipe {
   type: 'dish' | 'prep';
   yieldQuantity: string | null;
   yieldUnit: Unit | null;
+  yieldEstimated: boolean;
   portions: string;
   notes: string | null;
   version: number;

@@ -137,6 +137,8 @@ export const recipes = pgTable(
     type: recipeTypeEnum('type').notNull().default('dish'),
     yieldQuantity: quantity('yield_quantity'),
     yieldUnit: unitEnum('yield_unit'),
+    /** The yield was worked out from the ingredients, not weighed; cleared once a batch is weighed. */
+    yieldEstimated: boolean('yield_estimated').notNull().default(false),
     portions: quantity('portions').notNull().default('1'),
     notes: text('notes'),
     ...tracked,

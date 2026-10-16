@@ -23,7 +23,7 @@ export async function loadMenuSheet(menuId: string | undefined) {
         profit: ok ? costing.grossProfit.toFixed(2, DecimalJs.ROUND_HALF_UP) : null,
         suggested: ok && costing.suggestedCents !== null ? new DecimalJs(costing.suggestedCents).div(100).toFixed(2) : null,
         rating: ok ? costing.rating : null,
-        note: costing.status === 'uncosted' ? 'Not costed' : costing.status === 'incomplete' ? 'Recipe incomplete' : '',
+        note: costing.status === 'uncosted' ? 'Not costed' : costing.status === 'incomplete' ? 'Recipe incomplete' : costing.estimates.length > 0 ? 'Estimate' : '',
       };
     });
   return { menu, asOf: data.asOf, settings: data.settings, groups: groupByCategory(rows), rows };

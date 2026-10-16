@@ -35,7 +35,7 @@ export default async function RecipesPage() {
                   {cost.status === 'ok' ? (
                     <span className="shrink-0 text-right">
                       <span className="font-semibold tabular-nums">{money(cost.costPerPortion)}</span>
-                      <span className={`block ${muted}`}>per portion</span>
+                      <span className={`block ${muted}`}>{cost.estimates.length > 0 || r.yieldEstimated ? 'estimate, per portion' : 'per portion'}</span>
                     </span>
                   ) : (
                     <span className={`shrink-0 ${badgeWarn}`}>Incomplete</span>
