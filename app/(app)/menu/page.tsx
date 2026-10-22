@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import DecimalJs from 'decimal.js';
 import { ActionButton } from '@/components/action-button';
 import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
 import { badgeBad, badgeOk, badgeWarn, card, eyebrow, h1, h2, input, label, muted, primary, secondary } from '@/components/ui';
 import { displayDate, issueText, moneyFromCents, money, percent, plain } from '@/lib/format';
-import { costMenuItem, groupByCategory, type ItemCosting } from '@/lib/menu';
+import { costMenuItem, groupByCategory, menuSummary, MIN_DISHES_FOR_AVERAGE, type ItemCosting } from '@/lib/menu';
 import { contextFrom, loadCostingData, loadMenus, loadSnapshot } from '@/lib/queries';
 import type { MenuDto } from '@/lib/types';
 import { requireRole } from '@/lib/session';
@@ -20,10 +19,23 @@ const RATING_BADGE = { good: badgeOk, watch: badgeWarn, high: badgeBad, none: ba
 function Costing({ costing }: { costing: ItemCosting }) {
   if (costing.status === 'uncosted') return <span className={`${muted} text-xs`}>Not costed</span>;
   if (costing.status === 'incomplete') {
-    const missing = costing.issues.filter((i) => i.code === 'no_price').length;
+    // Name what is really missing, looking inside preps, so "Recipe incomplete" is never the whole story.
+    const prices = costing.blockers.filter((b) => b.code === 'no_price');
+    const other = costing.blockers.length - prices.length;
+    const named = (prices.length > 0 ? prices : costing.blockers).slice(0, 2);
+    const more = costing.blockers.length - named.length;
     return (
-      <span className={badgeWarn} title={[...new Set(costing.issues.map(issueText))].join('\n')}>
-        {missing > 0 && missing === costing.issues.length ? `Needs ${missing} price${missing === 1 ? '' : 's'}` : 'Recipe incomplete'}
+      <span className="flex flex-col items-end gap-0.5 text-right" title={costing.blockers.map(issueText).join('\n')}>
+        <span className={badgeWarn}>
+          {prices.length > 0 ? `Needs ${prices.length} price${prices.length === 1 ? '' : 's'}` : 'Recipe incomplete'}
+          {prices.length > 0 && other > 0 ? ' + a fix' : ''}
+        </span>
+        {named.length > 0 && (
+          <span className={`${muted} text-xs`}>
+            {named.map((b) => (b.code === 'no_price' ? b.subject : issueText(b))).join(', ')}
+            {more > 0 ? ` +${more} more` : ''}
+          </span>
+        )}
       </span>
     );
   }
@@ -146,17 +158,10 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
   }
 
   const ctx = contextFrom(data);
-  const target = new DecimalJs(data.settings.targetFoodCostPct);
   const active = menu.items.filter((i) => !i.archived);
   const trashed = menu.items.filter((i) => i.archived);
   const rows = active.map((item) => ({ item, costing: costMenuItem(item, ctx, data.settings) }));
-  const costed = rows.flatMap((r) => (r.costing.status === 'ok' ? [r.costing] : []));
-  const withPct = costed.filter((c) => c.foodCostPct);
-  const average = withPct.length > 0 ? withPct.reduce((sum, c) => sum.plus(c.foodCostPct!), new DecimalJs(0)).div(withPct.length) : null;
-  const overTarget = costed.filter((c) => c.rating === 'high').length;
-  const incomplete = rows.filter((r) => r.costing.status === 'incomplete').length;
-  const unlinked = rows.filter((r) => r.costing.status === 'uncosted').length;
-  const partial = costed.filter((c) => c.asNeeded.length > 0).length;
+  const { costed, incomplete, unlinked, partial, watch, high, dishes, dishesCosted, average } = menuSummary(rows);
 
   return (
     <div className="space-y-6">
@@ -193,25 +198,29 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
         <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div>
             <dt className={muted}>Items costed</dt>
-            <dd className="text-2xl font-extrabold tabular-nums">{costed.length} of {active.length}</dd>
+            <dd className="text-2xl font-extrabold tabular-nums">{costed} of {active.length}</dd>
           </div>
           <div>
             <dt className={muted}>Average food cost</dt>
             <dd className="text-2xl font-extrabold tabular-nums">{average ? percent(average) : '—'}</dd>
+            <dd className={`${muted} text-xs`}>
+              {average ? `across ${dishesCosted} of ${dishes} dishes` : `not enough dishes costed yet (${dishesCosted} of ${dishes})`}
+            </dd>
           </div>
           <div>
             <dt className={muted}>Target</dt>
-            <dd className="text-2xl font-extrabold tabular-nums">{percent(target)}</dd>
+            <dd className="text-2xl font-extrabold tabular-nums">{percent(data.settings.targetFoodCostPct)}</dd>
           </div>
           <div>
-            <dt className={muted}>Well over target</dt>
-            <dd className="text-2xl font-extrabold tabular-nums">{overTarget}</dd>
+            <dt className={muted}>Over target</dt>
+            <dd className="text-2xl font-extrabold tabular-nums">{costed > 0 ? high + watch : '—'}</dd>
+            {costed > 0 && <dd className={`${muted} text-xs`}>{high} well over, {watch} a little over</dd>}
           </div>
         </dl>
         <p className={`mt-3 ${muted}`}>
-          Food cost % is the cost of one serve against the menu price{data.settings.gstRegistered ? ' with GST taken off' : ''}. Only fully
-          costed items count towards the average
-          {costed.length < active.length ? `, so it describes ${withPct.length} of ${active.length} items, not the whole menu` : ''}.
+          Food cost % is the cost of one serve against the menu price{data.settings.gstRegistered ? ' with GST taken off' : ''}. The average
+          leaves out add-ons and anything not fully costed, and appears once at least {MIN_DISHES_FOR_AVERAGE} dishes and half of all dishes
+          are costed, so a few cheap items cannot stand in for the whole menu.
         </p>
         {(incomplete > 0 || unlinked > 0) && (
           <p className={`mt-2 ${badgeWarn}`}>
