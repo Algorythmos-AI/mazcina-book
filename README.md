@@ -100,9 +100,14 @@ account once and prints a Stripe-hosted onboarding link for the owner. Run it
 again for a fresh link. It needs `--live` with a live key.
 
 Refunds and disputes: a full refund or a new dispute cancels an untouched card;
-a card already used is only flagged. A partial refund only flags the card, and
-a dispute the restaurant wins flags the cancelled card so the owner can decide
-whether to reissue it. Flags show as "Check" in the Gift cards list.
+a card already used is put on hold instead. A partial refund also puts the card
+on hold, and a dispute the restaurant wins flags the cancelled card so the owner
+can decide whether to reissue it. A card on hold cannot be used: staff see "On
+hold" and are told to ask the owner, who can set the balance, cancel the card or
+clear the hold from the card's page. A refund or dispute that arrives before the
+card was issued is matched to its order through the payment's metadata and
+applied as the card is created. The webhook keeps handling events while sales
+are switched off, so pausing sales never loses a refund.
 
 To test locally: `stripe listen --events
 checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.async_payment_failed,checkout.session.expired,charge.refunded,charge.dispute.created,charge.dispute.closed
