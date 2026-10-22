@@ -190,6 +190,8 @@ export const menus = pgTable(
     ...tracked,
   },
   (t) => [
+    // One seasonal menu is live at a time; making another live archives it (setMenuStatus).
+    uniqueIndex('menus_one_live_seasonal').on(t.kind).where(sql`${t.status} = 'live' AND ${t.kind} = 'seasonal' AND ${t.archivedAt} IS NULL`),
     check('menus_name_present', sql`btrim(${t.name}) <> ''`),
     check('menus_dates_ordered', sql`${t.startsOn} IS NULL OR ${t.endsOn} IS NULL OR ${t.startsOn} <= ${t.endsOn}`),
   ],

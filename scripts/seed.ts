@@ -1,9 +1,11 @@
 /**
  * Idempotent base data: the settings row and the first owner.
  * Usage: tsx scripts/seed.ts <owner-email>
- * Refuses to run against production unless --production is passed.
+ * Refuses to run against production unless --production is passed, and asks
+ * before writing (--yes to skip).
  */
 import { config } from 'dotenv';
+import { confirmTarget } from './target';
 config({ path: '.env.local' });
 
 async function main() {
@@ -13,6 +15,7 @@ async function main() {
   if (process.env.VERCEL_ENV === 'production' && !args.includes('--production')) {
     throw new Error('Refusing to seed production without --production');
   }
+  await confirmTarget(`seed settings and the owner ${email}`);
   const { db, schema } = await import('../db');
   const { sql } = await import('drizzle-orm');
   await db.insert(schema.settings).values({ id: 1 }).onConflictDoNothing();

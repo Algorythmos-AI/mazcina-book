@@ -1,5 +1,6 @@
 import { del, list, put } from '@vercel/blob';
-import { timingSafeEqual } from 'node:crypto';
+import { alert } from '@/lib/alert';
+import { cronAuthorised } from '@/lib/cron';
 import { exportEverything } from '@/lib/export';
 import { todaySydney } from '@/lib/format';
 import { daysAgo } from '@/lib/impact';
@@ -7,22 +8,22 @@ import { daysAgo } from '@/lib/impact';
 const PREFIX = 'backups/';
 const KEEP_DAYS = 30;
 
-function authorised(request: Request): boolean {
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return false;
-  const given = Buffer.from(request.headers.get('authorization') ?? '');
-  const expected = Buffer.from(`Bearer ${secret}`);
-  return given.length === expected.length && timingSafeEqual(given, expected);
-}
-
 /**
  * Nightly backup, called by Vercel Cron. Writes one private JSON file per day
  * and removes files older than 30 days. Re-running on the same day replaces
  * that day's file.
  */
 export async function GET(request: Request) {
-  if (!authorised(request)) return new Response('Unauthorized', { status: 401 });
+  if (!cronAuthorised(request)) return new Response('Unauthorized', { status: 401 });
+  try {
+    return await backUp();
+  } catch (error) {
+    await alert('Last night\'s backup failed', `${error instanceof Error ? error.stack ?? error.message : String(error)}\nThe previous backups are untouched. Download all data from the Team page if you need a copy today.`);
+    return new Response('Backup failed', { status: 500 });
+  }
+}
 
+async function backUp(): Promise<Response> {
   const today = todaySydney();
   const data = await exportEverything();
   const body = JSON.stringify(data);

@@ -59,9 +59,11 @@ export function decimal(
   return d.toString();
 }
 
-function pgCode(error: unknown): string | undefined {
-  for (let e = error as { code?: unknown; cause?: unknown } | undefined, i = 0; e && i < 4; e = e.cause as typeof e, i++) {
-    if (typeof e.code === 'string' && /^[0-9A-Z]{5}$/.test(e.code)) return e.code;
+function pgError(error: unknown): { code: string; constraint?: string } | undefined {
+  for (let e = error as { code?: unknown; constraint?: unknown; cause?: unknown } | undefined, i = 0; e && i < 4; e = e.cause as typeof e, i++) {
+    if (typeof e.code === 'string' && /^[0-9A-Z]{5}$/.test(e.code)) {
+      return { code: e.code, constraint: typeof e.constraint === 'string' ? e.constraint : undefined };
+    }
   }
   return undefined;
 }
@@ -73,7 +75,8 @@ export async function mutate<T>(fn: (user: CurrentUser) => Promise<T>): Promise<
     return { ok: true, data: await fn(user) };
   } catch (error) {
     if (error instanceof Invalid) return { ok: false, error: error.message };
-    const code = pgCode(error);
+    const { code, constraint } = pgError(error) ?? {};
+    if (constraint === 'menus_one_live_seasonal') return { ok: false, error: 'Another seasonal menu went live at the same moment. Reload the page and try again.' };
     if (code === '23505') return { ok: false, error: 'That name is already used' };
     if (code === '23503') return { ok: false, error: 'This is still used somewhere else' };
     if (code === '23514') return { ok: false, error: 'One of the values is out of range' };

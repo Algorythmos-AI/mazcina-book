@@ -1,6 +1,7 @@
 import type Stripe from 'stripe';
 import { eq } from 'drizzle-orm';
 import { db, schema } from '@/db';
+import { alert } from '@/lib/alert';
 import { GiftCardError, stripe } from './config';
 import { flagForPayment, fulfilOrder, markOrder, voidForPayment, type PaymentOutcome } from './core';
 
@@ -108,7 +109,7 @@ export async function handleStripeEvent(event: Stripe.Event, account?: string): 
   } catch (error) {
     // A mismatch will not fix itself on retry: record it, shout, and stop Stripe resending.
     if (!(error instanceof GiftCardError)) throw error;
-    console.error(`[gift-cards] event ${event.id} (${event.type}) rejected: ${error.message}`);
+    await alert('A gift card payment was rejected', `Stripe event ${event.id} (${event.type}) was not acted on: ${error.message}\nNo card was issued or changed. Check the payment in the Stripe Dashboard.`);
     outcome = 'rejected';
   }
   await db.insert(schema.stripeEvents).values({ id: event.id, type: event.type }).onConflictDoNothing();
