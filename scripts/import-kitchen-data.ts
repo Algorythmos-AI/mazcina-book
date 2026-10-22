@@ -1,11 +1,12 @@
 /**
  * Loads data/kitchen/mazcina-kitchen-data.json into the database in .env.local
  * (the dev database). Production is loaded by an owner from the Kitchen data page.
- * Usage: npx tsx scripts/import-kitchen-data.ts [--apply]
+ * Usage: npx tsx scripts/import-kitchen-data.ts [--apply [--yes]]
  * Without --apply it only reports what would be added.
  */
 import { readFileSync } from 'node:fs';
 import { config } from 'dotenv';
+import { confirmTarget } from './target';
 config({ path: '.env.local' });
 
 async function main() {
@@ -14,6 +15,7 @@ async function main() {
   const { applyImport, planImport } = await import('../lib/kitchen-data/import');
   const pack = packSchema.parse(JSON.parse(readFileSync('data/kitchen/mazcina-kitchen-data.json', 'utf8')));
   const apply = process.argv.includes('--apply');
+  if (apply) await confirmTarget('import the kitchen data pack');
   const report = apply ? await applyImport(pack, 'import-script') : await planImport(pack);
   if (report.problems.length) console.log('PROBLEMS:\n- ' + report.problems.join('\n- '));
   for (const k of ['suppliers', 'ingredients', 'prices', 'recipes', 'menuLinks'] as const) {

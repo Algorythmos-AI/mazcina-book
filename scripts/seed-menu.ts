@@ -2,9 +2,10 @@
  * Loads the printed 2026 menu (public/menu/mazcina-menu-2026.pdf on the public
  * site; the takeaway menu carries the same prices) as the live menu.
  * Idempotent: does nothing if a menu with this name already exists.
- * Usage: tsx scripts/seed-menu.ts
+ * Usage: tsx scripts/seed-menu.ts [--yes]
  */
 import { config } from 'dotenv';
+import { confirmTarget } from './target';
 config({ path: '.env.local' });
 
 const MENU_NAME = 'Menu 2026';
@@ -57,6 +58,7 @@ const ITEMS: [string, string, number][] = [
 ];
 
 async function main() {
+  await confirmTarget(`load "${MENU_NAME}" as the live menu`);
   const { db, schema } = await import('../db');
   const { eq } = await import('drizzle-orm');
   const existing = await db.select().from(schema.menus).where(eq(schema.menus.name, MENU_NAME));

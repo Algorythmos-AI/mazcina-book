@@ -18,3 +18,33 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+
+  # The money rules (gift cards) proven against a real Postgres, with every
+  # migration applied from scratch, so a migration that cannot run fails here
+  # rather than in the production build.
+  database:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: kitchen
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/kitchen
+      TEST_DB_DRIVER: pg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx drizzle-kit migrate
+      - run: npm run test:db

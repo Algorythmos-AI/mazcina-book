@@ -36,6 +36,8 @@ Sign in with the email you seeded; the code is printed in the terminal.
 ```bash
 npm run lint && npm run typecheck && npm test
 npm run test:db   # needs .env.local; runs against the dev database
+# or against any plain Postgres, as CI does:
+TEST_DB_DRIVER=pg DATABASE_URL=postgres://... npx drizzle-kit migrate && TEST_DB_DRIVER=pg DATABASE_URL=postgres://... npm run test:db
 ```
 
 ## Database changes
@@ -130,6 +132,26 @@ live key, account id, webhook secret and `EMAIL_REPLY_TO` (a monitored inbox);
 a test event from the Stripe Dashboard returns 200; a "Gift card" payment type
 exists in the POS; the website change with the order form is merged; then
 `GIFT_CARDS_LIVE=true`. To stop sales, unset `GIFT_CARDS_LIVE` and redeploy.
+
+## Scheduled jobs and alerts
+
+Vercel Cron calls two routes (schedules in `vercel.json`, times in UTC):
+
+| Route | When | What |
+|---|---|---|
+| `/api/cron/backup` | 16:00 daily | Full JSON export to the Blob store (below) |
+| `/api/cron/outbox` | every 15 minutes | Retries gift card emails that did not go out |
+
+Both need `CRON_SECRET` in the production environment: Vercel sends it as
+`Authorization: Bearer …` and the routes refuse anything else. If it is
+missing, every run is refused with a 401 and `[cron] CRON_SECRET is not set` in
+the logs, so nothing is backed up and failed emails are not retried. The backup
+also needs `BLOB_READ_WRITE_TOKEN` (set by connecting the Blob store). A
+successful night logs `[backup] wrote backups/YYYY-MM-DD.json`.
+
+Problems that need a person are logged with an `[alert]` prefix and, when
+`ALERT_EMAIL` is set, emailed there: a gift card payment that did not match its
+order, a gift card email that failed every retry, and a failed backup.
 
 ## Backups
 

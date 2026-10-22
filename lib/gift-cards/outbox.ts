@@ -1,5 +1,6 @@
 import { and, asc, eq, lt } from 'drizzle-orm';
 import { db, schema } from '@/db';
+import { alert } from '@/lib/alert';
 import { sendEmail } from '@/lib/email';
 import { decryptCode } from './codes';
 import { codeKey } from './config';
@@ -68,11 +69,15 @@ export async function sendPendingEmails(limit = 20): Promise<{ sent: number; fai
     } catch (error) {
       failed++;
       const message = error instanceof Error ? error.message : String(error);
+      const gaveUp = row.attempts + 1 >= MAX_ATTEMPTS;
       console.error(`[gift-cards] email ${row.id} (${row.kind}) failed on attempt ${row.attempts + 1}: ${message}`);
       await db
         .update(emailOutbox)
-        .set({ lastError: message.slice(0, 500), status: row.attempts + 1 >= MAX_ATTEMPTS ? 'failed' : 'pending' })
+        .set({ lastError: message.slice(0, 500), status: gaveUp ? 'failed' : 'pending' })
         .where(eq(emailOutbox.id, row.id));
+      if (gaveUp) {
+        await alert('A gift card email could not be sent', `Email ${row.kind} for card ${row.giftCardId} failed ${MAX_ATTEMPTS} times and will not be retried: ${message}\nOpen the card in Gift cards and press "Send the card email again" once the cause is fixed.`);
+      }
     }
   }
   return { sent, failed };

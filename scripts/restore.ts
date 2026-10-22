@@ -3,7 +3,7 @@
  * EMPTY, already-migrated database, then reads everything back and checks it
  * matches the file row for row.
  *
- * Usage: DATABASE_URL=<target> tsx scripts/restore.ts <backup.json>
+ * Usage: DATABASE_URL=<target> tsx scripts/restore.ts <backup.json> [--yes]
  *
  * It never overwrites: if the target holds any kitchen data it stops. Login
  * sessions are not in a backup, so everyone signs in again afterwards. Gift
@@ -11,6 +11,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { config } from 'dotenv';
+import { confirmTarget } from './target';
 config({ path: '.env.local' });
 
 // Parents before children, so foreign keys are satisfied as rows go in.
@@ -55,6 +56,7 @@ async function main() {
   const unknown = Object.keys(backup.tables).filter((name) => !ORDER.some(([key]) => key === name));
   if (unknown.length > 0) throw new Error(`The file has tables this script does not know: ${unknown.join(', ')}`);
 
+  await confirmTarget(`restore ${file} (exported ${backup.exportedAt ?? 'at an unknown time'})`);
   const { db, schema } = await import('../db');
   const { getTableColumns } = await import('drizzle-orm');
   const target = new URL(process.env.DATABASE_URL);
