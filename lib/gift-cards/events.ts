@@ -1,12 +1,39 @@
 import type Stripe from 'stripe';
 import { eq } from 'drizzle-orm';
 import { db, schema } from '@/db';
-import { GiftCardError } from './config';
-import { flagForPayment, fulfilOrder, markOrder, voidForPayment } from './core';
+import { GiftCardError, stripe } from './config';
+import { flagForPayment, fulfilOrder, markOrder, voidForPayment, type PaymentOutcome } from './core';
 
-export type EventOutcome = 'duplicate' | 'fulfilled' | 'already_fulfilled' | 'not_paid' | 'order_closed' | 'voided' | 'flagged' | 'ignored' | 'rejected';
+export type EventOutcome = 'duplicate' | 'fulfilled' | 'already_fulfilled' | 'not_paid' | 'order_closed' | 'voided' | 'flagged' | 'held' | 'ignored' | 'rejected';
 
 const id = (value: string | { id: string } | null | undefined): string | null => (typeof value === 'string' ? value : (value?.id ?? null));
+
+/**
+ * The order a payment was for, read from the payment's metadata on Stripe.
+ * Only needed when a refund or dispute arrives before the card was issued, so
+ * the payment id is not saved yet. Null when Stripe has no such payment on the
+ * account; any other failure throws, so Stripe tries the event again.
+ */
+async function orderIdFromStripe(paymentIntentId: string, account: string | null | undefined): Promise<string | null> {
+  const [known] = await db
+    .select({ id: schema.giftCardOrders.id })
+    .from(schema.giftCardOrders)
+    .where(eq(schema.giftCardOrders.stripePaymentIntentId, paymentIntentId));
+  if (known) return known.id;
+  try {
+    const intent = await stripe().paymentIntents.retrieve(paymentIntentId, undefined, account ? { stripeAccount: account } : undefined);
+    // The restaurant's account takes other payments too; only our own order ids count.
+    const orderId = intent.metadata?.order_id;
+    return orderId && UUID.test(orderId) ? orderId : null;
+  } catch (error) {
+    if ((error as { code?: string }).code === 'resource_missing') return null;
+    throw error;
+  }
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const settled = (result: PaymentOutcome): EventOutcome => (result === 'voided' || result === 'flagged' || result === 'held' ? result : 'ignored');
 
 async function handle(event: Stripe.Event): Promise<EventOutcome> {
   switch (event.type) {
@@ -39,25 +66,23 @@ async function handle(event: Stripe.Event): Promise<EventOutcome> {
       // A partial refund (say, goodwill) must not cancel a card that is mostly paid for: a person decides.
       if (charge.amount_refunded < charge.amount) {
         const dollars = (cents: number) => `$${(cents / 100).toFixed(2)}`;
-        const flagged = await flagForPayment(paymentIntent, `Partly refunded (${dollars(charge.amount_refunded)} of ${dollars(charge.amount)}). Check what should be left on the card.`);
-        return flagged ? 'flagged' : 'ignored';
+        const reason = `Partly refunded (${dollars(charge.amount_refunded)} of ${dollars(charge.amount)}). Set what should be left on the card, then clear the hold.`;
+        return settled(await flagForPayment(paymentIntent, reason, await orderIdFromStripe(paymentIntent, event.account)));
       }
-      const result = await voidForPayment(paymentIntent, 'Payment refunded');
-      return result === 'voided' ? 'voided' : result === 'flagged' ? 'flagged' : 'ignored';
+      return settled(await voidForPayment(paymentIntent, 'Payment refunded', await orderIdFromStripe(paymentIntent, event.account)));
     }
     case 'charge.dispute.created': {
       const paymentIntent = id(event.data.object.payment_intent);
       if (!paymentIntent) return 'ignored';
-      const result = await voidForPayment(paymentIntent, 'Payment disputed by the cardholder');
-      return result === 'voided' ? 'voided' : result === 'flagged' ? 'flagged' : 'ignored';
+      return settled(await voidForPayment(paymentIntent, 'Payment disputed by the cardholder', await orderIdFromStripe(paymentIntent, event.account)));
     }
     case 'charge.dispute.closed': {
       const dispute = event.data.object;
       const paymentIntent = id(dispute.payment_intent);
       if (!paymentIntent || dispute.status !== 'won') return 'ignored';
       // The card was cancelled when the dispute opened; the restaurant kept the money, so a person decides whether to reissue.
-      const flagged = await flagForPayment(paymentIntent, 'Dispute won: the payment stands. The card was cancelled when the dispute opened; reissue it if that is right.');
-      return flagged ? 'flagged' : 'ignored';
+      const result = await flagForPayment(paymentIntent, 'Dispute won: the payment stands. The card was cancelled when the dispute opened; reissue it if that is right.');
+      return result === 'flagged' ? 'flagged' : 'ignored';
     }
     default:
       return 'ignored';

@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { db, schema } from '@/db';
 import { createCheckout } from './checkout';
 import { GiftCardError } from './config';
-import { findCardByCode, fulfilOrder, ledgerBalance, redeem, reverseRedemption, voidForPayment } from './core';
+import { adjustBalance, cancelCard, clearHold, findCardByCode, fulfilOrder, ledgerBalance, redeem, reverseRedemption, voidForPayment } from './core';
 import { decryptCode } from './codes';
 import { handleStripeEvent } from './events';
 
@@ -17,9 +17,11 @@ const OTHER_ACCOUNT = 'acct_1SomeoneElse0002';
 
 // Checkout talks to Stripe; here it talks to this stand-in, which records what it was asked.
 const sessionsCreate = vi.hoisted(() => vi.fn());
+// A refund for a payment we have not matched to a card yet is looked up on Stripe.
+const intentsRetrieve = vi.hoisted(() => vi.fn(async (id: string) => ({ id, metadata: {} as Record<string, string> })));
 vi.mock('./config', async (original) => ({
   ...(await original<typeof import('./config')>()),
-  stripe: () => ({ checkout: { sessions: { create: sessionsCreate } } }),
+  stripe: () => ({ checkout: { sessions: { create: sessionsCreate } }, paymentIntents: { retrieve: intentsRetrieve } }),
 }));
 
 beforeAll(() => {
@@ -216,6 +218,81 @@ describe('Stripe events', () => {
     expect(await handleStripeEvent(event('charge.dispute.closed', { payment_intent: paymentIntentId, status: 'lost' }))).toBe('ignored');
     expect(await handleStripeEvent(event('charge.dispute.closed', { payment_intent: paymentIntentId, status: 'won' }))).toBe('flagged');
     expect((await card(cardId)).flaggedReason).toContain('Dispute won');
+  });
+});
+
+describe('cards on hold', () => {
+  it('cannot be used until the owner clears the hold, and the owner can set the balance first', async () => {
+    const { cardId, paymentIntentId } = await issued(20000);
+    await redeem(cardId, 5000, 'staff@example.com', null);
+    expect(await voidForPayment(paymentIntentId, 'Payment disputed by the cardholder')).toBe('flagged');
+    await expect(redeem(cardId, 100, 'staff@example.com', null)).rejects.toThrow('on hold');
+
+    await expect(adjustBalance(cardId, 20001, 'owner@example.com', 'too much')).rejects.toThrow('more than it was bought for');
+    await expect(adjustBalance(cardId, 15000, 'owner@example.com', 'no change')).rejects.toThrow('already the balance');
+    await expect(adjustBalance(cardId, 1000, 'owner@example.com', ' ')).rejects.toThrow('why');
+    expect(await adjustBalance(cardId, 2500, 'owner@example.com', 'Agreed with the customer')).toEqual({ balanceCents: 2500, deltaCents: -12500 });
+    expect(await ledgerBalance(cardId)).toBe(2500);
+
+    expect(await clearHold(cardId)).toEqual({ reason: 'Payment disputed by the cardholder' });
+    await expect(clearHold(cardId)).rejects.toThrow('not on hold');
+    expect((await redeem(cardId, 500, 'staff@example.com', null)).balanceCents).toBe(2000);
+    // An adjustment can also put value back, up to what the card was bought for.
+    expect((await adjustBalance(cardId, 3000, 'owner@example.com', 'Goodwill')).deltaCents).toBe(1000);
+    expect(await ledgerBalance(cardId)).toBe(3000);
+  });
+
+  it('can be cancelled by hand, writing off what is left', async () => {
+    const { cardId } = await issued(5000);
+    await redeem(cardId, 1500, 'staff@example.com', null);
+    await expect(cancelCard(cardId, 'owner@example.com', '')).rejects.toThrow('why');
+    expect(await cancelCard(cardId, 'owner@example.com', 'Refunded by bank transfer')).toEqual({ writtenOffCents: 3500 });
+    expect(await card(cardId)).toMatchObject({ status: 'void', balanceCents: 0 });
+    expect(await ledgerBalance(cardId)).toBe(0);
+    await expect(cancelCard(cardId, 'owner@example.com', 'again')).rejects.toThrow('cancelled');
+  });
+});
+
+describe('a refund that arrives before the card exists', () => {
+  const paid = (orderId: string, n: string) => ({ id: `cs_${TAG}_${n}`, client_reference_id: orderId, payment_status: 'paid', payment_intent: `pi_${TAG}_${n}`, amount_total: 7500, currency: 'aud' });
+
+  it('cancels the card as it is made, and emails nobody', async () => {
+    const o = await order(7500);
+    intentsRetrieve.mockResolvedValueOnce({ id: `pi_${TAG}_early`, metadata: { order_id: o.id } });
+    expect(await handleStripeEvent(event('charge.refunded', { payment_intent: `pi_${TAG}_early`, amount: 7500, amount_refunded: 7500 }))).toBe('held');
+    expect(await handleStripeEvent(event('checkout.session.completed', paid(o.id, 'early')))).toBe('fulfilled');
+    const [c] = await db.select().from(giftCards).where(eq(giftCards.orderId, o.id));
+    expect(c).toMatchObject({ status: 'void', balanceCents: 0, flaggedReason: 'Payment refunded' });
+    expect(await ledgerBalance(c.id)).toBe(0);
+    expect(await db.select().from(emailOutbox).where(eq(emailOutbox.giftCardId, c.id))).toHaveLength(0);
+    await expect(redeem(c.id, 100, 'staff@example.com', null)).rejects.toThrow('cancelled');
+  });
+
+  it('puts the card on hold as it is made after a partial refund, and a later full refund still cancels it', async () => {
+    const o = await order(7500);
+    intentsRetrieve.mockResolvedValueOnce({ id: `pi_${TAG}_early2`, metadata: { order_id: o.id } });
+    expect(await handleStripeEvent(event('charge.refunded', { payment_intent: `pi_${TAG}_early2`, amount: 7500, amount_refunded: 1000 }))).toBe('held');
+    expect(await handleStripeEvent(event('checkout.session.completed', paid(o.id, 'early2')))).toBe('fulfilled');
+    const [c] = await db.select().from(giftCards).where(eq(giftCards.orderId, o.id));
+    expect(c.status).toBe('active');
+    expect(c.flaggedReason).toContain('Partly refunded');
+    await expect(redeem(c.id, 100, 'staff@example.com', null)).rejects.toThrow('on hold');
+    expect(await handleStripeEvent(event('charge.refunded', { payment_intent: `pi_${TAG}_early2`, amount: 7500, amount_refunded: 7500 }))).toBe('voided');
+  });
+
+  it('ignores a refund for some other payment on the account', async () => {
+    intentsRetrieve.mockResolvedValueOnce({ id: 'pi_other', metadata: { order_id: 'not-ours' } });
+    expect(await handleStripeEvent(event('charge.refunded', { payment_intent: 'pi_other', amount: 100, amount_refunded: 100 }))).toBe('ignored');
+    intentsRetrieve.mockRejectedValueOnce(Object.assign(new Error('No such payment_intent'), { code: 'resource_missing' }));
+    expect(await handleStripeEvent(event('charge.dispute.created', { payment_intent: 'pi_gone' }))).toBe('ignored');
+  });
+
+  it('lets Stripe retry when it cannot be asked about the payment', async () => {
+    intentsRetrieve.mockRejectedValueOnce(new Error('network down'));
+    const e = event('charge.refunded', { payment_intent: 'pi_retry', amount: 100, amount_refunded: 100 });
+    await expect(handleStripeEvent(e)).rejects.toThrow('network down');
+    // Not recorded, so the retry is handled.
+    expect(await db.select().from(stripeEvents).where(eq(stripeEvents.id, e.id))).toHaveLength(0);
   });
 });
 
