@@ -30,6 +30,8 @@ export default async function MenuItemPage({ params }: PageProps<'/menu/[id]'>) 
 
   const costing = costMenuItem(item, contextFrom(data), data.settings);
   const recipe = data.recipes.find((r) => r.id === item.recipeId);
+  const ingredientByName = new Map(data.ingredients.map((i) => [i.name, i]));
+  const recipeByName = new Map(data.recipes.map((r) => [r.name, r]));
 
   return (
     <div className="space-y-6">
@@ -50,9 +52,16 @@ export default async function MenuItemPage({ params }: PageProps<'/menu/[id]'>) 
           <div className="mt-2">
             <p className={badgeWarn}>Recipe incomplete: no cost shown until this is fixed</p>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-              {[...new Set(costing.issues.map(issueText))].map((message) => (
-                <li key={message}>{message}</li>
-              ))}
+              {costing.blockers.map((issue) => {
+                const ingredient = issue.subject ? ingredientByName.get(issue.subject) : undefined;
+                const sub = issue.subject ? recipeByName.get(issue.subject) : undefined;
+                const href = ingredient ? `/ingredients/${ingredient.id}` : sub ? `/recipes/${sub.id}` : null;
+                return (
+                  <li key={`${issue.code}|${issue.subject}`}>
+                    {href ? <Link href={href} className={link}>{issueText(issue)}</Link> : issueText(issue)}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}
