@@ -65,6 +65,7 @@ export async function lookupCard(_prev: ActionResult | null, form: FormData): Pr
     await log(user, 'lookup_failed', '-');
     return { ok: false, error: 'No card with that code. Check each letter and number; there is no O, I, L, 0 or 1.' };
   }
+  await log(user, 'lookup', card.id);
   redirect(`/cards/${card.id}`);
 }
 

@@ -85,6 +85,17 @@ describe('parsePriceList', () => {
   });
 });
 
+describe('GST warning', () => {
+  it('warns when no row says whether it has GST', () => {
+    expect(parsePriceList('Lemon\tA\t5\tkg\t10').warnings[0]).toContain('GST-free');
+    expect(parsePriceList('Item,Supplier,Size,Unit,Price\nLemon,A,5,kg,10').warnings[0]).toContain('GST-free');
+  });
+
+  it('stays quiet once any row answers it', () => {
+    expect(parsePriceList('Lemon\tA\t5\tkg\t10\tno\nOil\tA\t4\tl\t44').warnings).toEqual([]);
+  });
+});
+
 describe('matchKey', () => {
   it('ignores case and extra spaces', () => {
     expect(matchKey('  Olive   OIL ')).toBe('olive oil');

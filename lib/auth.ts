@@ -3,10 +3,14 @@ import { APIError } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
 import { emailOTP } from 'better-auth/plugins';
+import { and, eq, gt, sql } from 'drizzle-orm';
 import { after } from 'next/server';
 import { db, schema } from '@/db';
-import { findAllowedUser } from '@/lib/allow-list';
+import { findAllowedUser, normaliseEmail } from '@/lib/allow-list';
 import { sendEmail } from '@/lib/email';
+
+/** Sign-in codes one address can be sent in an hour. */
+const MAX_CODES_PER_HOUR = 5;
 
 const DAY = 60 * 60 * 24;
 
@@ -53,6 +57,19 @@ export const auth = betterAuth({
         after(async () => {
           try {
             if (!(await findAllowedUser(email))) return;
+            // The built-in limit is per IP address; this one is per person, so
+            // nobody can fill an owner's inbox (or the email quota) with codes.
+            const to = normaliseEmail(email);
+            const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
+            const [{ sent }] = await db
+              .select({ sent: sql<number>`count(*)::int` })
+              .from(schema.auditLog)
+              .where(and(eq(schema.auditLog.actorEmail, to), eq(schema.auditLog.action, 'code_sent'), gt(schema.auditLog.at, hourAgo)));
+            if (sent >= MAX_CODES_PER_HOUR) {
+              console.warn(`[auth] not sending a sign-in code to ${to}: ${sent} already sent in the last hour`);
+              return;
+            }
+            await db.insert(schema.auditLog).values({ actorEmail: to, action: 'code_sent', entity: 'auth', entityId: '-' });
             await sendEmail({
               to: email,
               subject: `${otp} is your Mazcina Kitchen code`,

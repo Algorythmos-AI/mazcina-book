@@ -2,13 +2,41 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ActionButton } from '@/components/action-button';
 import { ActionForm } from '@/components/action-form';
-import { badgeWarn, card, h1, h2, input, label, muted, secondary } from '@/components/ui';
+import { list } from '@vercel/blob';
+import { badgeBad, badgeOk, badgeWarn, card, h1, h2, input, label, muted, secondary } from '@/components/ui';
+import { latestBackup } from '@/lib/cron';
+import { displayDate, todaySydney } from '@/lib/format';
 import { loadTeam } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
 import { addTeamMember, removeTeamMember } from '../actions';
 import { RoleSelect } from './role-select';
 
 export const metadata: Metadata = { title: 'Team' };
+
+/**
+ * When the nightly backup last ran. A missing CRON_SECRET stops the job before
+ * any of its code runs, so nothing else would ever say backups have stopped.
+ */
+async function BackupStatus() {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return <p className={`mt-2 ${badgeWarn}`}>Nightly backups are not set up on this copy of the app.</p>;
+  }
+  let latest: ReturnType<typeof latestBackup>;
+  try {
+    const { blobs } = await list({ prefix: 'backups/', limit: 1000 });
+    latest = latestBackup(blobs.map((b) => b.pathname), todaySydney());
+  } catch (error) {
+    console.error('[team] could not list backups', error);
+    return <p className={`mt-2 ${badgeWarn}`}>Could not check the backups just now.</p>;
+  }
+  if (!latest) return <p className={`mt-2 ${badgeBad}`}>No nightly backup has run yet. Check CRON_SECRET in Vercel.</p>;
+  const when = latest.daysOld === 0 ? 'today' : latest.daysOld === 1 ? 'yesterday' : `${latest.daysOld} days ago`;
+  return latest.daysOld >= 2 ? (
+    <p className={`mt-2 ${badgeBad}`}>Last backup {when} ({displayDate(latest.date)}). Nightly backups have stopped: check CRON_SECRET and the cron logs in Vercel.</p>
+  ) : (
+    <p className={`mt-2 ${badgeOk}`}>Last backup {when} ({displayDate(latest.date)})</p>
+  );
+}
 
 export default async function TeamPage() {
   const user = await requireRole('owner');
@@ -88,6 +116,7 @@ export default async function TeamPage() {
         <p className={`mt-1 ${muted}`}>
           A full copy is saved automatically every night and kept for 30 days. You can also download everything now as one file.
         </p>
+        <BackupStatus />
         <div className="mt-3 flex flex-wrap gap-2">
           <a href="/api/export" className={secondary}>Download all data</a>
           <Link href="/kitchen-data" className={secondary}>Kitchen data: recipes and prices</Link>

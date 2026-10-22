@@ -23,6 +23,8 @@ export interface ParsedPriceList {
   rows: ParsedPriceRow[];
   /** A problem with the paste as a whole, e.g. nothing to read. */
   error: string | null;
+  /** Worth checking but not blocking, e.g. nothing says which items have GST. */
+  warnings: string[];
 }
 
 type Column = 'ingredient' | 'supplier' | 'size' | 'unit' | 'price' | 'gst' | 'inc';
@@ -126,7 +128,7 @@ export function parsePriceList(text: string): ParsedPriceList {
     .split('\n')
     .map((content, index) => ({ content, line: index + 1 }))
     .filter((l) => l.content.trim() !== '');
-  if (lines.length === 0) return { rows: [], error: 'Paste your price list first' };
+  if (lines.length === 0) return { rows: [], error: 'Paste your price list first', warnings: [] };
 
   const delimiter = detectDelimiter(lines.map((l) => l.content));
   const header = headerMap(splitLine(lines[0].content, delimiter));
@@ -135,8 +137,9 @@ export function parsePriceList(text: string): ParsedPriceList {
   const priceGst = columns.has('inc') ? null : (header?.priceGst ?? null);
   const body = header ? lines.slice(1) : lines;
 
-  if (body.length === 0) return { rows: [], error: 'Only a heading row was found' };
-  if (body.length > MAX_IMPORT_ROWS) return { rows: [], error: `Too many rows (${body.length}). Import up to ${MAX_IMPORT_ROWS} at a time.` };
+  if (body.length === 0) return { rows: [], error: 'Only a heading row was found', warnings: [] };
+  if (body.length > MAX_IMPORT_ROWS) return { rows: [], error: `Too many rows (${body.length}). Import up to ${MAX_IMPORT_ROWS} at a time.`, warnings: [] };
+  let anyGstCell = false;
 
   const rows = body.map(({ content, line }): ParsedPriceRow => {
     const cells = splitLine(content, delimiter);
@@ -177,6 +180,7 @@ export function parsePriceList(text: string): ParsedPriceList {
     else if (packPrice === null) errors.push(`Price "${cell('price')}" is not a clear number`);
     else if (Number(packPrice) === 0) errors.push('Price is $0. Enter something that costs nothing on its ingredient page instead.');
 
+    if (cell('gst').trim() !== '') anyGstCell = true;
     const gstApplicable = yesNo(cell('gst'), 'GST', errors);
     const priceIncludesGst = priceGst ? priceGst === 'inc' : yesNo(cell('inc'), 'Inc GST', errors);
     if (priceGst === 'inc' && !columns.has('gst')) {
@@ -191,7 +195,10 @@ export function parsePriceList(text: string): ParsedPriceList {
     return { line, ingredient, supplier, packSize, packUnit, packPrice, gstApplicable, priceIncludesGst: priceIncludesGst && gstApplicable, errors };
   });
 
-  return { rows, error: null };
+  const warnings = anyGstCell
+    ? []
+    : ['No row says whether the item has GST, so every price is taken as GST-free (fresh food). If anything here is taxable, add a GST column with yes or no.'];
+  return { rows, error: null, warnings };
 }
 
 /** Lower-case, single-spaced: how names are compared between the paste and the database. */

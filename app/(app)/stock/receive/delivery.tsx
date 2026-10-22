@@ -11,7 +11,11 @@ export interface DeliveryItem {
   name: string;
   units: Unit[];
   defaultUnit: Unit;
+  /** Has a price already, so a new one keeps its GST treatment. */
+  priced: boolean;
 }
+
+type GstChoice = '' | 'free' | 'inc' | 'ex';
 
 interface Line {
   key: string;
@@ -19,13 +23,15 @@ interface Line {
   quantity: string;
   unit: Unit;
   totalPaid: string;
+  gst: GstChoice;
 }
 
-const isNumber = (raw: string) => parseDecimalInput(raw.trim().replace(/^\$/, '')) !== null;
+const amount = (raw: string) => parseDecimalInput(raw.trim().replace(/^\$/, ''));
+const isNumber = (raw: string) => amount(raw) !== null;
 
 export function Delivery({ items, suppliers }: { items: DeliveryItem[]; suppliers: { id: string; name: string }[] }) {
   const byId = new Map(items.map((i) => [i.id, i]));
-  const blank = (): Line => ({ key: crypto.randomUUID(), ingredientId: '', quantity: '', unit: 'kg', totalPaid: '' });
+  const blank = (): Line => ({ key: crypto.randomUUID(), ingredientId: '', quantity: '', unit: 'kg', totalPaid: '', gst: '' });
   const [supplierId, setSupplierId] = useState('');
   const [lines, setLines] = useState<Line[]>(() => [blank()]);
   const [error, setError] = useState<string | null>(null);
@@ -37,19 +43,24 @@ export function Delivery({ items, suppliers }: { items: DeliveryItem[]; supplier
     setLines((current) => current.map((l) => (l.key === key ? { ...l, ...patch } : l)));
   };
   const ready = lines.filter((l) => l.ingredientId && l.quantity.trim());
+  const needsGst = (l: Line) => !!l.totalPaid.trim() && !byId.get(l.ingredientId)?.priced;
   const problem =
     ready.length === 0
       ? 'Add at least one item with a quantity.'
       : ready.some((l) => !isNumber(l.quantity) || (l.totalPaid.trim() && !isNumber(l.totalPaid)))
         ? 'One of the numbers is not clear (type 1500 or 1.5, not 1,500).'
-        : null;
+        : ready.some((l) => l.totalPaid.trim() && Number(amount(l.totalPaid)) <= 0)
+          ? 'An amount paid must be more than $0. Leave it blank if nothing was paid.'
+          : ready.some((l) => needsGst(l) && !l.gst)
+            ? 'Say whether each newly priced item has GST.'
+            : null;
 
   const save = () =>
     start(async () => {
       setError(null);
       const result = await recordDelivery({
         supplierId: supplierId || null,
-        lines: ready.map((l) => ({ ingredientId: l.ingredientId, quantity: l.quantity.trim(), unit: l.unit, totalPaid: l.totalPaid.trim() })),
+        lines: ready.map((l) => ({ ingredientId: l.ingredientId, quantity: l.quantity.trim(), unit: l.unit, totalPaid: l.totalPaid.trim(), gst: needsGst(l) ? l.gst : '' })),
       });
       if (!result.ok) return setError(result.error);
       setSaved(result.data!);
@@ -128,6 +139,17 @@ export function Delivery({ items, suppliers }: { items: DeliveryItem[]; supplier
                 >
                   Remove
                 </button>
+                {needsGst(line) && (
+                  <div className="col-span-2 sm:col-span-5">
+                    <label htmlFor={`d-gst-${line.key}`} className={label}>First price for {item?.name}: does it have GST?</label>
+                    <select id={`d-gst-${line.key}`} value={line.gst} onChange={(e) => edit(line.key, { gst: e.target.value as GstChoice })} className={`${input} max-w-md`}>
+                      <option value="">Choose…</option>
+                      <option value="free">No GST (fresh food)</option>
+                      <option value="inc">Has GST, and the amount paid includes it</option>
+                      <option value="ex">Has GST, but the amount paid is before GST</option>
+                    </select>
+                  </div>
+                )}
               </li>
             );
           })}
