@@ -54,7 +54,10 @@ export default async function SheetPage({ searchParams }: PageProps<'/menu/sheet
               </tr>
               {rows.map((row) => (
                 <tr key={row.name} className="border-b border-gray-100">
-                  <th scope="row" className="px-2 py-1.5 text-left font-semibold">{row.name}</th>
+                  <th scope="row" className="px-2 py-1.5 text-left font-semibold">
+                    {row.name}
+                    {row.cost && row.note && <span className={`block text-xs font-normal ${muted}`}>{row.note}</span>}
+                  </th>
                   <td className={cell}>${row.price}</td>
                   {row.cost ? (
                     <>

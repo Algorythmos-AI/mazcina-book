@@ -43,6 +43,13 @@
       "when": 1792128495778,
       "tag": "0005_recipe_yield_estimated",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792688207865,
+      "tag": "0006_recipe_as_needed",
+      "breakpoints": true
     }
   ]
 }

@@ -34,6 +34,7 @@ export interface RecipeDto extends Recipe {
   yieldUnit: Unit | null;
   yieldEstimated: boolean;
   portions: string;
+  asNeeded: string[];
   notes: string | null;
   version: number;
   archived: boolean;

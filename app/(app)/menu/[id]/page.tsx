@@ -84,6 +84,11 @@ export default async function MenuItemPage({ params }: PageProps<'/menu/[id]'>) 
                 Estimate: {costing.estimates.join(', ')} {costing.estimates.length === 1 ? 'has' : 'have'} an estimated batch yield. Weigh a finished batch to make this exact.
               </p>
             )}
+            {costing.asNeeded.length > 0 && (
+              <p className={`mt-3 ${badgeWarn}`}>
+                Not in this cost, used as needed: {costing.asNeeded.join(', ')}. The real cost is a little higher.
+              </p>
+            )}
             <p className={`mt-3 ${muted}`}>Cost and profit are before GST. Profit is before wages, rent and other running costs.</p>
           </>
         )}

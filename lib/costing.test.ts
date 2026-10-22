@@ -363,3 +363,18 @@ describe('estimated yields', () => {
     expect(plain.status === 'ok' && plain.estimates).toEqual([]);
   });
 });
+
+describe('ingredients used as needed', () => {
+  it('are listed with the cost, gathered from every prep used, without changing it', () => {
+    const plain = ok(costRecipe('dish', ctx()));
+    expect(plain.asNeeded).toEqual([]);
+    const withSalt = ok(
+      costRecipe(
+        'dish',
+        ctx({ recipes: [{ ...vinaigrette, asNeeded: ['Salt'] }, { ...octopusSalad, asNeeded: ['Frying oil', 'Salt'] }] }),
+      ),
+    );
+    expect(withSalt.asNeeded).toEqual(['Frying oil', 'Salt']);
+    expect(withSalt.batchCost.toString()).toBe(plain.batchCost.toString());
+  });
+});

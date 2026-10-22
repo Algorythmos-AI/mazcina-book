@@ -48,6 +48,8 @@ interface Draft {
   yieldUnit: Unit;
   yieldEstimated: boolean;
   portions: string;
+  /** One per line, as typed. */
+  asNeeded: string;
   notes: string;
   lines: DraftLine[];
 }
@@ -82,6 +84,7 @@ function toDraft(recipe: RecipeDto): Draft {
     yieldUnit: recipe.yieldUnit ?? 'kg',
     yieldEstimated: recipe.yieldEstimated,
     portions: plain(recipe.portions),
+    asNeeded: recipe.asNeeded.join('\n'),
     notes: recipe.notes ?? '',
     lines: recipe.lines.map((l) => ({
       key: l.id,
@@ -92,6 +95,8 @@ function toDraft(recipe: RecipeDto): Draft {
     })),
   };
 }
+
+const asNeededList = (raw: string) => [...new Set(raw.split('\n').map((s) => s.trim()).filter(Boolean))];
 
 const positive = (raw: string) => {
   const parsed = parseDecimalInput(raw);
@@ -145,6 +150,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         yieldUnit: snapshot.yieldQuantity.trim() ? snapshot.yieldUnit : null,
         yieldEstimated: snapshot.yieldQuantity.trim() ? snapshot.yieldEstimated : false,
         portions: snapshot.portions,
+        asNeeded: asNeededList(snapshot.asNeeded),
         notes: snapshot.notes,
         lines: snapshot.lines.map((l) => ({
           ingredientId: l.ingredientId,
@@ -213,6 +219,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
       yieldUnit: draft.yieldQuantity.trim() ? draft.yieldUnit : null,
       yieldEstimated: draft.yieldQuantity.trim() ? draft.yieldEstimated : false,
       portions: positive(draft.portions) ?? '0',
+      asNeeded: asNeededList(draft.asNeeded),
       lines: draft.lines.map((l) => ({
         id: l.key,
         ingredientId: l.ingredientId,
@@ -501,7 +508,24 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
               </ul>
             </div>
           )}
+          {cost.status === 'ok' && cost.asNeeded.length > 0 && (
+            <p className={`mt-3 ${badgeWarn}`}>
+              Not in this cost, used as needed: {cost.asNeeded.join(', ')}. Weigh a typical amount and add it as a line to include it.
+            </p>
+          )}
           <p className={`mt-3 ${muted}`}>Costs are before GST, from the latest supplier prices.</p>
+        </section>
+
+        <section className={card}>
+          <label htmlFor="recipe-as-needed" className={h2}>Used as needed</label>
+          <p className={`mt-1 ${muted}`}>Salt, frying oil and the like with no set amount. One per line. They are listed with the cost but not counted in it.</p>
+          <textarea
+            id="recipe-as-needed"
+            value={draft.asNeeded}
+            rows={Math.min(12, Math.max(2, draft.asNeeded.split('\n').length + 1))}
+            onChange={(e) => change((d) => ({ ...d, asNeeded: e.target.value }))}
+            className={`mt-2 ${input}`}
+          />
         </section>
 
         <section className={card}>

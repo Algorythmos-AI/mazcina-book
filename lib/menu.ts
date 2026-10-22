@@ -15,6 +15,8 @@ export type ItemCosting =
       rating: 'good' | 'watch' | 'high' | 'none';
       /** Preps whose yield is still an estimate; non-empty means the cost is an estimate too. */
       estimates: string[];
+      /** Ingredients used as needed that the cost leaves out; non-empty means the cost reads slightly low. */
+      asNeeded: string[];
     };
 
 /** Points above target that still count as "watch" rather than "high". */
@@ -35,7 +37,37 @@ export function costMenuItem(item: MenuItemDto, ctx: CostingContext, settings: S
     suggestedCents: suggestedSellPriceCents(recipe.costPerPortion, settings.targetFoodCostPct, settings.gstRegistered),
     rating: !pct ? 'none' : pct.lte(target) ? 'good' : pct.lte(target.plus(WATCH_BAND)) ? 'watch' : 'high',
     estimates: recipe.estimates,
+    asNeeded: recipe.asNeeded,
   };
+}
+
+/**
+ * The problems that stop a recipe being costed, traced down through every prep
+ * it uses: "Chimichurri is incomplete" becomes "Parsley has no price". Each
+ * problem is listed once, however many routes lead to it.
+ */
+export function rootIssues(recipeId: string, ctx: CostingContext): Issue[] {
+  const found = new Map<string, Issue>();
+  const seen = new Set<string>();
+  const walk = (id: string) => {
+    if (seen.has(id)) return;
+    seen.add(id);
+    const cost = costRecipe(id, ctx);
+    if (cost.status === 'ok') return;
+    const recipe = ctx.recipes.get(id);
+    for (const issue of cost.issues) {
+      const line = issue.lineId ? recipe?.lines.find((l) => l.id === issue.lineId) : undefined;
+      if (issue.code === 'sub_recipe_incomplete' && line?.subRecipeId) {
+        walk(line.subRecipeId);
+        continue;
+      }
+      // Problems with a line are about the ingredient; anything else is about the recipe itself.
+      const subject = issue.subject ?? recipe?.name;
+      found.set(`${issue.code}|${line?.ingredientId ?? line?.subRecipeId ?? id}`, { code: issue.code, subject });
+    }
+  };
+  walk(recipeId);
+  return [...found.values()];
 }
 
 export function groupByCategory<T extends { category: string }>(items: T[]): [string, T[]][] {

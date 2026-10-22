@@ -139,6 +139,7 @@ export async function applyImport(pack: KitchenPack, actorEmail: string): Promis
           yieldQuantity: r.yieldQuantity !== undefined ? String(r.yieldQuantity) : null,
           yieldUnit: r.yieldUnit ?? null,
           yieldEstimated: r.yieldQuantity !== undefined && r.yieldEstimated,
+          asNeeded: r.asNeeded,
           notes: recipeNotes(r),
         })
         .returning();

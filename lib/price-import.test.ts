@@ -36,6 +36,25 @@ describe('parsePriceList', () => {
     expect(rows.map((r) => r.line)).toEqual([2, 5]);
   });
 
+  it('takes a "Price inc GST" heading as the Inc GST answer for rows with GST', () => {
+    const { rows } = parsePriceList('Item,Supplier,Size,Unit,Price (inc GST),GST\nOlive oil,A,4,l,44,yes\nLemon,A,5,kg,10,no');
+    expect(rows[0]).toMatchObject({ gstApplicable: true, priceIncludesGst: true, errors: [] });
+    expect(rows[1]).toMatchObject({ gstApplicable: false, priceIncludesGst: false, errors: [] });
+    expect(one('Item,Supplier,Size,Unit,Price ex GST,GST\nOlive oil,A,4,l,40,yes')).toMatchObject({ gstApplicable: true, priceIncludesGst: false, errors: [] });
+  });
+
+  it('asks for a GST column when the heading says prices include GST but none is given', () => {
+    expect(one('Item,Supplier,Size,Unit,Price inc GST\nOlive oil,A,4,l,44').errors).toHaveLength(1);
+  });
+
+  it('lets an explicit Inc GST column win over the price heading', () => {
+    expect(one('Item,Supplier,Size,Unit,Price inc GST,GST,Inc GST\nOlive oil,A,4,l,44,yes,no')).toMatchObject({ priceIncludesGst: false, errors: [] });
+  });
+
+  it('refuses a $0 price', () => {
+    expect(one('Water\tA\t1\tl\t0').errors).toEqual([expect.stringContaining('$0')]);
+  });
+
   it('never keeps GST-inclusive on an item that has no GST', () => {
     expect(one('Lemon\tA\t5\tkg\t10\tno\tyes')).toMatchObject({ gstApplicable: false, priceIncludesGst: false, errors: [] });
   });

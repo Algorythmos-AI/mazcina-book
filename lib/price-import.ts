@@ -95,8 +95,15 @@ function yesNo(cell: string, label: string, errors: string[]): boolean {
   return false;
 }
 
-function headerMap(cells: string[]): Map<Column, number> | null {
+interface Header {
+  columns: Map<Column, number>;
+  /** What the price heading says about GST ("Price inc GST" / "Price ex GST"), when it says anything. */
+  priceGst: 'inc' | 'ex' | null;
+}
+
+function headerMap(cells: string[]): Header | null {
   const map = new Map<Column, number>();
+  let priceGst: Header['priceGst'] = null;
   cells.forEach((cell, index) => {
     const name = cell.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
     // Longest names first so "inc gst" is not taken for "gst" and "pack price" for "pack".
@@ -104,9 +111,13 @@ function headerMap(cells: string[]): Map<Column, number> | null {
       .flatMap((column) => HEADER_NAMES[column].map((alias) => ({ column, alias })))
       .sort((a, b) => b.alias.length - a.alias.length)
       .find(({ alias }) => name === alias);
-    if (match && !map.has(match.column)) map.set(match.column, index);
+    if (match && !map.has(match.column)) {
+      map.set(match.column, index);
+      if (match.alias === 'price inc gst') priceGst = 'inc';
+      if (match.alias === 'price ex gst') priceGst = 'ex';
+    }
   });
-  return map.has('ingredient') && map.has('price') ? map : null;
+  return map.has('ingredient') && map.has('price') ? { columns: map, priceGst } : null;
 }
 
 export function parsePriceList(text: string): ParsedPriceList {
@@ -119,7 +130,9 @@ export function parsePriceList(text: string): ParsedPriceList {
 
   const delimiter = detectDelimiter(lines.map((l) => l.content));
   const header = headerMap(splitLine(lines[0].content, delimiter));
-  const columns = header ?? new Map(DEFAULT_ORDER.map((column, index) => [column, index]));
+  const columns = header?.columns ?? new Map(DEFAULT_ORDER.map((column, index) => [column, index]));
+  // A "Price inc GST" heading answers the Inc GST question for every row that has GST.
+  const priceGst = columns.has('inc') ? null : (header?.priceGst ?? null);
   const body = header ? lines.slice(1) : lines;
 
   if (body.length === 0) return { rows: [], error: 'Only a heading row was found' };
@@ -162,9 +175,13 @@ export function parsePriceList(text: string): ParsedPriceList {
     const packPrice = priceRaw ? parseDecimalInput(priceRaw) : null;
     if (!priceRaw) errors.push('Price is missing');
     else if (packPrice === null) errors.push(`Price "${cell('price')}" is not a clear number`);
+    else if (Number(packPrice) === 0) errors.push('Price is $0. Enter something that costs nothing on its ingredient page instead.');
 
     const gstApplicable = yesNo(cell('gst'), 'GST', errors);
-    const priceIncludesGst = yesNo(cell('inc'), 'Inc GST', errors);
+    const priceIncludesGst = priceGst ? priceGst === 'inc' : yesNo(cell('inc'), 'Inc GST', errors);
+    if (priceGst === 'inc' && !columns.has('gst')) {
+      errors.push('The heading says prices include GST: add a GST column (yes or no) so GST is only taken off items that have it');
+    }
 
     const expected = Math.max(...columns.values()) + 1;
     if (cells.length > expected && !header) {
