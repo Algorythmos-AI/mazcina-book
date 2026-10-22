@@ -37,6 +37,9 @@ const VERB: Record<string, string> = {
   reverse: 'undid a redemption on a',
   resend: 're-sent a',
   lookup_failed: 'typed a wrong code for a',
+  clear_hold: 'cleared the hold on a',
+  adjust: 'changed the balance of a',
+  cancel: 'cancelled a',
 };
 
 /** "added an ingredient", not "added a ingredient". */

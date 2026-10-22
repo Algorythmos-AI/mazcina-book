@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { connectAccount, forgetReadiness, giftCardSales, giftCardSalesReady, platformFee } from './config';
+import { connectAccount, forgetReadiness, giftCardEvents, giftCardSales, giftCardSalesReady, platformFee } from './config';
 import * as config from './config';
 
 const ACCOUNT = 'acct_1TestMazcina0001';
@@ -55,6 +55,27 @@ describe('whether gift cards are on sale', () => {
     expect(giftCardSales()).toMatchObject({ enabled: false, reason: 'not switched on' });
     env({ STRIPE_SECRET_KEY: 'rk_live_x', VERCEL_ENV: 'production', GIFT_CARDS_LIVE: 'true' });
     expect(giftCardSales()).toEqual({ enabled: true, testMode: false });
+  });
+});
+
+describe('whether Stripe events are acted on', () => {
+  it('stays on while sales are paused, so refunds and disputes still land', () => {
+    env({ STRIPE_SECRET_KEY: 'rk_live_x', VERCEL_ENV: 'production' });
+    expect(giftCardSales()).toMatchObject({ enabled: false, reason: 'not switched on' });
+    expect(giftCardEvents()).toEqual({ enabled: true, testMode: false });
+    env({ GIFT_PLATFORM_FEE_BPS: 'oops' });
+    expect(giftCardEvents()).toEqual({ enabled: true, testMode: true });
+  });
+
+  it('still keeps keys in their own environment and needs the account and code key', () => {
+    env({ STRIPE_SECRET_KEY: 'rk_live_x', VERCEL_ENV: 'preview' });
+    expect(giftCardEvents().enabled).toBe(false);
+    env({ VERCEL_ENV: 'production', GIFT_CARDS_LIVE: 'true' });
+    expect(giftCardEvents().enabled).toBe(false);
+    env({ STRIPE_CONNECT_ACCOUNT_ID: 'nope' });
+    expect(giftCardEvents().enabled).toBe(false);
+    env({ GIFT_CODE_KEY: '' });
+    expect(giftCardEvents().enabled).toBe(false);
   });
 });
 

@@ -65,6 +65,23 @@ export function giftCardSales(): Sales {
   return { enabled: true, testMode: !live };
 }
 
+/**
+ * Whether Stripe events can be acted on here. Looser than `giftCardSales()` on
+ * purpose: pausing sales (or a platform fee typo) must not stop refunds and
+ * disputes on cards already sold from reaching them. The key must still match
+ * the environment, so a test event can never touch the live database.
+ */
+export function giftCardEvents(): Sales {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key || !process.env.GIFT_CODE_KEY) return { enabled: false, reason: 'not configured' };
+  if (!accountId()) return { enabled: false, reason: 'no connected Stripe account' };
+  const live = /^(sk|rk)_live_/.test(key);
+  const production = process.env.VERCEL_ENV === 'production';
+  if (live && !production) return { enabled: false, reason: 'live Stripe key outside production' };
+  if (production && !live) return { enabled: false, reason: 'test Stripe key in production' };
+  return { enabled: true, testMode: !live };
+}
+
 let client: Stripe | null = null;
 export function stripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;

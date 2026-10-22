@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { db, schema } from '@/db';
 import { parseDecimalInput } from '@/lib/costing';
 import { GiftCardError } from '@/lib/gift-cards/config';
-import { findCardByCode, redeem, reverseRedemption } from '@/lib/gift-cards/core';
+import { adjustBalance, cancelCard, clearHold, findCardByCode, redeem, reverseRedemption } from '@/lib/gift-cards/core';
 import { queueResend, sendPendingEmails } from '@/lib/gift-cards/outbox';
 import { requireRole, type CurrentUser } from '@/lib/session';
 import type { ActionResult } from '@/lib/types';
@@ -26,12 +26,23 @@ async function run<T>(user: CurrentUser, fn: () => Promise<T>): Promise<ActionRe
   } catch (error) {
     if (error instanceof GiftCardError) return { ok: false, error: error.message };
     console.error(`[gift-cards] action failed for ${user.email}`, error);
-    return { ok: false, error: 'Something went wrong. Nothing was changed, please try again.' };
+    // We cannot tell whether it went through (the connection may have dropped after the change was saved).
+    return { ok: false, error: "Something went wrong. Check the card's history before trying again, so it is not done twice." };
   }
 }
 
-const log = (user: CurrentUser, action: string, entityId: string, after?: unknown) =>
-  db.insert(schema.auditLog).values({ actorEmail: user.email, action, entity: 'gift_card', entityId, after: after ?? null });
+/**
+ * Records who did what. The card's own ledger already holds the money movement,
+ * so a failure here is reported to the logs but never turns a completed change
+ * into an error on screen (which would invite doing it twice).
+ */
+async function log(user: CurrentUser, action: string, entityId: string, after?: unknown): Promise<void> {
+  try {
+    await db.insert(schema.auditLog).values({ actorEmail: user.email, action, entity: 'gift_card', entityId, after: after ?? null });
+  } catch (error) {
+    console.error(`[gift-cards] could not write the activity log for ${action} on ${entityId} by ${user.email}`, error);
+  }
+}
 
 /** Finds a card from its code. Wrong guesses are counted per person, and too many in ten minutes locks lookups for a while. */
 export async function lookupCard(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
@@ -96,6 +107,56 @@ export async function resendCard(cardId: string): Promise<ActionResult> {
     await log(user, 'resend', cardId);
     const { failed } = await sendPendingEmails();
     if (failed > 0) throw new GiftCardError('The email could not be sent just now. It will be retried automatically within 15 minutes.');
+  });
+  if (result.ok) revalidatePath('/cards', 'layout');
+  return result;
+}
+
+const dollarsToCents = (raw: string): number | null => {
+  const parsed = parseDecimalInput(raw.replace(/^\$/, ''));
+  return parsed !== null && /^\d+(\.\d{1,2})?$/.test(parsed) ? Math.round(Number(parsed) * 100) : null;
+};
+
+/** The owner has checked a card on hold and it may be used again. */
+export async function clearCardHold(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const user = await requireRole('owner');
+  const cardId = uuid.safeParse(field(form, 'cardId'));
+  if (!cardId.success) return { ok: false, error: 'Card not found' };
+  const note = field(form, 'note').slice(0, 200);
+  if (!note) return { ok: false, error: 'Say what you checked, for the record' };
+  const result = await run(user, async () => {
+    const { reason } = await clearHold(cardId.data);
+    await log(user, 'clear_hold', cardId.data, { reason, note });
+  });
+  if (result.ok) revalidatePath('/cards', 'layout');
+  return result;
+}
+
+/** Sets what is left on a card, e.g. after a partial refund. */
+export async function adjustCardBalance(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const user = await requireRole('owner');
+  const cardId = uuid.safeParse(field(form, 'cardId'));
+  if (!cardId.success) return { ok: false, error: 'Card not found' };
+  const balanceCents = dollarsToCents(field(form, 'balance'));
+  if (balanceCents === null) return { ok: false, error: 'Type the new balance in dollars, like 40 or 12.50' };
+  const note = field(form, 'note').slice(0, 200);
+  const result = await run(user, async () => {
+    const { deltaCents } = await adjustBalance(cardId.data, balanceCents, user.email, note);
+    await log(user, 'adjust', cardId.data, { balanceCents, deltaCents, note });
+  });
+  if (result.ok) revalidatePath('/cards', 'layout');
+  return result;
+}
+
+/** Cancels a card by hand, writing off what is left. */
+export async function cancelGiftCard(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const user = await requireRole('owner');
+  const cardId = uuid.safeParse(field(form, 'cardId'));
+  if (!cardId.success) return { ok: false, error: 'Card not found' };
+  const note = field(form, 'note').slice(0, 200);
+  const result = await run(user, async () => {
+    const { writtenOffCents } = await cancelCard(cardId.data, user.email, note);
+    await log(user, 'cancel', cardId.data, { writtenOffCents, note });
   });
   if (result.ok) revalidatePath('/cards', 'layout');
   return result;

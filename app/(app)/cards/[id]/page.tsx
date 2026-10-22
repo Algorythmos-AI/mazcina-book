@@ -9,11 +9,11 @@ import { db, schema } from '@/db';
 import { displayDate, moneyFromCents, todaySydney } from '@/lib/format';
 import { ledgerBalance } from '@/lib/gift-cards/core';
 import { requireRole } from '@/lib/session';
-import { redeemCard, resendCard, reverseEntry } from '../actions';
+import { adjustCardBalance, cancelGiftCard, clearCardHold, redeemCard, resendCard, reverseEntry } from '../actions';
 
 export const metadata: Metadata = { title: 'Gift card' };
 
-const KIND = { issue: 'Bought', redeem: 'Used', reverse: 'Put back', void: 'Cancelled' } as const;
+const KIND = { issue: 'Bought', redeem: 'Used', reverse: 'Put back', void: 'Cancelled', adjust: 'Balance changed' } as const;
 
 export default async function CardPage({ params }: PageProps<'/cards/[id]'>) {
   const user = await requireRole();
@@ -37,7 +37,8 @@ export default async function CardPage({ params }: PageProps<'/cards/[id]'>) {
   ]);
   const today = todaySydney();
   const expired = card.expiresOn < today;
-  const usable = card.status === 'active' && !expired && card.balanceCents > 0;
+  const held = card.status === 'active' && !!card.flaggedReason;
+  const usable = card.status === 'active' && !held && !expired && card.balanceCents > 0;
   const reversed = new Set(ledger.flatMap((l) => (l.reversesId ? [l.reversesId] : [])));
   const when = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Sydney', dateStyle: 'medium', timeStyle: 'short' });
   const owner = user.role === 'owner';
@@ -55,7 +56,8 @@ export default async function CardPage({ params }: PageProps<'/cards/[id]'>) {
           {card.status === 'active' && expired && <span className={badgeBad}>Expired: do not accept</span>}
           {usable && <span className={badgeOk}>Good to use</span>}
           {card.status === 'active' && !expired && card.balanceCents === 0 && <span className={badgeWarn}>Nothing left</span>}
-          {card.flaggedReason && owner && <span className={badgeBad}>{card.flaggedReason}</span>}
+          {held && <span className={badgeBad}>On hold: do not accept. {owner ? card.flaggedReason : 'Ask the owner.'}</span>}
+          {card.status === 'void' && card.flaggedReason && owner && <span className={badgeWarn}>{card.flaggedReason}</span>}
           {total !== card.balanceCents && <span className={badgeBad}>Balance check failed: tell Sam before using this card</span>}
         </p>
       </div>
@@ -99,6 +101,40 @@ export default async function CardPage({ params }: PageProps<'/cards/[id]'>) {
           ))}
         </ul>
       </section>
+
+      {owner && card.status === 'active' && (
+        <section className={cardBox}>
+          <h2 className={h2}>Fix this card</h2>
+          {held && (
+            <ActionForm action={clearCardHold} submitLabel="Clear the hold" savedLabel="Hold cleared" className="mt-3">
+              <input type="hidden" name="cardId" value={card.id} />
+              <label htmlFor="hold-note" className={label}>What you checked</label>
+              <input id="hold-note" name="note" required maxLength={200} placeholder="Refund was for the drinks only; balance is right" className={input} />
+              <p className={`mt-2 ${muted}`}>Once cleared, staff can use the card again. Change the balance first if it needs it.</p>
+            </ActionForm>
+          )}
+          <ActionForm action={adjustCardBalance} submitLabel="Set balance" savedLabel="Balance changed" resetOnSuccess className="mt-5">
+            <input type="hidden" name="cardId" value={card.id} />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label htmlFor="adjust-balance" className={label}>New balance ($)</label>
+                <input id="adjust-balance" name="balance" inputMode="decimal" required placeholder={`0 to ${(card.initialCents / 100).toFixed(2)}`} className={input} />
+              </div>
+              <div>
+                <label htmlFor="adjust-note" className={label}>Why</label>
+                <input id="adjust-note" name="note" required maxLength={200} placeholder="$20 refunded on Stripe" className={input} />
+              </div>
+            </div>
+            <p className={`mt-2 ${muted}`}>Recorded in the history with your name. To undo a single use, press Undo on it instead.</p>
+          </ActionForm>
+          <ActionForm action={cancelGiftCard} submitLabel="Cancel this card" savedLabel="Card cancelled" className="mt-5">
+            <input type="hidden" name="cardId" value={card.id} />
+            <label htmlFor="cancel-note" className={label}>Why cancel it</label>
+            <input id="cancel-note" name="note" required maxLength={200} placeholder="Refunded in full by bank transfer" className={input} />
+            <p className={`mt-2 ${muted}`}>Writes off the {moneyFromCents(card.balanceCents)} left. It cannot be undone.</p>
+          </ActionForm>
+        </section>
+      )}
 
       {owner && (
         <section className={cardBox}>

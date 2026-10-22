@@ -245,7 +245,7 @@ export const auditLog = pgTable(
 
 export const giftOrderStatusEnum = pgEnum('gift_order_status', ['pending', 'paid', 'failed', 'expired']);
 export const giftCardStatusEnum = pgEnum('gift_card_status', ['active', 'void']);
-export const giftLedgerKindEnum = pgEnum('gift_ledger_kind', ['issue', 'redeem', 'reverse', 'void']);
+export const giftLedgerKindEnum = pgEnum('gift_ledger_kind', ['issue', 'redeem', 'reverse', 'void', 'adjust']);
 export const outboxStatusEnum = pgEnum('outbox_status', ['pending', 'sent', 'failed']);
 
 /** What the buyer asked for, saved before they are sent to Stripe. The card is only created once Stripe says it is paid. */
@@ -268,6 +268,13 @@ export const giftCardOrders = pgTable(
     stripeAccountId: text('stripe_account_id'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     paidAt: timestamp('paid_at', { withTimezone: true }),
+    /**
+     * A refund or dispute Stripe reported before the card existed (events can
+     * arrive in any order). Applied to the card the moment it is created.
+     */
+    paymentIssue: text('payment_issue'),
+    /** True when that issue cancels the card outright (full refund, dispute); false when it only puts it on hold. */
+    paymentIssueVoids: boolean('payment_issue_voids').notNull().default(false),
   },
   (t) => [
     index('gift_card_orders_payment_intent').on(t.stripePaymentIntentId),
@@ -293,7 +300,7 @@ export const giftCards = pgTable(
     status: giftCardStatusEnum('status').notNull().default('active'),
     /** Last day the card can be used, Australia/Sydney. Three years from purchase. */
     expiresOn: date('expires_on').notNull(),
-    /** Set when a refund or dispute arrives after the card was partly used. */
+    /** Set when a refund or dispute needs a person to decide. The card cannot be used until the owner clears it. */
     flaggedReason: text('flagged_reason'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     voidedAt: timestamp('voided_at', { withTimezone: true }),
@@ -311,7 +318,7 @@ export const giftCardLedger = pgTable(
     id: id(),
     cardId: uuid('card_id').notNull().references(() => giftCards.id, { onDelete: 'restrict' }),
     kind: giftLedgerKindEnum('kind').notNull(),
-    /** Positive adds value (issue, reverse), negative takes it (redeem, void). */
+    /** Positive adds value (issue, reverse), negative takes it (redeem, void); an owner's `adjust` goes either way. */
     amountCents: integer('amount_cents').notNull(),
     actorEmail: text('actor_email').notNull(),
     note: text('note'),
@@ -322,9 +329,11 @@ export const giftCardLedger = pgTable(
   (t) => [
     index('gift_card_ledger_card').on(t.cardId, t.createdAt),
     check('gift_card_ledger_nonzero', sql`${t.amountCents} <> 0`),
+    // Compared as text: 'adjust' is added to the enum in the same migration, and a
+    // new enum value cannot be used as one until that transaction commits.
     check(
       'gift_card_ledger_sign',
-      sql`(${t.kind} IN ('issue', 'reverse') AND ${t.amountCents} > 0) OR (${t.kind} IN ('redeem', 'void') AND ${t.amountCents} < 0)`,
+      sql`(${t.kind}::text IN ('issue', 'reverse') AND ${t.amountCents} > 0) OR (${t.kind}::text IN ('redeem', 'void') AND ${t.amountCents} < 0) OR ${t.kind}::text = 'adjust'`,
     ),
     check('gift_card_ledger_reverse_target', sql`(${t.kind} = 'reverse') = (${t.reversesId} IS NOT NULL)`),
   ],

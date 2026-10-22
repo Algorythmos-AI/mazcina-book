@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, gte, sql } from 'drizzle-orm';
 import { ActionForm } from '@/components/action-form';
 import { QrScanner } from '@/components/qr-scanner';
 import { badgeBad, badgeOk, badgeWarn, card, h1, h2, input, label, link, muted } from '@/components/ui';
@@ -25,7 +25,18 @@ export default async function CardsPage() {
           .orderBy(desc(schema.giftCards.createdAt))
           .limit(100)
       : [];
-  const outstanding = cards.filter((c) => c.card.status === 'active' && c.card.expiresOn >= today).reduce((sum, c) => sum + c.card.balanceCents, 0);
+  // Over every card, not just the 100 listed: this is money the restaurant still owes in meals.
+  const [totals] =
+    user.role === 'owner'
+      ? await db
+          .select({
+            outstanding: sql<number>`coalesce(sum(${schema.giftCards.balanceCents}), 0)::int`,
+            sold: sql<number>`(select count(*)::int from ${schema.giftCards})`,
+            held: sql<number>`count(*) filter (where ${schema.giftCards.flaggedReason} is not null)::int`,
+          })
+          .from(schema.giftCards)
+          .where(and(eq(schema.giftCards.status, 'active'), gte(schema.giftCards.expiresOn, today)))
+      : [{ outstanding: 0, sold: 0, held: 0 }];
 
   return (
     <div className="space-y-6">
@@ -56,10 +67,16 @@ export default async function CardsPage() {
       {user.role === 'owner' && (
         <section className={card}>
           <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <h2 className={h2}>Cards sold ({cards.length})</h2>
+            <h2 className={h2}>Cards sold ({totals.sold})</h2>
             <Link href="/cards/sign" className={link}>Counter sign to print</Link>
-            <p className={muted}>Still to be spent: <span className="font-bold text-mazcina-emerald">{moneyFromCents(outstanding)}</span></p>
+            <p className={muted}>Still to be spent: <span className="font-bold text-mazcina-emerald">{moneyFromCents(totals.outstanding)}</span></p>
           </div>
+          {totals.held > 0 && (
+            <p className={`mt-2 ${badgeBad}`}>
+              {totals.held} {totals.held === 1 ? 'card is' : 'cards are'} on hold after a refund or dispute. Staff cannot use {totals.held === 1 ? 'it' : 'them'} until you check.
+            </p>
+          )}
+          {totals.sold > cards.length && <p className={`mt-1 ${muted}`}>Showing the latest {cards.length}. Find any card by its code above.</p>}
           {cards.length === 0 ? (
             <p className={`mt-2 ${muted}`}>None yet.</p>
           ) : (
@@ -72,7 +89,7 @@ export default async function CardsPage() {
                       <span className={`block ${muted}`}>…{c.codeLast4} · from {order.buyerName} · {displayDate(todaySydney(c.createdAt))}</span>
                     </span>
                     <span className="flex items-center gap-2 tabular-nums">
-                      {c.flaggedReason && c.status === 'active' && <span className={badgeBad}>Check</span>}
+                      {c.flaggedReason && c.status === 'active' && <span className={badgeBad}>On hold</span>}
                       {c.status === 'void' ? (
                         <span className={badgeBad}>Cancelled</span>
                       ) : c.expiresOn < today ? (

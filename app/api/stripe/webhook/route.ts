@@ -1,6 +1,6 @@
 import { after } from 'next/server';
 import type Stripe from 'stripe';
-import { connectAccount, giftCardSales, stripe } from '@/lib/gift-cards/config';
+import { connectAccount, giftCardEvents, stripe } from '@/lib/gift-cards/config';
 import { handleStripeEvent } from '@/lib/gift-cards/events';
 import { sendPendingEmails } from '@/lib/gift-cards/outbox';
 
@@ -12,7 +12,8 @@ import { sendPendingEmails } from '@/lib/gift-cards/outbox';
  */
 export async function POST(request: Request) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
-  const sales = giftCardSales();
+  // Not giftCardSales(): with sales paused, refunds and disputes on cards already sold must still land.
+  const sales = giftCardEvents();
   if (!secret || !sales.enabled) return new Response('Gift cards are not configured here', { status: 503 });
 
   const signature = request.headers.get('stripe-signature');
