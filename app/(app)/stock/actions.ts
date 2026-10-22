@@ -19,10 +19,21 @@ const quantityLine = z.object({ ingredientId: uuid, quantity: z.string().max(20)
 const stocktakePayload = z.object({ lines: z.array(quantityLine).min(1).max(MAX_LINES) });
 const deliveryPayload = z.object({
   supplierId: uuid.nullable(),
-  lines: z.array(quantityLine.extend({ totalPaid: z.string().max(20) })).min(1).max(MAX_LINES),
+  lines: z
+    .array(quantityLine.extend({ totalPaid: z.string().max(20), gst: z.enum(['', 'free', 'inc', 'ex']).default('') }))
+    .min(1)
+    .max(MAX_LINES),
 });
 
 type Ingredient = typeof ingredients.$inferSelect;
+
+/** GST treatment for an ingredient's first ever price, which the person recording the delivery has to choose. */
+function firstPriceGst(choice: '' | 'free' | 'inc' | 'ex', name: string): { gstApplicable: boolean; priceIncludesGst: boolean } {
+  if (choice === 'free') return { gstApplicable: false, priceIncludesGst: false };
+  if (choice === 'inc') return { gstApplicable: true, priceIncludesGst: true };
+  if (choice === 'ex') return { gstApplicable: true, priceIncludesGst: false };
+  throw new Invalid(`Say whether ${name} has GST: it is the first price recorded for it`);
+}
 
 /** Locks the ingredient so two people recording stock at once are applied one after the other. */
 async function lockIngredient(tx: Tx, id: string): Promise<Ingredient> {
@@ -103,8 +114,8 @@ export async function recordDelivery(input: z.infer<typeof deliveryPayload>): Pr
         if (line.totalPaid.trim()) {
           const supplierId = payload.supplierId ?? ingredient.preferredSupplierId;
           if (!supplierId) throw new Invalid(`Choose the supplier to record a price for ${ingredient.name}`);
-          const packPrice = decimal(line.totalPaid.trim().replace(/^\$/, ''), `${ingredient.name} price`, { min: 0 })!;
-          // Carry the GST treatment over from this ingredient's last price; a first price is taken as GST-free.
+          const packPrice = decimal(line.totalPaid.trim().replace(/^\$/, ''), `${ingredient.name} price`, { min: 0, minExclusive: true })!;
+          // Carry the GST treatment over from this ingredient's last price; a first price needs it said.
           const [last] = await tx
             .select({ gstApplicable: ingredientPrices.gstApplicable, priceIncludesGst: ingredientPrices.priceIncludesGst })
             .from(ingredientPrices)
@@ -117,8 +128,7 @@ export async function recordDelivery(input: z.infer<typeof deliveryPayload>): Pr
             packSize: decimal(line.quantity.trim(), 'Quantity', { min: 0, minExclusive: true })!,
             packUnit: line.unit,
             packPrice,
-            gstApplicable: last?.gstApplicable ?? false,
-            priceIncludesGst: last?.priceIncludesGst ?? false,
+            ...(last ?? firstPriceGst(line.gst, ingredient.name)),
             effectiveDate: today,
             createdBy: user.email,
           });

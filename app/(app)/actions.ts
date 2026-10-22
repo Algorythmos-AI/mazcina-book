@@ -552,6 +552,8 @@ export async function setMenuStatus(id: string, status: 'draft' | 'live' | 'arch
       const [menu] = await tx.select().from(schema.menus).where(eq(schema.menus.id, id)).for('update');
       if (!menu) throw new Invalid('Menu not found');
       if (menu.status === status) return;
+      // An archived menu's costs are frozen in its snapshot; it comes back as a draft to be checked first.
+      if (menu.status === 'archived' && status === 'live') throw new Invalid('Reopen this menu as a draft first, check it, then make it live');
 
       if (status === 'live' && menu.kind === 'seasonal') {
         const current = await tx

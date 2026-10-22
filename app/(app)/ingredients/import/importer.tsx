@@ -94,6 +94,9 @@ export function PriceImporter({ since }: { since: string }) {
             <span className={badgeOk}>{preview.ready} ready</span>
             {preview.failed > 0 && <span className={badgeBad}>{preview.failed} to fix</span>}
           </p>
+          {preview.warnings.map((warning) => (
+            <p key={warning} className={`mt-2 ${badgeWarn}`}>{warning}</p>
+          ))}
           <ul className="mt-3 divide-y divide-gray-100">
             {preview.rows.map((row) => (
               <li key={row.line} className="py-2.5">

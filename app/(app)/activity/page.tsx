@@ -17,6 +17,8 @@ const ENTITY: Record<string, string> = {
   stock: 'stock record',
   gift_card: 'gift card',
   kitchen_data: 'kitchen data pack',
+  data: 'everything (the full data download)',
+  auth: 'sign-in code',
 };
 
 const VERB: Record<string, string> = {
@@ -37,6 +39,9 @@ const VERB: Record<string, string> = {
   reverse: 'undid a redemption on a',
   resend: 're-sent a',
   lookup_failed: 'typed a wrong code for a',
+  lookup: 'looked up a',
+  export: 'downloaded',
+  code_sent: 'was emailed a',
   clear_hold: 'cleared the hold on a',
   adjust: 'changed the balance of a',
   cancel: 'cancelled a',

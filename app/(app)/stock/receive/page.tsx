@@ -12,9 +12,10 @@ export const metadata: Metadata = { title: 'Receive a delivery' };
 export default async function ReceivePage() {
   await requireRole('owner', 'chef');
   const data = await loadCostingData();
+  const priced = new Set(data.prices.map((p) => p.ingredientId));
   const items = data.ingredients
     .filter((i) => !i.archived)
-    .map((i) => ({ id: i.id, name: i.name, units: unitsForIngredient(i), defaultUnit: countUnit(i.baseUnit) }));
+    .map((i) => ({ id: i.id, name: i.name, units: unitsForIngredient(i), defaultUnit: countUnit(i.baseUnit), priced: priced.has(i.id) }));
 
   return (
     <div className="space-y-6">

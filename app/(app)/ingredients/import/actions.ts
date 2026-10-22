@@ -28,6 +28,7 @@ export interface ImportPreview {
   rows: ImportPreviewRow[];
   ready: number;
   failed: number;
+  warnings: string[];
 }
 
 interface ResolvedRow {
@@ -132,7 +133,7 @@ async function resolve(text: string): Promise<{ preview: ImportPreview; resolved
   });
 
   const failed = rows.filter((r) => r.errors.length > 0).length;
-  return { preview: { rows, ready: rows.length - failed, failed }, resolved };
+  return { preview: { rows, ready: rows.length - failed, failed, warnings: parsed.warnings }, resolved };
 }
 
 /** Shows what an import would do. Changes nothing. */
