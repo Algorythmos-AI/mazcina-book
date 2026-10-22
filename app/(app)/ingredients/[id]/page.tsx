@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
 import { badgeWarn, card, h1, h2, input, label, muted } from '@/components/ui';
-import { ingredientUnitCost, selectPrice } from '@/lib/costing';
+import { ingredientUnitCost, selectPrice, type IngredientPrice } from '@/lib/costing';
 import { displayDate, issueText, money, plain, unitPrice, unitsForIngredient } from '@/lib/format';
 import { contextFrom, loadCostingData, loadMovements, loadStock } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
@@ -28,6 +28,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
   const current = selectPrice(history, ingredient.preferredSupplierId, data.asOf);
   const suppliers = data.suppliers.filter((s) => !s.archived);
   const supplierName = new Map(data.suppliers.map((s) => [s.id, s.name]));
+  const pricing = priceChoice(history, current, ingredient.preferredSupplierId ?? null, data.asOf, (id) => supplierName.get(id) ?? 'an unknown supplier');
   const usedIn = data.recipes.filter((r) => !r.archived && r.lines.some((l) => l.ingredientId === ingredient.id));
   const units = unitsForIngredient(ingredient);
   const [stock, movements] = await Promise.all([loadStock(), loadMovements(ingredient.id, 12)]);
@@ -98,6 +99,10 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
                 <label className="col-span-2 flex min-h-11 items-center gap-2 text-sm font-semibold">
                   <input type="checkbox" name="priceIncludesGst" defaultChecked={current?.priceIncludesGst ?? false} className="size-5" />
                   The price I typed includes GST
+                </label>
+                <label className="col-span-2 flex min-h-11 items-center gap-2 text-sm font-semibold">
+                  <input type="checkbox" name="free" className="size-5" />
+                  This costs nothing (only with a $0 price)
                 </label>
               </div>
               <p className={`mt-2 ${muted}`}>Fresh produce, meat and fish have no GST. Most packaged goods and drinks do.</p>
@@ -171,6 +176,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
 
       <section className={card}>
         <h2 className={h2}>Price history</h2>
+        {pricing && <p className={`mt-1 ${pricing.warn ? badgeWarn : muted}`}>{pricing.text}</p>}
         {history.length === 0 ? (
           <p className={`mt-2 ${muted}`}>No prices yet.</p>
         ) : (
@@ -224,4 +230,27 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
       </section>
     </div>
   );
+}
+
+/** Which price the costs use and why, so a fallback to another supplier is never a surprise. */
+function priceChoice(
+  history: IngredientPrice[],
+  current: IngredientPrice | null,
+  preferredId: string | null,
+  asOf: string,
+  name: (supplierId: string) => string,
+): { text: string; warn: boolean } | null {
+  if (!current) return null;
+  const used = `Costs use ${name(current.supplierId)}'s price from ${displayDate(current.effectiveDate)}`;
+  if (preferredId && current.supplierId !== preferredId) {
+    return { text: `${used}, because ${name(preferredId)} (the preferred supplier) has no price yet.`, warn: true };
+  }
+  const newer = history.find((p) => p.supplierId !== current.supplierId && p.effectiveDate > current.effectiveDate && p.effectiveDate <= asOf);
+  if (newer) {
+    return {
+      text: `${used} (preferred supplier). ${name(newer.supplierId)} has a newer price from ${displayDate(newer.effectiveDate)}; make them the preferred supplier to use it.`,
+      warn: true,
+    };
+  }
+  return { text: `${used}${preferredId ? ' (preferred supplier)' : ''}.`, warn: false };
 }

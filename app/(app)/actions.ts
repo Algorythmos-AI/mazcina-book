@@ -152,6 +152,13 @@ export async function addPrice(_prev: ActionResult | null, form: FormData): Prom
       effectiveDate: parse(isoDate, text(form, 'effectiveDate') || today, 'Date'),
       createdBy: user.email,
     };
+    // A $0 price makes every dish using it look cheaper than it is, so it must be meant.
+    if (new DecimalJs(values.packPrice).isZero() && form.get('free') !== 'on') {
+      throw new Invalid('The price is $0. If this really costs nothing (tap water, a herb from the garden), tick "This costs nothing".');
+    }
+    if (values.priceIncludesGst && !values.gstApplicable) {
+      throw new Invalid('You ticked that the price includes GST but not that the item has GST. Tick both, or neither.');
+    }
     await db.transaction(async (tx) => {
       const [ingredient] = await tx.select().from(schema.ingredients).where(eq(schema.ingredients.id, values.ingredientId));
       if (!ingredient || ingredient.archivedAt) throw new Invalid('Ingredient not found');
@@ -207,6 +214,7 @@ const recipePayload = z.object({
   yieldUnit: unit.nullable(),
   yieldEstimated: z.boolean(),
   portions: z.string(),
+  asNeeded: z.array(z.string().max(120)).max(40),
   notes: z.string().max(12000),
   lines: z
     .array(
@@ -231,6 +239,7 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
     const yieldQuantity = decimal(payload.yieldQuantity.trim(), 'Batch yield', { min: 0, minExclusive: true, optional: true });
     if (payload.type === 'prep' && !yieldQuantity) throw new Invalid('A prep needs a batch yield, for example 2 l');
     const yieldUnit = yieldQuantity ? payload.yieldUnit : null;
+    const asNeeded = [...new Set(payload.asNeeded.map((s) => s.trim()).filter(Boolean))];
     if (yieldQuantity && !yieldUnit) throw new Invalid('Choose a unit for the batch yield');
 
     const lines = payload.lines.map((line, index) => {
@@ -301,7 +310,7 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
       }
 
       const version = before.version + 1;
-      const values = { name, type: payload.type, yieldQuantity, yieldUnit, yieldEstimated: !!yieldQuantity && payload.yieldEstimated, portions, notes: payload.notes.trim() || null };
+      const values = { name, type: payload.type, yieldQuantity, yieldUnit, yieldEstimated: !!yieldQuantity && payload.yieldEstimated, portions, asNeeded, notes: payload.notes.trim() || null };
       await tx.update(schema.recipes).set({ ...values, updatedAt: new Date(), version }).where(eq(schema.recipes.id, payload.id));
       await tx.delete(schema.recipeLines).where(eq(schema.recipeLines.recipeId, payload.id));
       if (lines.length > 0) await tx.insert(schema.recipeLines).values(lines);

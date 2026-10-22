@@ -140,6 +140,8 @@ export const recipes = pgTable(
     /** The yield was worked out from the ingredients, not weighed; cleared once a batch is weighed. */
     yieldEstimated: boolean('yield_estimated').notNull().default(false),
     portions: quantity('portions').notNull().default('1'),
+    /** Ingredients used "as needed" (salt, frying oil, ...): shown with the recipe, left out of its cost. */
+    asNeeded: text('as_needed').array().notNull().default(sql`'{}'::text[]`),
     notes: text('notes'),
     ...tracked,
   },

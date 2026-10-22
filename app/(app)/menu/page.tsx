@@ -5,7 +5,7 @@ import { ActionButton } from '@/components/action-button';
 import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
 import { badgeBad, badgeOk, badgeWarn, card, eyebrow, h1, h2, input, label, muted, primary, secondary } from '@/components/ui';
-import { displayDate, moneyFromCents, money, percent, plain } from '@/lib/format';
+import { displayDate, issueText, moneyFromCents, money, percent, plain } from '@/lib/format';
 import { costMenuItem, groupByCategory, type ItemCosting } from '@/lib/menu';
 import { contextFrom, loadCostingData, loadMenus, loadSnapshot } from '@/lib/queries';
 import type { MenuDto } from '@/lib/types';
@@ -19,11 +19,19 @@ const RATING_BADGE = { good: badgeOk, watch: badgeWarn, high: badgeBad, none: ba
 
 function Costing({ costing }: { costing: ItemCosting }) {
   if (costing.status === 'uncosted') return <span className={`${muted} text-xs`}>Not costed</span>;
-  if (costing.status === 'incomplete') return <span className={badgeWarn}>Recipe incomplete</span>;
+  if (costing.status === 'incomplete') {
+    const missing = costing.issues.filter((i) => i.code === 'no_price').length;
+    return (
+      <span className={badgeWarn} title={[...new Set(costing.issues.map(issueText))].join('\n')}>
+        {missing > 0 && missing === costing.issues.length ? `Needs ${missing} price${missing === 1 ? '' : 's'}` : 'Recipe incomplete'}
+      </span>
+    );
+  }
   return (
     <span className="flex flex-col items-end gap-0.5">
       <span className={RATING_BADGE[costing.rating]}>{costing.foodCostPct ? percent(costing.foodCostPct) : 'No price'}</span>
       {costing.estimates.length > 0 && <span className={`${muted} text-xs`} title={`Estimated yields: ${costing.estimates.join(', ')}`}>estimate</span>}
+      {costing.asNeeded.length > 0 && <span className={`${muted} text-xs`} title={`Not in the cost: ${costing.asNeeded.join(', ')}`}>+ as needed</span>}
       <span className={`${muted} text-xs tabular-nums`}>cost {money(costing.cost)}</span>
     </span>
   );
@@ -142,9 +150,13 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
   const active = menu.items.filter((i) => !i.archived);
   const trashed = menu.items.filter((i) => i.archived);
   const rows = active.map((item) => ({ item, costing: costMenuItem(item, ctx, data.settings) }));
-  const costed = rows.flatMap((r) => (r.costing.status === 'ok' && r.costing.foodCostPct ? [r.costing] : []));
-  const average = costed.length > 0 ? costed.reduce((sum, c) => sum.plus(c.foodCostPct!), new DecimalJs(0)).div(costed.length) : null;
+  const costed = rows.flatMap((r) => (r.costing.status === 'ok' ? [r.costing] : []));
+  const withPct = costed.filter((c) => c.foodCostPct);
+  const average = withPct.length > 0 ? withPct.reduce((sum, c) => sum.plus(c.foodCostPct!), new DecimalJs(0)).div(withPct.length) : null;
   const overTarget = costed.filter((c) => c.rating === 'high').length;
+  const incomplete = rows.filter((r) => r.costing.status === 'incomplete').length;
+  const unlinked = rows.filter((r) => r.costing.status === 'uncosted').length;
+  const partial = costed.filter((c) => c.asNeeded.length > 0).length;
 
   return (
     <div className="space-y-6">
@@ -198,8 +210,27 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
         </dl>
         <p className={`mt-3 ${muted}`}>
           Food cost % is the cost of one serve against the menu price{data.settings.gstRegistered ? ' with GST taken off' : ''}. Only fully
-          costed items count towards the average.
+          costed items count towards the average
+          {costed.length < active.length ? `, so it describes ${withPct.length} of ${active.length} items, not the whole menu` : ''}.
         </p>
+        {(incomplete > 0 || unlinked > 0) && (
+          <p className={`mt-2 ${badgeWarn}`}>
+            {[
+              incomplete > 0 && `${incomplete} ${incomplete === 1 ? 'item needs' : 'items need'} a supplier price or a fix to its recipe`,
+              unlinked > 0 && `${unlinked} ${unlinked === 1 ? 'item has' : 'items have'} no recipe linked`,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
+            .{' '}
+            <Link href="/prices-needed" className="underline">See what is missing</Link>
+          </p>
+        )}
+        {partial > 0 && (
+          <p className={`mt-2 ${muted}`}>
+            {partial} costed {partial === 1 ? 'item uses' : 'items use'} ingredients &ldquo;as needed&rdquo; (salt, oil, ...) that are not in the cost, so
+            {partial === 1 ? ' its' : ' their'} food cost % reads slightly low.
+          </p>
+        )}
       </section>
 
       {groupByCategory(rows.map((r) => ({ ...r, category: r.item.category }))).map(([category, group]) => (
