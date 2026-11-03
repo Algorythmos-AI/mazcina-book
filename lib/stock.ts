@@ -13,7 +13,8 @@ import type { BaseUnit, Unit } from './costing';
 const D = DecimalJs.clone({ precision: 40, rounding: DecimalJs.ROUND_HALF_UP });
 type Numeric = string | number | DecimalJs;
 
-export type StockStatus = 'uncounted' | 'out' | 'low' | 'ok' | 'no_par';
+/** `count_needed`: the books went below zero (waste recorded beyond what was booked), so only a count can fix the figure. */
+export type StockStatus = 'uncounted' | 'count_needed' | 'out' | 'low' | 'ok' | 'no_par';
 
 export interface StockLine {
   /** Current quantity in base units; null when nothing has ever been recorded. */
@@ -28,9 +29,11 @@ export interface StockLine {
 export function stockLine(input: { onHand: Numeric | null; parLevel: Numeric | null; unitCost: Numeric | null }): StockLine {
   const onHand = input.onHand === null ? null : new D(input.onHand);
   const par = input.parLevel === null ? null : new D(input.parLevel);
-  const value = onHand && input.unitCost !== null ? onHand.times(input.unitCost) : null;
+  // Below zero is a gap in the books, not negative stock: it adds nothing to (and takes nothing from) the value.
+  const value = onHand && input.unitCost !== null ? D.max(onHand, 0).times(input.unitCost) : null;
 
   if (!onHand) return { onHand: null, status: 'uncounted', toOrder: par && par.gt(0) ? par : null, value: null };
+  if (onHand.lt(0)) return { onHand, status: 'count_needed', toOrder: par && par.gt(0) ? par : null, value };
   const short = par && par.gt(0) && onHand.lt(par) ? par.minus(onHand) : null;
   const status: StockStatus = onHand.lte(0) ? 'out' : !par || par.lte(0) ? 'no_par' : short ? 'low' : 'ok';
   return { onHand, status, toOrder: short, value };

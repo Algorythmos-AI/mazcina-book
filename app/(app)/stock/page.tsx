@@ -11,13 +11,14 @@ import { formatStock, stockLine, type StockStatus } from '@/lib/stock';
 export const metadata: Metadata = { title: 'Stock' };
 
 const STATUS: Record<StockStatus, { label: string; badge: string }> = {
+  count_needed: { label: 'Count needed', badge: badgeWarn },
   out: { label: 'Out', badge: badgeBad },
   low: { label: 'Low', badge: badgeWarn },
   ok: { label: 'OK', badge: badgeOk },
   no_par: { label: 'No minimum set', badge: 'inline-block rounded-sm bg-gray-100 px-2.5 py-0.5 text-xs font-bold text-gray-700' },
   uncounted: { label: 'Not counted', badge: 'inline-block rounded-sm bg-gray-100 px-2.5 py-0.5 text-xs font-bold text-gray-700' },
 };
-const ORDER: StockStatus[] = ['out', 'low', 'uncounted', 'no_par', 'ok'];
+const ORDER: StockStatus[] = ['count_needed', 'out', 'low', 'uncounted', 'no_par', 'ok'];
 
 export default async function StockPage() {
   await requireRole('owner', 'chef');
