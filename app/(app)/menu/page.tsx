@@ -288,6 +288,10 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
                 Mazcina is registered for GST
               </label>
             </div>
+            <p className={`mt-2 ${muted}`}>
+              Changing either one re-costs every dish. When Mazcina is not registered for GST, GST is kept in ingredient costs because it
+              cannot be claimed back.
+            </p>
           </ActionForm>
         </section>
       )}

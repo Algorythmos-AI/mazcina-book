@@ -53,6 +53,20 @@ const YES = new Set(['y', 'yes', 'true', '1', 'x', 'gst', 'inc']);
 const NO = new Set(['', 'n', 'no', 'false', '0', '-', 'free', 'ex']);
 
 export const MAX_IMPORT_ROWS = 500;
+/** What fits in the database columns (numeric(12,4)), with room to spare. */
+export const MAX_PACK_PRICE = 100_000;
+export const MAX_PACK_SIZE = 1_000_000;
+
+function trimTrailing(cells: string[]): string[] {
+  let end = cells.length;
+  while (end > 0 && cells[end - 1] === '') end--;
+  return cells.slice(0, end);
+}
+
+function withinLimits(value: string, max: number): boolean {
+  const [, places = ''] = value.split('.');
+  return Number(value) <= max && places.length <= 4;
+}
 
 function splitLine(line: string, delimiter: string): string[] {
   if (delimiter !== ',') return line.split(delimiter).map((c) => c.trim());
@@ -131,7 +145,8 @@ export function parsePriceList(text: string): ParsedPriceList {
   if (lines.length === 0) return { rows: [], error: 'Paste your price list first', warnings: [] };
 
   const delimiter = detectDelimiter(lines.map((l) => l.content));
-  const header = headerMap(splitLine(lines[0].content, delimiter));
+  const firstCells = splitLine(lines[0].content, delimiter);
+  const header = headerMap(firstCells);
   const columns = header?.columns ?? new Map(DEFAULT_ORDER.map((column, index) => [column, index]));
   // A "Price inc GST" heading answers the Inc GST question for every row that has GST.
   const priceGst = columns.has('inc') ? null : (header?.priceGst ?? null);
@@ -187,10 +202,14 @@ export function parsePriceList(text: string): ParsedPriceList {
       errors.push('The heading says prices include GST: add a GST column (yes or no) so GST is only taken off items that have it');
     }
 
-    const expected = Math.max(...columns.values()) + 1;
-    if (cells.length > expected && !header) {
+    // A comma used as the decimal point in a CSV splits "22,50" into two cells, which
+    // would quietly save $22. With a heading, any row wider than the heading is that.
+    const expected = header ? trimTrailing(firstCells).length : Math.max(...columns.values()) + 1;
+    if (trimTrailing(cells).length > expected) {
       errors.push('Too many columns. If a price uses a comma as the decimal point, paste with tabs or type a dot.');
     }
+    if (packSize !== null && !withinLimits(packSize, MAX_PACK_SIZE)) errors.push(`Pack size "${sizeRaw}" is too large or has more than 4 decimal places`);
+    if (packPrice !== null && !withinLimits(packPrice, MAX_PACK_PRICE)) errors.push(`Price "${cell('price')}" is over $${MAX_PACK_PRICE.toLocaleString('en-AU')} or has more than 4 decimal places`);
 
     return { line, ingredient, supplier, packSize, packUnit, packPrice, gstApplicable, priceIncludesGst: priceIncludesGst && gstApplicable, errors };
   });

@@ -3,6 +3,7 @@ import DecimalJs from 'decimal.js';
 import { z } from 'zod';
 import { db, schema } from '@/db';
 import { parseDecimalInput } from '@/lib/costing';
+import { Invalid } from '@/lib/invalid';
 import { requireRole, type CurrentUser } from '@/lib/session';
 import type { ActionResult } from '@/lib/types';
 
@@ -10,7 +11,7 @@ import type { ActionResult } from '@/lib/types';
 
 export type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
-export class Invalid extends Error {}
+export { Invalid };
 
 export const uuid = z.uuid();
 export const unit = z.enum(['g', 'kg', 'ml', 'l', 'each']);
@@ -80,6 +81,7 @@ export async function mutate<T>(fn: (user: CurrentUser) => Promise<T>): Promise<
     if (code === '23505') return { ok: false, error: 'That name is already used' };
     if (code === '23503') return { ok: false, error: 'This is still used somewhere else' };
     if (code === '23514') return { ok: false, error: 'One of the values is out of range' };
+    if (code === '22003') return { ok: false, error: 'That number is too big. Check it and try again.' };
     console.error('[action] unexpected failure', error);
     return { ok: false, error: 'Something went wrong. Nothing was saved, please try again.' };
   }

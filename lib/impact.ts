@@ -40,7 +40,7 @@ export function daysAgo(iso: string, days: number): string {
  * the effect of prices.
  */
 export function priceImpact(data: CostingData, menuItems: MenuItemDto[], since: string) {
-  const base = { ingredients: data.ingredients, recipes: data.recipes, prices: data.prices };
+  const base = { ingredients: data.ingredients, recipes: data.recipes, prices: data.prices, gstRegistered: data.settings.gstRegistered };
   const then = createContext({ ...base, asOf: dayBefore(since) });
   const now = createContext({ ...base, asOf: data.asOf });
 
