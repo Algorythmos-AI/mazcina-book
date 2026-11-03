@@ -171,3 +171,13 @@ export async function loadMovements(ingredientId: string, limit = 20) {
     .orderBy(desc(schema.stockMovements.createdAt))
     .limit(limit);
 }
+
+/** How many things stop the live menu (or the first open one) from being fully costed: the "To do" count. */
+export const loadTodoCount = cache(async (): Promise<number> => {
+  const { menuBlockers } = await import('./menu');
+  const [data, menus] = await Promise.all([loadCostingData(), loadMenus()]);
+  const open = menus.filter((m) => m.status !== 'archived');
+  const menu = open.find((m) => m.status === 'live' && m.kind === 'seasonal') ?? open[0];
+  if (!menu) return 0;
+  return menuBlockers(menu.items, contextFrom(data), { ingredients: data.ingredients, recipes: data.recipes }).length;
+});

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const LINKS = [
   { href: '/menu', label: 'Menu' },
+  { href: '/prices-needed', label: 'To do' },
   { href: '/recipes', label: 'Recipes' },
   { href: '/ingredients', label: 'Ingredients' },
   { href: '/suppliers', label: 'Suppliers' },
@@ -19,7 +20,7 @@ const OWNER_LINKS = [
 /** Same treatment as the public site's nav: emerald links, the current one in wood with an underline. */
 const STAFF_LINKS = [{ href: '/cards', label: 'Gift cards' }];
 
-export function Nav({ role, giftCards }: { role: 'owner' | 'chef' | 'staff'; giftCards: boolean }) {
+export function Nav({ role, giftCards, todo = 0 }: { role: 'owner' | 'chef' | 'staff'; giftCards: boolean; todo?: number }) {
   const cards = giftCards ? STAFF_LINKS : [];
   const links = role === 'staff' ? cards : role === 'owner' ? [...LINKS, ...cards, ...OWNER_LINKS] : [...LINKS, ...cards];
   const pathname = usePathname();
@@ -37,6 +38,11 @@ export function Nav({ role, giftCards }: { role: 'owner' | 'chef' | 'staff'; gif
             }`}
           >
             {item.label}
+            {item.href === '/prices-needed' && todo > 0 && (
+              <span className="ml-1.5 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold tabular-nums text-amber-900" aria-label={`${todo} to do`}>
+                {todo}
+              </span>
+            )}
           </Link>
         );
       })}

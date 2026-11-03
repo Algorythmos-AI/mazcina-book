@@ -132,3 +132,47 @@ export function groupByCategory<T extends { category: string }>(items: T[]): [st
   for (const item of items) groups.set(item.category, [...(groups.get(item.category) ?? []), item]);
   return [...groups.entries()].sort((a, b) => order(a[0]) - order(b[0]) || a[0].localeCompare(b[0]));
 }
+
+export interface MenuBlocker {
+  key: string;
+  code: Issue['code'];
+  subject: string;
+  /** Set when the blocker is an ingredient (a missing price, a conversion, ...). */
+  ingredientId: string | null;
+  /** Set when the blocker is a prep or dish that needs finishing. */
+  recipeId: string | null;
+  /** Menu items it holds back. */
+  items: { id: string; name: string }[];
+}
+
+/**
+ * Everything standing between a menu and a full set of costs, biggest win
+ * first: each ingredient price (or other fix) with the menu items waiting on it.
+ */
+export function menuBlockers(
+  items: MenuItemDto[],
+  ctx: CostingContext,
+  lookup: { ingredients: { id: string; name: string }[]; recipes: { id: string; name: string }[] },
+): MenuBlocker[] {
+  const ingredientByName = new Map(lookup.ingredients.map((i) => [i.name, i.id]));
+  const recipeByName = new Map(lookup.recipes.map((r) => [r.name, r.id]));
+  const blockers = new Map<string, MenuBlocker>();
+  for (const item of items) {
+    if (item.archived || !item.recipeId) continue;
+    for (const issue of rootIssues(item.recipeId, ctx)) {
+      const subject = issue.subject ?? item.name;
+      const key = `${issue.code}|${subject}`;
+      const entry = blockers.get(key) ?? {
+        key,
+        code: issue.code,
+        subject,
+        ingredientId: ingredientByName.get(subject) ?? null,
+        recipeId: ingredientByName.has(subject) ? null : (recipeByName.get(subject) ?? null),
+        items: [],
+      };
+      if (!entry.items.some((i) => i.id === item.id)) entry.items.push({ id: item.id, name: item.name });
+      blockers.set(key, entry);
+    }
+  }
+  return [...blockers.values()].sort((a, b) => b.items.length - a.items.length || a.subject.localeCompare(b.subject));
+}

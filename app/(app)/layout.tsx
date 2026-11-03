@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { EnterMovesToNext } from '@/components/enter-next';
 import { Logo } from '@/components/logo';
 import { Nav } from '@/components/nav';
+import { loadTodoCount } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
 import { SignOutButton } from './sign-out-button';
 
 export default async function AppLayout({ children }: LayoutProps<'/'>) {
   const user = await requireRole();
+  const todo = user.role === 'staff' ? 0 : await loadTodoCount();
   return (
     <>
       {process.env.VERCEL_ENV !== 'production' && (
@@ -32,7 +34,7 @@ export default async function AppLayout({ children }: LayoutProps<'/'>) {
           <Link href="/" aria-label="Mazcina Kitchen home" className="pb-3">
             <Logo />
           </Link>
-          <Nav role={user.role} giftCards={!!process.env.GIFT_CODE_KEY} />
+          <Nav role={user.role} giftCards={!!process.env.GIFT_CODE_KEY} todo={todo} />
         </div>
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">{children}</main>
