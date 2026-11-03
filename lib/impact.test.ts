@@ -18,8 +18,8 @@ const data: CostingData = {
     { id: 'p4', ingredientId: 'new', supplierId: 's', packSize: '1', packUnit: 'kg', packPrice: '5', priceIncludesGst: false, gstApplicable: false, effectiveDate: '2026-10-12', createdBy: null },
   ],
   recipes: [
-    { id: 'chips', name: 'Chips', type: 'dish', yieldQuantity: null, yieldUnit: null, yieldEstimated: false, portions: '1', asNeeded: [], notes: null, version: 1, archived: false, lines: [{ id: 'l1', ingredientId: 'oil', quantity: '300', unit: 'ml' }] },
-    { id: 'plain', name: 'Plain', type: 'dish', yieldQuantity: null, yieldUnit: null, yieldEstimated: false, portions: '1', asNeeded: [], notes: null, version: 1, archived: false, lines: [{ id: 'l2', ingredientId: 'salt', quantity: '10', unit: 'g' }] },
+    { id: 'chips', name: 'Chips', type: 'dish', yieldQuantity: null, yieldUnit: null, yieldEstimated: false, portions: '1', asNeeded: [], notes: null, pendingLines: 0, version: 1, archived: false, lines: [{ id: 'l1', ingredientId: 'oil', quantity: '300', unit: 'ml' }] },
+    { id: 'plain', name: 'Plain', type: 'dish', yieldQuantity: null, yieldUnit: null, yieldEstimated: false, portions: '1', asNeeded: [], notes: null, pendingLines: 0, version: 1, archived: false, lines: [{ id: 'l2', ingredientId: 'salt', quantity: '10', unit: 'g' }] },
   ],
 };
 const items: MenuItemDto[] = [{ id: 'm1', menuId: 'm', recipeId: 'chips', name: 'Chips', category: 'Sides', sellPriceCents: 900, sortOrder: 0, version: 1, archived: false }];

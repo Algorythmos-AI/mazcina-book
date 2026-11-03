@@ -3,6 +3,7 @@
 import { unstable_rethrow } from 'next/navigation';
 import { startTransition, useActionState, useEffect, useRef, type ReactNode } from 'react';
 import type { ActionResult } from '@/lib/types';
+import { useToast } from './toast';
 import { primary } from './ui';
 
 type FormAction = (prev: ActionResult | null, form: FormData) => Promise<ActionResult>;
@@ -36,6 +37,7 @@ export function ActionForm({
   submitLabel,
   savedLabel = 'Saved',
   resetOnSuccess = false,
+  confirm,
   className,
   children,
 }: {
@@ -43,16 +45,21 @@ export function ActionForm({
   submitLabel: string;
   savedLabel?: string;
   resetOnSuccess?: boolean;
+  /** Asked before anything is sent, for actions that cannot be taken back. */
+  confirm?: string;
   className?: string;
   children: ReactNode;
 }) {
   // A redirect after saving is passed on by `safely`: it is not a failure.
   const [state, formAction, pending] = useActionState((prev: ActionResult | null, form: FormData) => safely(() => action(prev, form)), null);
   const ref = useRef<HTMLFormElement>(null);
+  const toast = useToast();
 
   useEffect(() => {
-    if (state?.ok && resetOnSuccess) ref.current?.reset();
-  }, [state, resetOnSuccess]);
+    if (!state?.ok) return;
+    if (resetOnSuccess) ref.current?.reset();
+    toast(savedLabel);
+  }, [state, resetOnSuccess, savedLabel, toast]);
 
   return (
     <form
@@ -60,6 +67,7 @@ export function ActionForm({
       onSubmit={(event) => {
         event.preventDefault();
         if (pending) return;
+        if (confirm && !window.confirm(confirm)) return;
         const form = new FormData(event.currentTarget, (event.nativeEvent as SubmitEvent).submitter);
         startTransition(() => formAction(form));
       }}

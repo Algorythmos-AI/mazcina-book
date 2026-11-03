@@ -1,7 +1,7 @@
 'use server';
 
 import DecimalJs from 'decimal.js';
-import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -26,6 +26,27 @@ export async function createSupplier(_prev: ActionResult | null, form: FormData)
     await db.transaction(async (tx) => {
       const [row] = await tx.insert(schema.suppliers).values(values).returning({ id: schema.suppliers.id });
       await audit(tx, user, 'create', 'supplier', row.id, { after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+export async function updateSupplier(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
+  const result = await mutate(async (user) => {
+    const id = parse(uuid, text(form, 'id'), 'Supplier');
+    const values = {
+      name: required(text(form, 'name'), 'Name'),
+      contact: text(form, 'contact').slice(0, 200) || null,
+    };
+    await db.transaction(async (tx) => {
+      const [before] = await tx.select().from(schema.suppliers).where(eq(schema.suppliers.id, id)).for('update');
+      if (!before || before.archivedAt) throw new Invalid('Supplier not found');
+      await tx
+        .update(schema.suppliers)
+        .set({ ...values, updatedAt: new Date(), version: before.version + 1 })
+        .where(eq(schema.suppliers.id, id));
+      await audit(tx, user, 'update', 'supplier', id, { before: { name: before.name, contact: before.contact }, after: values });
     });
   });
   if (result.ok) revalidatePath('/', 'layout');
@@ -233,12 +254,23 @@ const recipePayload = z.object({
       }),
     )
     .max(200),
+  /** Lines on screen still waiting for a quantity, not sent. */
+  pendingLines: z.number().int().min(0).max(200).optional(),
 });
 
 export type RecipePayload = z.infer<typeof recipePayload>;
 
+/** Who last saved a recipe, so "someone else changed it" can say who and when. */
+export interface RecipeConflict {
+  by: string;
+  at: string;
+  version: number;
+}
+
 /** Saves the whole recipe at once. Returns the new version, or an error (including "someone else changed it"). */
-export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ version: number }>> {
+export async function saveRecipe(
+  input: RecipePayload,
+): Promise<ActionResult<{ version: number }> | { ok: false; error: string; conflict: RecipeConflict }> {
   const result = await mutate(async (user) => {
     const payload = parse(recipePayload, input, 'Recipe');
     const name = required(payload.name.trim(), 'Name');
@@ -268,7 +300,14 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
       const [before] = await tx.select().from(schema.recipes).where(eq(schema.recipes.id, payload.id)).for('update');
       if (!before || before.archivedAt) throw new Invalid('Recipe not found');
       if (before.version !== payload.version) {
-        throw new Invalid('Someone else changed this recipe. Reload the page to see their version.');
+        const [last] = await tx
+          .select({ by: schema.auditLog.actorEmail, at: schema.auditLog.at })
+          .from(schema.auditLog)
+          .where(and(eq(schema.auditLog.entity, 'recipe'), eq(schema.auditLog.entityId, payload.id)))
+          .orderBy(desc(schema.auditLog.at))
+          .limit(1);
+        const conflict: RecipeConflict = { by: last?.by ?? 'someone', at: (last?.at ?? before.updatedAt).toISOString(), version: before.version };
+        return { conflict };
       }
 
       const ingredientIds = [...new Set(lines.flatMap((l) => (l.ingredientId ? [l.ingredientId] : [])))];
@@ -302,7 +341,17 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
       }
 
       const version = before.version + 1;
-      const values = { name, type: payload.type, yieldQuantity, yieldUnit, yieldEstimated: !!yieldQuantity && payload.yieldEstimated, portions, asNeeded, notes: payload.notes.trim() || null };
+      const values = {
+        name,
+        type: payload.type,
+        yieldQuantity,
+        yieldUnit,
+        yieldEstimated: !!yieldQuantity && payload.yieldEstimated,
+        portions,
+        asNeeded,
+        notes: payload.notes.trim() || null,
+        pendingLines: payload.pendingLines ?? 0,
+      };
       await tx.update(schema.recipes).set({ ...values, updatedAt: new Date(), version }).where(eq(schema.recipes.id, payload.id));
       await tx.delete(schema.recipeLines).where(eq(schema.recipeLines.recipeId, payload.id));
       if (lines.length > 0) await tx.insert(schema.recipeLines).values(lines);
@@ -310,8 +359,11 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
       return { version };
     });
   });
-  if (result.ok) revalidatePath('/', 'layout');
-  return result;
+  if (!result.ok) return result;
+  const saved = result.data!;
+  if ('conflict' in saved) return { ok: false, error: 'Someone else changed this recipe', conflict: saved.conflict };
+  revalidatePath('/', 'layout');
+  return { ok: true, data: { version: saved.version } };
 }
 
 export async function setRecipeArchived(id: string, archived: boolean): Promise<ActionResult> {

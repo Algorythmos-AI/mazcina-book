@@ -4,6 +4,7 @@ import { safely } from './action-form';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import type { ActionResult } from '@/lib/types';
+import { useToast } from './toast';
 import { secondary } from './ui';
 
 /** Moves something to the trash (or restores it). Nothing is ever deleted outright. */
@@ -19,6 +20,7 @@ export function ArchiveButton({
   const router = useRouter();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const toast = useToast();
 
   return (
     <div>
@@ -31,6 +33,20 @@ export function ArchiveButton({
             setError(null);
             const result = await safely(() => action(!archived));
             if (!result.ok) return setError(result.error);
+            if (archived) toast('Restored');
+            else {
+              toast('Moved to the trash', {
+                action: {
+                  label: 'Undo',
+                  run: async () => {
+                    const undo = await safely(() => action(false));
+                    if (!undo.ok) return `Could not undo: ${undo.error}`;
+                    router.refresh();
+                    return null;
+                  },
+                },
+              });
+            }
             if (redirectTo && !archived) router.push(redirectTo);
             else router.refresh();
           })

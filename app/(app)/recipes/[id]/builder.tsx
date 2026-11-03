@@ -18,8 +18,10 @@ import {
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { badgeOk, badgeWarn, card, h2, input, label, muted, secondary } from '@/components/ui';
+import { isConnectionError } from '@/components/action-form';
+import { badgeOk, badgeWarn, card, h2, input, label, muted, primary, secondary } from '@/components/ui';
 import {
   costRecipe,
   createContext,
@@ -31,7 +33,7 @@ import {
 } from '@/lib/costing';
 import { issueText, money, moneyFromCents, plain, unitsForDimension, unitsForIngredient } from '@/lib/format';
 import type { CostingData, RecipeDto } from '@/lib/types';
-import { saveRecipe } from '../../actions';
+import { saveRecipe, type RecipeConflict } from '../../actions';
 
 interface DraftLine {
   key: string;
@@ -55,10 +57,12 @@ interface Draft {
 }
 
 type SaveState =
-  | { kind: 'saved' }
+  | { kind: 'saved'; pending?: string }
   | { kind: 'waiting' }
   | { kind: 'saving' }
   | { kind: 'incomplete'; reason: string }
+  | { kind: 'leftover'; count: number }
+  | { kind: 'conflict'; conflict: RecipeConflict }
   | { kind: 'error'; message: string };
 
 const AUTOSAVE_MS = 900;
@@ -109,22 +113,27 @@ function blocker(draft: Draft): string | null {
   if (!positive(draft.portions)) return 'Portions must be a number above zero';
   if (draft.type === 'prep' && !positive(draft.yieldQuantity)) return 'A prep needs a batch yield';
   if (draft.yieldQuantity.trim() && !positive(draft.yieldQuantity)) return 'The batch yield is not a number';
-  const bad = draft.lines.findIndex((l) => !positive(l.quantity));
-  if (bad >= 0) return `Type a quantity for line ${bad + 1}`;
   return null;
 }
 
+const whenFormat = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Sydney', weekday: 'short', hour: 'numeric', minute: '2-digit' });
+
 export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: CostingData }) {
   const [draft, setDraft] = useState<Draft>(() => toDraft(recipe));
-  const [save, setSave] = useState<SaveState>({ kind: 'saved' });
+  // A line left without a quantity last time was not saved: say so until the next save.
+  const [save, setSave] = useState<SaveState>(recipe.pendingLines > 0 ? { kind: 'leftover', count: recipe.pendingLines } : { kind: 'saved' });
+  const router = useRouter();
   const [search, setSearch] = useState('');
+  // On a phone the ingredient list opens over the recipe, instead of sitting far below it.
+  const [poolOpen, setPoolOpen] = useState(false);
+  const focusLine = useRef<string | null>(null);
 
   const version = useRef(recipe.version);
   const latest = useRef(draft);
   const dirty = useRef(false);
   const saving = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const flushRef = useRef<() => void>(() => {});
+  const flushRef = useRef<() => Promise<boolean | void>>(async () => {});
   const schedule = useCallback(() => {
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => flushRef.current(), AUTOSAVE_MS);
@@ -135,6 +144,11 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
     const snapshot = latest.current;
     const reason = blocker(snapshot);
     if (reason) return setSave({ kind: 'incomplete', reason });
+
+    // Lines still waiting for a quantity stay on screen and are saved once they have one;
+    // the rest of the recipe is saved now, so nothing typed so far can be lost.
+    const complete = snapshot.lines.filter((l) => positive(l.quantity));
+    const pendingIndex = snapshot.lines.findIndex((l) => !positive(l.quantity));
 
     saving.current = true;
     dirty.current = false;
@@ -152,30 +166,40 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         portions: snapshot.portions,
         asNeeded: asNeededList(snapshot.asNeeded),
         notes: snapshot.notes,
-        lines: snapshot.lines.map((l) => ({
+        lines: complete.map((l) => ({
           ingredientId: l.ingredientId,
           subRecipeId: l.subRecipeId,
           quantity: l.quantity,
           unit: l.unit,
         })),
+        pendingLines: snapshot.lines.length - complete.length,
       });
-    } catch {
+    } catch (error) {
+      if (!isConnectionError(error)) throw error;
       result = { ok: false, error: 'No connection. Your changes are still here; they will be saved when you tap Retry.' };
     }
     saving.current = false;
 
     if (!result.ok) {
       dirty.current = true;
-      return setSave({ kind: 'error', message: result.error });
+      return setSave('conflict' in result ? { kind: 'conflict', conflict: result.conflict } : { kind: 'error', message: result.error });
     }
     version.current = result.data!.version;
     if (dirty.current) {
       setSave({ kind: 'waiting' });
       schedule();
     } else {
-      setSave({ kind: 'saved' });
+      setSave({ kind: 'saved', pending: pendingIndex >= 0 ? `line ${pendingIndex + 1} needs a quantity before it is saved` : undefined });
     }
+    return true;
   }, [recipe.id, schedule]);
+
+  /** Keep this version: save on top of theirs, which is now the one being replaced. */
+  const keepMine = useCallback((conflict: RecipeConflict) => {
+    version.current = conflict.version;
+    dirty.current = true;
+    void flush();
+  }, [flush]);
 
   useEffect(() => {
     flushRef.current = flush;
@@ -199,12 +223,32 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
     const warn = (event: BeforeUnloadEvent) => {
       if (dirty.current || saving.current) event.preventDefault();
     };
+    // Tapping a link inside the app does not fire beforeunload: save first, then go.
+    const onLink = (event: MouseEvent) => {
+      const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+      if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || link.getAttribute('target') === '_blank') return;
+      const href = link.getAttribute('href') ?? '';
+      if (!href.startsWith('/')) return;
+      const unfinished = latest.current.lines.findIndex((l) => !positive(l.quantity));
+      if (!dirty.current && !saving.current && unfinished < 0) return;
+      event.preventDefault();
+      event.stopPropagation();
+      void (async () => {
+        if (timer.current) clearTimeout(timer.current);
+        while (saving.current) await new Promise((r) => setTimeout(r, 100));
+        if (dirty.current && !(await flushRef.current())) return; // the save failed: stay, the error is on screen
+        if (unfinished >= 0 && !window.confirm(`Line ${unfinished + 1} has no quantity, so it is not saved. Leave anyway?`)) return;
+        router.push(href);
+      })();
+    };
     window.addEventListener('beforeunload', warn);
+    document.addEventListener('click', onLink, true);
     return () => {
       window.removeEventListener('beforeunload', warn);
+      document.removeEventListener('click', onLink, true);
       if (timer.current) clearTimeout(timer.current);
     };
-  }, []);
+  }, [router]);
 
   const ingredientById = useMemo(() => new Map(data.ingredients.map((i) => [i.id, i])), [data.ingredients]);
   const recipeById = useMemo(() => new Map(data.recipes.map((r) => [r.id, r])), [data.recipes]);
@@ -263,12 +307,25 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
     };
   }, [search, data, recipe.id]);
 
-  const addLine = (line: Omit<DraftLine, 'key' | 'quantity'>, at?: number) =>
+  const addLine = (line: Omit<DraftLine, 'key' | 'quantity'>, at?: number) => {
+    const key = crypto.randomUUID();
+    focusLine.current = key;
+    setPoolOpen(false);
     change((d) => {
       const lines = [...d.lines];
-      lines.splice(at ?? lines.length, 0, { ...line, key: crypto.randomUUID(), quantity: '' });
+      lines.splice(at ?? lines.length, 0, { ...line, key, quantity: '' });
       return { ...d, lines };
     });
+  };
+
+  // A line just added is ready for its quantity.
+  useEffect(() => {
+    if (!focusLine.current) return;
+    const field = document.getElementById(`qty-${focusLine.current}`);
+    focusLine.current = null;
+    field?.focus();
+    field?.scrollIntoView({ block: 'center' });
+  }, [draft.lines]);
   const editLine = (key: string, patch: Partial<DraftLine>) =>
     change((d) => ({ ...d, lines: d.lines.map((l) => (l.key === key ? { ...l, ...patch } : l)) }));
   const removeLine = (key: string) => change((d) => ({ ...d, lines: d.lines.filter((l) => l.key !== key) }));
@@ -324,9 +381,20 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
       onDragEnd={onDragEnd}
     >
     <div className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
-      <section className={`${card} order-2 lg:order-1 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:self-start lg:overflow-y-auto`} aria-label="Ingredient pool">
-        <h2 className={h2}>Add to recipe</h2>
-        <p className={`mt-1 ${muted}`}>Tap to add, or drag into the recipe.</p>
+      <section
+        className={`${card} lg:order-1 lg:sticky lg:top-4 lg:block lg:max-h-[calc(100vh-2rem)] lg:self-start lg:overflow-y-auto ${
+          poolOpen ? 'fixed inset-0 z-[70] overflow-y-auto rounded-none pb-24' : 'hidden'
+        }`}
+        aria-label="Ingredient pool"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <h2 className={h2}>Add to recipe</h2>
+          <button type="button" onClick={() => setPoolOpen(false)} className={`${secondary} lg:hidden`}>Close</button>
+        </div>
+        <p className={`mt-1 ${muted}`}>
+          <span className="lg:hidden">Tap an ingredient to add it.</span>
+          <span className="hidden lg:inline">Tap to add, or drag into the recipe.</span>
+        </p>
         <label htmlFor="pool-search" className="sr-only">Search ingredients</label>
         <input
           id="pool-search"
@@ -360,11 +428,19 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         )}
       </section>
 
-      <div className="order-1 space-y-6 lg:order-2">
+      <div className="space-y-6 lg:order-2">
         <section className={card}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className={h2}>Recipe</h2>
-            <SaveBadge state={save} onRetry={flush} />
+            <SaveBadge
+              state={save}
+              onRetry={flush}
+              onKeepMine={keepMine}
+              onConfirmLines={() => {
+                dirty.current = true;
+                void flush();
+              }}
+            />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="col-span-2 sm:col-span-4">
@@ -412,9 +488,15 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
         </section>
 
         <LinesZone active={!!dragging && dragging.startsWith(POOL_PREFIX)}>
-          <h2 className={h2}>Ingredients in this recipe</h2>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className={h2}>Ingredients in this recipe</h2>
+            <button type="button" onClick={() => setPoolOpen(true)} className={`${primary} lg:hidden`}>+ Add ingredient</button>
+          </div>
           {draft.lines.length === 0 ? (
-            <p className={`mt-2 ${muted}`}>Empty. Tap an ingredient in “Add to recipe”, or drag it here.</p>
+            <p className={`mt-2 ${muted}`}>
+              Empty. <span className="lg:hidden">Tap “+ Add ingredient”.</span>
+              <span className="hidden lg:inline">Tap an ingredient in “Add to recipe”, or drag it here.</span>
+            </p>
           ) : (
             <SortableContext items={draft.lines.map((l) => l.key)} strategy={verticalListSortingStrategy}>
             <ul className="mt-2 divide-y divide-gray-100">
@@ -464,11 +546,17 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                       </button>
                     </div>
                     {issue && line.quantity.trim() !== '' && <p className={`mt-2 ${badgeWarn}`}>{issueText(issue)}</p>}
+                    {!positive(line.quantity) && (
+                      <p className={`mt-1 ${muted}`}>{line.quantity.trim() ? 'Type a number, like 150 or 0.5' : 'Type how much goes in one batch'}</p>
+                    )}
                   </SortableLine>
                 );
               })}
             </ul>
             </SortableContext>
+          )}
+          {draft.lines.length > 0 && (
+            <button type="button" onClick={() => setPoolOpen(true)} className={`mt-3 w-full ${secondary} lg:hidden`}>+ Add another ingredient</button>
           )}
         </LinesZone>
 
@@ -599,7 +687,7 @@ function SortableLine({ id, name, children }: { id: string; name: string; childr
         {...attributes}
         {...listeners}
         aria-label={`Move ${name}`}
-        className="grid min-h-11 w-9 shrink-0 cursor-grab touch-none place-items-center self-start rounded-sm text-mazcina-sage hover:bg-mazcina-wood/10 hover:text-mazcina-wood active:cursor-grabbing"
+        className="grid min-h-11 w-11 shrink-0 cursor-grab touch-none place-items-center self-start rounded-sm text-mazcina-green hover:bg-mazcina-wood/10 hover:text-mazcina-wood active:cursor-grabbing"
       >
         <svg aria-hidden="true" viewBox="0 0 16 24" className="h-6 w-4 fill-current">
           <circle cx="4" cy="5" r="2" /><circle cx="12" cy="5" r="2" />
@@ -613,18 +701,55 @@ function SortableLine({ id, name, children }: { id: string; name: string; childr
 }
 
 
-function SaveBadge({ state, onRetry }: { state: SaveState; onRetry: () => void }) {
-  if (state.kind === 'saved') return <p role="status" className={badgeOk}>Saved</p>;
+function SaveBadge({
+  state,
+  onRetry,
+  onKeepMine,
+  onConfirmLines,
+}: {
+  state: SaveState;
+  onRetry: () => void;
+  onKeepMine: (conflict: RecipeConflict) => void;
+  onConfirmLines: () => void;
+}) {
+  if (state.kind === 'saved') {
+    return state.pending ? (
+      <p role="status" className={badgeWarn}>Saved, but {state.pending}</p>
+    ) : (
+      <p role="status" className={badgeOk}>Saved</p>
+    );
+  }
   if (state.kind === 'saving' || state.kind === 'waiting') return <p role="status" className={badgeWarn}>Saving…</p>;
   if (state.kind === 'incomplete') return <p role="status" className={badgeWarn}>Not saved yet: {state.reason}</p>;
-  // Retrying cannot win against someone else's newer version; only a reload can.
-  const stale = state.message.startsWith('Someone else');
+  if (state.kind === 'leftover') {
+    return (
+      <div role="status" className="flex flex-wrap items-center gap-2">
+        <p className={badgeWarn}>
+          Last time {state.count === 1 ? 'an ingredient was' : `${state.count} ingredients were`} added without a quantity and not saved. Add
+          {state.count === 1 ? ' it' : ' them'} again if needed.
+        </p>
+        <button type="button" onClick={onConfirmLines} className={secondary}>The list is complete</button>
+      </div>
+    );
+  }
+  if (state.kind === 'conflict') {
+    const { by, at } = state.conflict;
+    return (
+      <div role="alert" className="w-full rounded-md border-l-4 border-red-600 bg-red-50 p-3">
+        <p className="text-sm font-semibold text-red-800">
+          {by} changed this recipe on {whenFormat.format(new Date(at))}, so your last change is not saved yet.
+        </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <button type="button" onClick={() => onKeepMine(state.conflict)} className={secondary}>Keep my version</button>
+          <button type="button" onClick={() => window.location.reload()} className={secondary}>Show theirs</button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div role="alert" className="flex flex-wrap items-center gap-2">
       <p className="text-sm font-semibold text-red-700">Not saved: {state.message}</p>
-      <button type="button" onClick={stale ? () => window.location.reload() : onRetry} className={secondary}>
-        {stale ? 'Reload' : 'Retry'}
-      </button>
+      <button type="button" onClick={onRetry} className={secondary}>Retry</button>
     </div>
   );
 }

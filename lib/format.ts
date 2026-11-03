@@ -59,6 +59,7 @@ const ISSUE_TEXT: Record<IssueCode, (subject: string) => string> = {
   sub_recipe_no_yield: (s) => `${s} needs a batch yield`,
   cycle: (s) => `${s} would contain itself`,
   too_deep: (s) => `${s}: too many preps inside preps`,
+  unfinished_line: (s) => `${s}: an ingredient was added without a quantity`,
 };
 
 export function issueText(issue: Issue): string {

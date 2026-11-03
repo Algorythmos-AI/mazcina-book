@@ -156,6 +156,7 @@ export async function cancelGiftCard(_prev: ActionResult | null, form: FormData)
   const cardId = uuid.safeParse(field(form, 'cardId'));
   if (!cardId.success) return { ok: false, error: 'Card not found' };
   const note = field(form, 'note').slice(0, 200);
+  if (!note) return { ok: false, error: 'Say why the card is being cancelled, for the record' };
   const result = await run(user, async () => {
     const { writtenOffCents } = await cancelCard(cardId.data, user.email, note);
     await log(user, 'cancel', cardId.data, { writtenOffCents, note });

@@ -79,6 +79,8 @@ export interface Recipe {
   lines: RecipeLine[];
   /** Ingredients used "as needed" (salt, frying oil, ...): listed in the recipe but not in its cost. */
   asNeeded?: string[];
+  /** Lines started on screen but not saved for lack of a quantity: the cost would be too low. */
+  pendingLines?: number;
   archived?: boolean;
 }
 
@@ -98,7 +100,8 @@ export type IssueCode =
   | 'sub_recipe_incomplete'
   | 'sub_recipe_no_yield'
   | 'cycle'
-  | 'too_deep';
+  | 'too_deep'
+  | 'unfinished_line';
 
 export interface Issue {
   code: IssueCode;
@@ -322,7 +325,8 @@ function costRecipeInner(recipe: Recipe, ctx: CostingContext, path: string[]): R
   const estimates = new Set<string>();
   const asNeeded = new Set<string>(recipe.asNeeded ?? []);
 
-  if (recipe.lines.length === 0) issues.push({ code: 'no_lines' });
+  if (recipe.lines.length === 0 && !recipe.pendingLines) issues.push({ code: 'no_lines' });
+  if (recipe.pendingLines && recipe.pendingLines > 0) issues.push({ code: 'unfinished_line', subject: recipe.name });
 
   for (const line of recipe.lines) {
     let result: Partial_<Decimal>;

@@ -77,6 +77,7 @@ export const loadCostingData = cache(async (): Promise<CostingData> => {
       yieldQuantity: r.yieldQuantity,
       yieldUnit: r.yieldUnit,
       yieldEstimated: r.yieldEstimated,
+      pendingLines: r.pendingLines,
       portions: r.portions,
       asNeeded: r.asNeeded,
       notes: r.notes,

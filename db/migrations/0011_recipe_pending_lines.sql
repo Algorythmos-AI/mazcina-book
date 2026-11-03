@@ -1,0 +1,2 @@
+ALTER TABLE "recipes" ADD COLUMN "pending_lines" integer DEFAULT 0 NOT NULL;--> statement-breakpoint
+ALTER TABLE "recipes" ADD CONSTRAINT "recipes_pending_lines_valid" CHECK ("recipes"."pending_lines" >= 0);

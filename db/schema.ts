@@ -143,6 +143,8 @@ export const recipes = pgTable(
     /** Ingredients used "as needed" (salt, frying oil, ...): shown with the recipe, left out of its cost. */
     asNeeded: text('as_needed').array().notNull().default(sql`'{}'::text[]`),
     notes: text('notes'),
+    /** Lines added on screen but not saved because they had no quantity yet. Above zero, the recipe is not fully costed. */
+    pendingLines: integer('pending_lines').notNull().default(0),
     ...tracked,
   },
   (t) => [
@@ -153,6 +155,7 @@ export const recipes = pgTable(
     check('recipes_yield_positive', sql`${t.yieldQuantity} IS NULL OR ${t.yieldQuantity} > 0`),
     // A prep is costed per unit of what it makes, so it must say how much that is.
     check('recipes_prep_has_yield', sql`${t.type} <> 'prep' OR ${t.yieldQuantity} IS NOT NULL`),
+    check('recipes_pending_lines_valid', sql`${t.pendingLines} >= 0`),
   ],
 );
 

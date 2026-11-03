@@ -133,7 +133,7 @@ export default async function CardPage({ params }: PageProps<'/cards/[id]'>) {
             </div>
             <p className={`mt-2 ${muted}`}>Recorded in the history with your name. To undo a single use, press Undo on it instead.</p>
           </ActionForm>
-          <ActionForm action={cancelGiftCard} submitLabel="Cancel this card" savedLabel="Card cancelled" className="mt-5">
+          <ActionForm action={cancelGiftCard} submitLabel="Cancel this card" savedLabel="Card cancelled" confirm="Cancel this card for good? Whatever is left on it is written off, and this cannot be undone." className="mt-5">
             <input type="hidden" name="cardId" value={card.id} />
             <label htmlFor="cancel-note" className={label}>Why cancel it</label>
             <input id="cancel-note" name="note" required maxLength={200} placeholder="Refunded in full by bank transfer" className={input} />

@@ -36,6 +36,7 @@ export interface RecipeDto extends Recipe {
   portions: string;
   asNeeded: string[];
   notes: string | null;
+  pendingLines: number;
   version: number;
   archived: boolean;
 }

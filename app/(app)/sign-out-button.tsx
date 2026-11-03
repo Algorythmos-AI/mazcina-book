@@ -9,6 +9,8 @@ export function SignOutButton() {
     <button
       type="button"
       onClick={async () => {
+        // Coming back needs a new code from email, so a stray tap should not cost that.
+        if (!window.confirm('Sign out? To come back you will need a new code from your email.')) return;
         await authClient.signOut();
         router.replace('/sign-in');
         router.refresh();
