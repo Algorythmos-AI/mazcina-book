@@ -10,7 +10,7 @@ import { Stocktake, type CountItem } from './stocktake';
 export const metadata: Metadata = { title: 'Stocktake' };
 
 export default async function StocktakePage() {
-  await requireRole('owner', 'chef');
+  const user = await requireRole('owner', 'chef');
   const [data, stock] = await Promise.all([loadCostingData(), loadStock()]);
   const items: CountItem[] = data.ingredients
     .filter((i) => !i.archived)
@@ -32,7 +32,7 @@ export default async function StocktakePage() {
         <Link href="/stock" className={`${muted} font-semibold hover:text-mazcina-wood`}>← Stock</Link>
         <h1 className={`mt-1 ${h1}`}>Stocktake</h1>
       </div>
-      {items.length === 0 ? <p className={muted}>No ingredients yet.</p> : <Stocktake items={items} />}
+      {items.length === 0 ? <p className={muted}>No ingredients yet.</p> : <Stocktake items={items} userEmail={user.email} />}
     </div>
   );
 }
