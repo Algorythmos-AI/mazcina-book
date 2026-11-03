@@ -401,3 +401,17 @@ export const stockMovements = pgTable(
     check('stock_movements_waste_negative', sql`${t.kind} <> 'waste' OR ${t.quantityDelta} < 0`),
   ],
 );
+
+// ------------------------------------------------------------- idempotency
+
+/**
+ * One row per save that must not happen twice (a delivery, a gift card
+ * redemption). The phone makes up the key when the form opens and sends it
+ * with every try, so a retry after a dropped connection is recognised.
+ * Rows older than 30 days are cleared by the nightly job.
+ */
+export const idempotencyKeys = pgTable('idempotency_keys', {
+  key: uuid('key').primaryKey(),
+  action: text('action').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});

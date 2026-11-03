@@ -3,6 +3,7 @@ import { alert } from '@/lib/alert';
 import { cronAuthorised } from '@/lib/cron';
 import { exportEverything } from '@/lib/export';
 import { todaySydney } from '@/lib/format';
+import { clearOldKeys } from '@/lib/idempotency';
 import { daysAgo } from '@/lib/impact';
 
 const PREFIX = 'backups/';
@@ -38,6 +39,7 @@ async function backUp(): Promise<Response> {
   const { blobs } = await list({ prefix: PREFIX, limit: 1000 });
   const expired = blobs.filter((b) => /^backups\/\d{4}-\d{2}-\d{2}\.json$/.test(b.pathname) && b.pathname < cutoff).map((b) => b.url);
   if (expired.length > 0) await del(expired);
+  await clearOldKeys();
 
   const rows = Object.fromEntries(Object.entries(data.tables).map(([name, table]) => [name, table.length]));
   console.log(`[backup] wrote ${blob.pathname} (${body.length} bytes), removed ${expired.length} old`, rows);

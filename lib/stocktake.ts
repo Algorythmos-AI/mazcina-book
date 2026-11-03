@@ -36,12 +36,16 @@ export async function saveCount(
 ): Promise<CountOutcome> {
   const { stockMovements } = schema;
   const [newer] = await tx
-    .select({ actorEmail: stockMovements.actorEmail, createdAt: stockMovements.createdAt })
+    .select({ actorEmail: stockMovements.actorEmail, createdAt: stockMovements.createdAt, countedQuantity: stockMovements.countedQuantity })
     .from(stockMovements)
     .where(and(eq(stockMovements.ingredientId, input.ingredientId), eq(stockMovements.kind, 'count'), gt(stockMovements.createdAt, input.countedAt)))
     .orderBy(desc(stockMovements.createdAt))
     .limit(1);
-  if (newer) return { saved: false, countedBy: newer.actorEmail, countedAt: newer.createdAt };
+  if (newer) {
+    // The same count sent again after a dropped connection: it is already in.
+    if (newer.actorEmail === input.actorEmail && newer.countedQuantity !== null && input.counted.eq(newer.countedQuantity)) return { saved: true };
+    return { saved: false, countedBy: newer.actorEmail, countedAt: newer.createdAt };
+  }
 
   const [{ total }] = await tx
     .select({ total: sql<string | null>`sum(${stockMovements.quantityDelta})` })

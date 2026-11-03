@@ -60,6 +60,21 @@ describe('a stocktake count', () => {
   });
 });
 
+describe('a stocktake sent twice', () => {
+  it('counts once when the same count arrives again after a dropped connection', async () => {
+    const salt = await ingredient();
+    const countedAt = new Date(Date.now() - 5 * 60_000);
+    expect(await count(salt.id, '2000', countedAt)).toEqual({ saved: true });
+    expect(await count(salt.id, '2000', countedAt)).toEqual({ saved: true });
+    expect(await onHand(salt.id)).toBe(2000);
+    const [{ rows }] = await db
+      .select({ rows: sql<number>`count(*)::int` })
+      .from(schema.stockMovements)
+      .where(eq(schema.stockMovements.ingredientId, salt.id));
+    expect(rows).toBe(1);
+  });
+});
+
 describe('clampCountedAt', () => {
   const now = new Date('2026-11-03T10:00:00Z');
   it('trusts a recent time and pulls in a wrong clock', () => {

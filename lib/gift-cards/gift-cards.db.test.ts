@@ -412,3 +412,15 @@ describe('checkout', () => {
     }
   });
 });
+
+describe('a redemption sent twice', () => {
+  it('takes the money off once when the same tap arrives again', async () => {
+    const { cardId } = await issued(5000);
+    const key = crypto.randomUUID();
+    await redeem(cardId, 1000, 'staff@example.com', null, key);
+    await expect(redeem(cardId, 1000, 'staff@example.com', null, key)).rejects.toThrow(/Already taken off/);
+    const [card] = await db.select().from(giftCards).where(eq(giftCards.id, cardId));
+    expect(card.balanceCents).toBe(4000);
+    await db.delete(schema.idempotencyKeys).where(eq(schema.idempotencyKeys.key, key));
+  });
+});

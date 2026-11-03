@@ -1,5 +1,6 @@
 'use client';
 
+import { safely } from './action-form';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import type { ActionResult } from '@/lib/types';
@@ -28,7 +29,7 @@ export function ArchiveButton({
         onClick={() =>
           start(async () => {
             setError(null);
-            const result = await action(!archived);
+            const result = await safely(() => action(!archived));
             if (!result.ok) return setError(result.error);
             if (redirectTo && !archived) router.push(redirectTo);
             else router.refresh();

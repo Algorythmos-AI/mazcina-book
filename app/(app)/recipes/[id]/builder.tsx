@@ -401,7 +401,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                 type="checkbox"
                 checked={draft.yieldEstimated}
                 onChange={(e) => change((d) => ({ ...d, yieldEstimated: e.target.checked }))}
-                className="mt-1 size-4 accent-mazcina-wood"
+                className="mt-0.5 size-6 shrink-0 accent-mazcina-wood"
               />
               <span>
                 Estimated, not weighed yet.{' '}

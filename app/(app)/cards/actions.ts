@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { db, schema } from '@/db';
-import { parseDecimalInput } from '@/lib/costing';
+import { parseMoneyInput } from '@/lib/costing';
 import { GiftCardError } from '@/lib/gift-cards/config';
 import { adjustBalance, cancelCard, clearHold, findCardByCode, redeem, reverseRedemption } from '@/lib/gift-cards/core';
 import { queueResend, sendPendingEmails } from '@/lib/gift-cards/outbox';
@@ -72,14 +72,15 @@ export async function lookupCard(_prev: ActionResult | null, form: FormData): Pr
 export async function redeemCard(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
   const user = await requireRole();
   const cardId = uuid.safeParse(field(form, 'cardId'));
-  const parsed = parseDecimalInput(field(form, 'amount').replace(/^\$/, ''));
+  const parsed = parseMoneyInput(field(form, 'amount'));
   if (!cardId.success) return { ok: false, error: 'Card not found' };
   if (parsed === null || !/^\d+(\.\d{1,2})?$/.test(parsed)) return { ok: false, error: 'Type the amount in dollars, like 45 or 45.50' };
   const amountCents = Math.round(Number(parsed) * 100);
   const note = field(form, 'note').slice(0, 120) || null;
 
   const result = await run(user, async () => {
-    const { balanceCents } = await redeem(cardId.data, amountCents, user.email, note);
+    const requestKey = uuid.safeParse(field(form, 'requestKey'));
+    const { balanceCents } = await redeem(cardId.data, amountCents, user.email, note, requestKey.success ? requestKey.data : null);
     await log(user, 'redeem', cardId.data, { amountCents, balanceCents });
   });
   if (result.ok) revalidatePath('/cards', 'layout');
@@ -114,7 +115,7 @@ export async function resendCard(cardId: string): Promise<ActionResult> {
 }
 
 const dollarsToCents = (raw: string): number | null => {
-  const parsed = parseDecimalInput(raw.replace(/^\$/, ''));
+  const parsed = parseMoneyInput(raw);
   return parsed !== null && /^\d+(\.\d{1,2})?$/.test(parsed) ? Math.round(Number(parsed) * 100) : null;
 };
 

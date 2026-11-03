@@ -477,3 +477,14 @@ export function longestChainThrough(uses: Map<string, string[]>, recipeId: strin
   };
   return deepest(recipeId, uses, new Set()) + deepest(recipeId, usedBy, new Set()) - 1;
 }
+
+/**
+ * Parse a price typed on a phone: everything `parseDecimalInput` accepts, plus
+ * a leading "$" and thousands written with commas when a dot marks the cents
+ * ("$1,234.50"). "1,234" alone is still refused: it could be 1234 or 1.234.
+ */
+export function parseMoneyInput(raw: string): string | null {
+  const text = raw.trim().replace(/^\$\s*/, '');
+  if (/^\d{1,3}(,\d{3})+\.\d+$/.test(text)) return parseDecimalInput(text.replace(/,/g, ''));
+  return parseDecimalInput(text);
+}
