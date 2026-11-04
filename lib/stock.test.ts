@@ -19,6 +19,11 @@ describe('stockLine', () => {
     expect(line(null, null)).toEqual({ status: 'uncounted', toOrder: null, value: null });
   });
 
+  it('asks for a count when waste took the books below zero, and values it at nothing', () => {
+    expect(line('-500', '10000')).toEqual({ status: 'count_needed', toOrder: '10000', value: '0' });
+    expect(line('-500', null)).toEqual({ status: 'count_needed', toOrder: null, value: '0' });
+  });
+
   it('has nothing to say about ordering without a par level', () => {
     expect(line('500', null)).toEqual({ status: 'no_par', toOrder: null, value: '0.75' });
     expect(line('500', '0')).toEqual({ status: 'no_par', toOrder: null, value: '0.75' });

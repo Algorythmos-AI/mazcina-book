@@ -119,6 +119,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
             {level.value && <span className={`ml-2 ${muted}`}>worth {money(level.value)}</span>}
             {level.status === 'low' && <span className={`ml-2 ${badgeWarn}`}>Low</span>}
             {level.status === 'out' && <span className={`ml-2 ${badgeWarn}`}>Out</span>}
+            {level.status === 'count_needed' && <span className={`ml-2 ${badgeWarn}`}>Below zero on the books: do a count</span>}
           </p>
           <div className="mt-4 grid gap-6 sm:grid-cols-2">
             <ActionForm action={setParLevel} submitLabel="Save minimum" key={`par-${ingredient.version}`}>
@@ -151,6 +152,10 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
               </div>
               <label htmlFor="waste-note" className="sr-only">Reason</label>
               <input id="waste-note" name="note" maxLength={120} placeholder="Reason (optional)" className={`mt-2 ${input}`} />
+              <label className="mt-2 flex min-h-11 items-center gap-2 text-sm">
+                <input type="checkbox" name="beyondBooks" className="size-5 accent-mazcina-wood" />
+                Record it even if it is more than the books show
+              </label>
             </ActionForm>
           </div>
           {movements.length > 0 && (

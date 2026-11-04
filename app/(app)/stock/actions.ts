@@ -9,14 +9,17 @@ import { db, schema } from '@/db';
 import { audit, decimal, Invalid, mutate, parse, text, unit, uuid, type Tx } from '@/lib/action-helpers';
 import { convertToBase } from '@/lib/costing';
 import { todaySydney } from '@/lib/format';
-import { countDelta, formatStock } from '@/lib/stock';
+import { formatStock } from '@/lib/stock';
+import { clampCountedAt, saveCount } from '@/lib/stocktake';
 import type { ActionResult } from '@/lib/types';
 
 const { ingredients, stockMovements, ingredientPrices, suppliers } = schema;
 const MAX_LINES = 400;
 
 const quantityLine = z.object({ ingredientId: uuid, quantity: z.string().max(20), unit });
-const stocktakePayload = z.object({ lines: z.array(quantityLine).min(1).max(MAX_LINES) });
+const stocktakePayload = z.object({
+  lines: z.array(quantityLine.extend({ countedAt: z.number().int().positive().nullable().optional() })).min(1).max(MAX_LINES),
+});
 const deliveryPayload = z.object({
   supplierId: uuid.nullable(),
   lines: z
@@ -62,30 +65,32 @@ function toBase(ingredient: Ingredient, raw: string, rawUnit: z.infer<typeof uni
 /**
  * Records a stocktake: for each line, what is physically there. Each count is
  * stored with the difference it made, so shrinkage is visible afterwards.
- * Lines left blank on the screen are simply not sent and stay untouched.
+ * Lines left blank on the screen are simply not sent and stay untouched. A
+ * line someone else counted more recently is skipped and named in the result.
  */
-export async function recordStocktake(input: z.infer<typeof stocktakePayload>): Promise<ActionResult<{ counted: number }>> {
+export async function recordStocktake(
+  input: z.infer<typeof stocktakePayload>,
+): Promise<ActionResult<{ counted: number; skipped: { name: string; by: string; at: string }[] }>> {
   const result = await mutate(async (user) => {
     const payload = parse(stocktakePayload, input, 'Stocktake');
     if (new Set(payload.lines.map((l) => l.ingredientId)).size !== payload.lines.length) throw new Invalid('An ingredient appears twice');
     const batchId = randomUUID();
+    const now = new Date();
+    const skipped: { name: string; by: string; at: string }[] = [];
     await db.transaction(async (tx) => {
       // Always lock in the same order so two stocktakes at once cannot deadlock.
       for (const line of [...payload.lines].sort((a, b) => a.ingredientId.localeCompare(b.ingredientId))) {
         const ingredient = await lockIngredient(tx, line.ingredientId);
         const counted = toBase(ingredient, line.quantity, line.unit, `${ingredient.name} count`, { allowZero: true });
-        await tx.insert(stockMovements).values({
-          ingredientId: ingredient.id,
-          kind: 'count',
-          quantityDelta: countDelta(counted, await onHand(tx, ingredient.id)).toString(),
-          countedQuantity: counted.toString(),
-          batchId,
-          actorEmail: user.email,
-        });
+        const outcome = await saveCount(tx, { ingredientId: ingredient.id, counted, countedAt: clampCountedAt(line.countedAt, now), batchId, actorEmail: user.email });
+        if (!outcome.saved) skipped.push({ name: ingredient.name, by: outcome.countedBy, at: outcome.countedAt.toISOString() });
       }
-      await audit(tx, user, 'stocktake', 'stock', batchId, { after: { name: payload.lines.length === 1 ? '1 item' : `${payload.lines.length} items`, lines: payload.lines.length } });
+      const counted = payload.lines.length - skipped.length;
+      if (counted > 0) {
+        await audit(tx, user, 'stocktake', 'stock', batchId, { after: { name: counted === 1 ? '1 item' : `${counted} items`, lines: counted } });
+      }
     });
-    return { counted: payload.lines.length };
+    return { counted: payload.lines.length - skipped.length, skipped };
   });
   if (result.ok) revalidatePath('/', 'layout');
   return result;
@@ -146,7 +151,11 @@ export async function recordDelivery(input: z.infer<typeof deliveryPayload>): Pr
   return result;
 }
 
-/** Takes stock off for waste, spoilage or a staff meal. Never below zero: if the books are wrong, do a count instead. */
+/**
+ * Takes stock off for waste, spoilage or a staff meal. Going below what the
+ * books show has to be confirmed; the ingredient then shows "Count needed"
+ * until the next stocktake sets the real figure.
+ */
 export async function recordWaste(_prev: ActionResult | null, form: FormData): Promise<ActionResult> {
   const result = await mutate(async (user) => {
     const ingredientId = parse(uuid, text(form, 'ingredientId'), 'Ingredient');
@@ -156,8 +165,10 @@ export async function recordWaste(_prev: ActionResult | null, form: FormData): P
       const ingredient = await lockIngredient(tx, ingredientId);
       const amount = toBase(ingredient, text(form, 'quantity'), rawUnit, 'Quantity');
       const current = new DecimalJs((await onHand(tx, ingredient.id)) ?? 0);
-      if (amount.gt(current)) {
-        throw new Invalid(`Only ${formatStock(current, ingredient.baseUnit)} is on the books. If the shelf says otherwise, do a count instead.`);
+      if (amount.gt(current) && form.get('beyondBooks') !== 'on') {
+        throw new Invalid(
+          `Only ${formatStock(current, ingredient.baseUnit)} is on the books. Tick "Record it even if it is more than the books show" to take it off anyway, then do a count.`,
+        );
       }
       const [row] = await tx
         .insert(stockMovements)
