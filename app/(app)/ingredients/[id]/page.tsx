@@ -5,7 +5,7 @@ import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
 import { badgeWarn, card, h1, h2, input, label, muted } from '@/components/ui';
 import { ingredientUnitCost, selectPrice, type IngredientPrice } from '@/lib/costing';
-import { displayDate, issueText, money, plain, unitPrice, unitsForIngredient } from '@/lib/format';
+import { displayDate, issueText, money, plain, unitName, unitPrice, unitsForIngredient } from '@/lib/format';
 import { contextFrom, loadCostingData, loadMovements, loadStock } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
 import { countUnit, formatStock, stockLine } from '@/lib/stock';
@@ -15,7 +15,11 @@ import { IngredientFields } from '../ingredient-fields';
 import { lastPrice } from '../last-price';
 import { PriceForm } from '../price-form';
 
-export const metadata: Metadata = { title: 'Ingredient' };
+export async function generateMetadata({ params }: PageProps<'/ingredients/[id]'>): Promise<Metadata> {
+  const { id } = await params;
+  const ingredient = (await loadCostingData()).ingredients.find((i) => i.id === id);
+  return { title: ingredient?.name ?? 'Ingredient' };
+}
 
 export default async function IngredientPage({ params }: PageProps<'/ingredients/[id]'>) {
   await requireRole('owner', 'chef');
@@ -97,7 +101,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
                 <label htmlFor="par-unit" className="sr-only">Unit</label>
                 <select id="par-unit" name="unit" defaultValue={stockUnit} className={`${input} w-24`}>
                   {units.map((u) => (
-                    <option key={u} value={u}>{u}</option>
+                    <option key={u} value={u}>{unitName(u)}</option>
                   ))}
                 </select>
               </div>
@@ -112,7 +116,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
                 <label htmlFor="waste-unit" className="sr-only">Unit</label>
                 <select id="waste-unit" name="unit" defaultValue={stockUnit} className={`${input} w-24`}>
                   {units.map((u) => (
-                    <option key={u} value={u}>{u}</option>
+                    <option key={u} value={u}>{unitName(u)}</option>
                   ))}
                 </select>
               </div>

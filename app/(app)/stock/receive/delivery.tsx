@@ -7,6 +7,7 @@ import { Affix } from '@/components/affix';
 import { SearchPick } from '@/components/search-pick';
 import { badgeOk, card, h2, input, label, link, muted, primary, secondary } from '@/components/ui';
 import { parseDecimalInput, parseMoneyInput, type Unit } from '@/lib/costing';
+import { unitName } from '@/lib/format';
 import { recordDelivery } from '../actions';
 
 export interface DeliveryItem {
@@ -166,14 +167,14 @@ function DeliveryForm({ items, suppliers }: { items: DeliveryItem[]; suppliers: 
                   <label htmlFor={`d-unit-${line.key}`} className="sr-only">Unit, line {index + 1}</label>
                   <select id={`d-unit-${line.key}`} value={line.unit} onChange={(e) => edit(line.key, { unit: e.target.value as Unit })} className={input}>
                     {(item?.units ?? [line.unit]).map((u) => (
-                      <option key={u} value={u}>{u}</option>
+                      <option key={u} value={u}>{unitName(u)}</option>
                     ))}
                   </select>
                 </div>
                 <div>
                   <label htmlFor={`d-paid-${line.key}`} className="sr-only">Amount paid for this line, optional</label>
                   <Affix prefix="$">
-                    <input id={`d-paid-${line.key}`} inputMode="decimal" placeholder="paid (optional)" value={line.totalPaid} onChange={(e) => edit(line.key, { totalPaid: e.target.value })} className={`${input} pl-7`} />
+                    <input id={`d-paid-${line.key}`} inputMode="decimal" placeholder="paid" value={line.totalPaid} onChange={(e) => edit(line.key, { totalPaid: e.target.value })} className={`${input} pl-7`} />
                   </Affix>
                 </div>
                 <button

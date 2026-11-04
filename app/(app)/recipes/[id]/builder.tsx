@@ -31,7 +31,7 @@ import {
   wouldCreateCycle,
   type Unit,
 } from '@/lib/costing';
-import { issueText, money, moneyFromCents, plain, unitsForDimension, unitsForIngredient } from '@/lib/format';
+import { issueText, money, moneyFromCents, plain, unitName, unitsForDimension, unitsForIngredient } from '@/lib/format';
 import type { CostingData, RecipeDto } from '@/lib/types';
 import { saveRecipe, type RecipeConflict } from '../../actions';
 
@@ -466,7 +466,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
               <label htmlFor="recipe-yield-unit" className={label}>Unit</label>
               <select id="recipe-yield-unit" value={draft.yieldUnit} onChange={(e) => change((d) => ({ ...d, yieldUnit: e.target.value as Unit }))} className={input}>
                 {(Object.keys(UNITS) as Unit[]).map((u) => (
-                  <option key={u} value={u}>{u}</option>
+                  <option key={u} value={u}>{unitName(u)}</option>
                 ))}
               </select>
             </div>
@@ -538,7 +538,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
                         className={`${input} max-w-24`}
                       >
                         {(units.includes(line.unit) ? units : [line.unit, ...units]).map((u) => (
-                          <option key={u} value={u}>{u}</option>
+                          <option key={u} value={u}>{unitName(u)}</option>
                         ))}
                       </select>
                       <button type="button" onClick={() => removeLine(line.key)} className={`${secondary} ml-auto`} aria-label={`Remove ${name} (line ${index + 1})`}>

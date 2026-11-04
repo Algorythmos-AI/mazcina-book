@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState, useSyncExternalStore, useTransition } from 'react';
 import { badgeOk, card, h2, input, link, muted, primary, secondary } from '@/components/ui';
 import { parseDecimalInput, type Unit } from '@/lib/costing';
+import { unitName } from '@/lib/format';
 import { recordStocktake } from '../actions';
 
 export interface CountItem {
@@ -194,7 +195,7 @@ function StocktakeForm({ items, userEmail }: { items: CountItem[]; userEmail: st
                     <label htmlFor={`count-unit-${item.id}`} className="sr-only">Unit for {item.name}</label>
                     <select id={`count-unit-${item.id}`} value={entry?.unit ?? item.defaultUnit} onChange={(e) => set(item, { unit: e.target.value as Unit })} className={`${input} w-24`}>
                       {item.units.map((u) => (
-                        <option key={u} value={u}>{u}</option>
+                        <option key={u} value={u}>{unitName(u)}</option>
                       ))}
                     </select>
                   </span>

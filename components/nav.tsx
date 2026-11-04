@@ -56,7 +56,7 @@ export function Nav({ role, giftCards, todo = 0 }: { role: Role; giftCards: bool
             key={item.href}
             href={item.href}
             aria-current={active ? 'page' : undefined}
-            className={`flex min-h-11 shrink-0 items-center border-b-2 transition-colors ${
+            className={`flex min-h-11 shrink-0 items-center border-b-2 transition-colors focus-visible:outline-offset-[-3px] ${
               active ? 'border-mazcina-wood text-mazcina-wood' : 'border-transparent hover:text-mazcina-wood'
             }`}
           >
