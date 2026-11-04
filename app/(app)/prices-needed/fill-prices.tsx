@@ -17,6 +17,28 @@ export interface FillRow {
   items: string[];
 }
 
+const SHOWN = 4;
+
+/** The dishes waiting on a price: a few names and the rest one tap away, so the price fields stay near the top. */
+function DishList({ items }: { items: string[] }) {
+  const [all, setAll] = useState(false);
+  const shown = all ? items : items.slice(0, SHOWN);
+  const hidden = items.length - shown.length;
+  return (
+    <p className={`mt-1 ${muted}`}>
+      {shown.join(', ')}
+      {hidden > 0 && (
+        <>
+          {' '}
+          <button type="button" onClick={() => setAll(true)} className={`${link} text-sm`}>
+            and {hidden} more
+          </button>
+        </>
+      )}
+    </p>
+  );
+}
+
 /**
  * One price after another, without leaving the page: each row saves on its
  * own (Enter on the price saves it), ticks off, and the next row's first
@@ -76,22 +98,24 @@ export function FillPrices({
                 needed by {row.items.length} {row.items.length === 1 ? 'dish' : 'dishes'}
               </span>
             </div>
-            <p className={`mt-1 ${muted}`}>{row.items.join(', ')}</p>
-            <PriceForm
-              compact
-              ingredient={row.ingredient}
-              suppliers={suppliers}
-              units={row.units}
-              last={row.last}
-              defaultSupplierId={row.defaultSupplierId}
-              defaultUnit={row.defaultUnit}
-              today={today}
-              gstRegistered={gstRegistered}
-              onSaved={(summary) => {
-                setDone((list) => [...list, { name: row.ingredient.name, summary }]);
-                focusNext.current = rows[index + 1]?.ingredient.id ?? null;
-              }}
-            />
+            <DishList items={row.items} />
+            <div className="mt-3">
+              <PriceForm
+                compact
+                ingredient={row.ingredient}
+                suppliers={suppliers}
+                units={row.units}
+                last={row.last}
+                defaultSupplierId={row.defaultSupplierId}
+                defaultUnit={row.defaultUnit}
+                today={today}
+                gstRegistered={gstRegistered}
+                onSaved={(summary) => {
+                  setDone((list) => [...list, { name: row.ingredient.name, summary }]);
+                  focusNext.current = rows[index + 1]?.ingredient.id ?? null;
+                }}
+              />
+            </div>
           </li>
         ))}
       </ol>

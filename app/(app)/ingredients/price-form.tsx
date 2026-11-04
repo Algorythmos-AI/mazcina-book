@@ -6,8 +6,8 @@ import { useId, useMemo, useRef, useState, useTransition } from 'react';
 import { isConnectionError, OFFLINE_MESSAGE } from '@/components/action-form';
 import { Affix } from '@/components/affix';
 import { checkbox, input, label, muted, primary, secondary } from '@/components/ui';
-import type { BaseUnit, Unit } from '@/lib/costing';
-import { money, unitPrice } from '@/lib/format';
+import { parseMoneyInput, type BaseUnit, type Unit } from '@/lib/costing';
+import { money, unitName, unitPrice } from '@/lib/format';
 import { priceWarnings, typedUnitCost, type GstMode, type PriceWarning } from '@/lib/price-check';
 import { addPrice } from '../actions';
 
@@ -96,6 +96,8 @@ export function PriceForm({
     [ingredient, packSize, packUnit, packPrice, gst, gstRegistered],
   );
   const lastCost = last?.unitCost ? new DecimalJs(last.unitCost) : null;
+  // Said while typing, not after Save: "1,234" could be 1234 or 1.234.
+  const unclearPrice = packPrice.trim() !== '' && parseMoneyInput(packPrice) === null;
 
   const save = (checked: boolean) => {
     setError(null);
@@ -154,7 +156,7 @@ export function PriceForm({
             inputMode="decimal"
             enterKeyHint="next"
             required
-            placeholder="5"
+            placeholder="e.g. 5"
             value={packSize}
             onChange={(e) => setPackSize(e.target.value)}
             className={input}
@@ -164,7 +166,7 @@ export function PriceForm({
           <label htmlFor={`${id}-unit`} className={label}>Unit</label>
           <select id={`${id}-unit`} value={packUnit} onChange={(e) => setPackUnit(e.target.value as Unit)} className={input}>
             {units.map((u) => (
-              <option key={u} value={u}>{u}</option>
+              <option key={u} value={u}>{unitName(u)}</option>
             ))}
           </select>
         </div>
@@ -177,7 +179,7 @@ export function PriceForm({
               inputMode="decimal"
               enterKeyHint={compact ? 'done' : 'next'}
               required
-              placeholder={last ? last.packPrice : '22.50'}
+              placeholder={last ? undefined : 'e.g. 22.50'}
               value={packPrice}
               onChange={(e) => setPackPrice(e.target.value)}
               aria-describedby={`${id}-preview`}
@@ -194,7 +196,13 @@ export function PriceForm({
       </div>
 
       <p id={`${id}-preview`} className="mt-2 min-h-6 text-base font-semibold tabular-nums" aria-live="polite">
-        {next ? `= ${unitPrice(next, ingredient.baseUnit)}${gstRegistered && gst !== 'free' ? ' before GST' : ''}` : ''}
+        {unclearPrice ? (
+          <span className="text-amber-800">Type the price like 22.50 or 1234.50</span>
+        ) : next ? (
+          `= ${unitPrice(next, ingredient.baseUnit)}${gstRegistered && gst !== 'free' ? ' before GST' : ''}`
+        ) : (
+          ''
+        )}
         {last && (
           <span className={`ml-2 font-normal ${muted}`}>
             last {money(last.packPrice)} for {last.packSize} {last.packUnit} from {last.supplierName}

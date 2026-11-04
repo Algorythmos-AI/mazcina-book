@@ -8,7 +8,11 @@ import { requireRole } from '@/lib/session';
 import { setRecipeArchived } from '../../actions';
 import { RecipeBuilder } from './builder';
 
-export const metadata: Metadata = { title: 'Recipe' };
+export async function generateMetadata({ params }: PageProps<'/recipes/[id]'>): Promise<Metadata> {
+  const { id } = await params;
+  const recipe = (await loadCostingData()).recipes.find((r) => r.id === id);
+  return { title: recipe?.name ?? 'Recipe' };
+}
 
 export default async function RecipePage({ params }: PageProps<'/recipes/[id]'>) {
   await requireRole('owner', 'chef');

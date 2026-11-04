@@ -74,3 +74,8 @@ export function displayDate(iso: string): string {
   const [y, m, d] = iso.split('-');
   return `${d}/${m}/${y}`;
 }
+
+/** How a unit reads in a picker: a lone lowercase "l" looks like a bar or a 1. */
+export function unitName(unit: string): string {
+  return unit === 'l' ? 'L' : unit === 'ml' ? 'mL' : unit;
+}

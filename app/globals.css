@@ -50,8 +50,11 @@ html {
   scrollbar-color: var(--color-mazcina-sage) #f1f5f9;
 }
 
-/* Keyboard focus is always visible, whatever the element. */
-:where(a, button, summary, [role='button']):focus-visible {
-  outline: 3px solid var(--color-mazcina-wood);
-  outline-offset: 2px;
+/* Keyboard focus is always visible, whatever the element. In the base layer
+   so a component can still adjust it (the nav row clips an outer outline). */
+@layer base {
+  :where(a, button, summary, [role='button']):focus-visible {
+    outline: 3px solid var(--color-mazcina-wood);
+    outline-offset: 2px;
+  }
 }

@@ -11,7 +11,11 @@ import { requireRole } from '@/lib/session';
 import { setMenuItemArchived, updateMenuItem } from '../../actions';
 import { ItemFields } from '../item-fields';
 
-export const metadata: Metadata = { title: 'Menu item' };
+export async function generateMetadata({ params }: PageProps<'/menu/[id]'>): Promise<Metadata> {
+  const { id } = await params;
+  const item = (await loadMenus()).flatMap((m) => m.items).find((i) => i.id === id);
+  return { title: item?.name ?? 'Menu item' };
+}
 
 const RATING = {
   good: { badge: badgeOk, text: 'On target' },
