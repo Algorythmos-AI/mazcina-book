@@ -15,7 +15,8 @@ type Numeric = string | number | Decimal;
 
 export const GST_RATE = new D('0.1');
 const GST_DIVISOR = GST_RATE.plus(1);
-const MAX_DEPTH = 8;
+/** Most recipes in one chain (dish → prep → prep …) that costing will follow. */
+export const MAX_DEPTH = 8;
 
 export type Unit = 'g' | 'kg' | 'ml' | 'l' | 'each';
 export type BaseUnit = 'g' | 'ml' | 'each';
@@ -132,6 +133,8 @@ export interface CostingContext {
   recipes: Map<string, Recipe>;
   pricesByIngredient: Map<string, IngredientPrice[]>;
   asOf: string;
+  /** False when the venue cannot claim GST back, so GST stays in ingredient costs. */
+  gstRegistered: boolean;
   memo: Map<string, RecipeCost>;
 }
 
@@ -141,6 +144,8 @@ export function createContext(input: {
   prices: IngredientPrice[];
   /** ISO date; prices dated after this are ignored. */
   asOf: string;
+  /** Defaults to true, the usual case. */
+  gstRegistered?: boolean;
 }): CostingContext {
   const pricesByIngredient = new Map<string, IngredientPrice[]>();
   for (const price of input.prices) {
@@ -153,6 +158,7 @@ export function createContext(input: {
     recipes: new Map(input.recipes.map((r) => [r.id, r])),
     pricesByIngredient,
     asOf: input.asOf,
+    gstRegistered: input.gstRegistered ?? true,
     memo: new Map(),
   };
 }
@@ -224,11 +230,17 @@ export function selectPrice(
   return latest(prices);
 }
 
-/** Pack price with GST removed. Only divides when the price both includes GST and attracts it. */
-export function packPriceExGst(price: IngredientPrice): Decimal | null {
+/**
+ * What the pack really costs the venue. A GST-registered venue claims GST back,
+ * so it is removed when the price includes it. A venue that is not registered
+ * pays it for good, so it is added when a taxable price was quoted without it.
+ */
+export function packPriceExGst(price: IngredientPrice, gstRegistered = true): Decimal | null {
   const amount = dec(price.packPrice);
   if (!amount || amount.lt(0)) return null;
-  return price.priceIncludesGst && price.gstApplicable ? amount.div(GST_DIVISOR) : amount;
+  if (!price.gstApplicable) return amount;
+  if (gstRegistered) return price.priceIncludesGst ? amount.div(GST_DIVISOR) : amount;
+  return price.priceIncludesGst ? amount : amount.times(GST_DIVISOR);
 }
 
 type Partial_<T> = { ok: true; value: T; estimates?: string[]; asNeeded?: string[] } | { ok: false; issue: Issue };
@@ -242,7 +254,7 @@ function unitCost(ingredient: Ingredient, ctx: CostingContext): Partial_<Decimal
     ctx.asOf,
   );
   if (!price) return { ok: false, issue: { code: 'no_price', subject } };
-  const exGst = packPriceExGst(price);
+  const exGst = packPriceExGst(price, ctx.gstRegistered);
   if (!exGst || !positive(price.packSize)) {
     return { ok: false, issue: { code: 'invalid_price', subject } };
   }
@@ -381,7 +393,7 @@ export function costRecipe(recipeId: string, ctx: CostingContext): RecipeCost {
  * (directly or indirectly) contain itself. Call before saving a line.
  */
 export function wouldCreateCycle(
-  recipes: Map<string, Pick<Recipe, 'lines'>>,
+  recipes: Map<string, { lines: Pick<RecipeLine, 'subRecipeId'>[] }>,
   recipeId: string,
   subRecipeId: string,
 ): boolean {
@@ -446,4 +458,22 @@ export function parseDecimalInput(raw: string): string | null {
   if (/^\d{1,3},\d{3}$/.test(text)) return null;
   const normalised = text.replace(',', '.').replace(/\.$/, '');
   return new D(normalised.startsWith('.') ? `0${normalised}` : normalised).toString();
+}
+
+/**
+ * How many recipes are in the longest chain (dish → prep → prep …) that passes
+ * through `recipeId`, counting it once. `uses` maps each recipe to the preps it
+ * uses. Call after checking for cycles; a cycle is cut where it is found.
+ */
+export function longestChainThrough(uses: Map<string, string[]>, recipeId: string): number {
+  const usedBy = new Map<string, string[]>();
+  for (const [parent, subs] of uses) {
+    for (const sub of subs) usedBy.set(sub, [...(usedBy.get(sub) ?? []), parent]);
+  }
+  const deepest = (id: string, next: Map<string, string[]>, seen: Set<string>): number => {
+    if (seen.has(id)) return 0;
+    const path = new Set(seen).add(id);
+    return 1 + Math.max(0, ...(next.get(id) ?? []).map((n) => deepest(n, next, path)));
+  };
+  return deepest(recipeId, uses, new Set()) + deepest(recipeId, usedBy, new Set()) - 1;
 }

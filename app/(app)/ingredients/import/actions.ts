@@ -89,7 +89,7 @@ async function resolve(text: string): Promise<{ preview: ImportPreview; resolved
           gstApplicable: row.gstApplicable,
           priceIncludesGst: row.priceIncludesGst,
           effectiveDate: data.asOf,
-        });
+        }, data.settings.gstRegistered);
         if (exGst) {
           const next = exGst.div(packInBase);
           after = unitPrice(next, ingredient.baseUnit);

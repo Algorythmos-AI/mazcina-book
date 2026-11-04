@@ -233,6 +233,7 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
       prices: data.prices,
       recipes: data.recipes.map((r) => (r.id === recipe.id ? live : r)),
       asOf: data.asOf,
+      gstRegistered: data.settings.gstRegistered,
     });
     return costRecipe(recipe.id, ctx);
   }, [draft, data, recipe]);

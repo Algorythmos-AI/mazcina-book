@@ -77,6 +77,18 @@ describe('parsePriceList', () => {
     expect(one('Lemon,A,5,kg,22,50,no,no').errors.join(' ')).toContain('Too many columns');
   });
 
+  it('flags a decimal comma under a heading too, instead of saving $22', () => {
+    const [row] = parsePriceList('Item,Supplier,Size,Unit,Price\nLemon,A,5,kg,22,50').rows;
+    expect(row.errors.join(' ')).toContain('Too many columns');
+    // Trailing empty cells from a spreadsheet export are not extra columns.
+    expect(parsePriceList('Item,Supplier,Size,Unit,Price\nLemon,A,5,kg,22.50,,').rows[0].errors).toEqual([]);
+  });
+
+  it('refuses a price or pack size the database cannot hold', () => {
+    expect(one('Lemon\tA\t5\tkg\t250000').errors.join(' ')).toContain('over $100,000');
+    expect(one('Lemon\tA\t5\tkg\t1.123456').errors.join(' ')).toContain('decimal places');
+  });
+
   it('rejects an empty paste, a heading on its own, and an oversized paste', () => {
     expect(parsePriceList('  \n ').error).toBe('Paste your price list first');
     expect(parsePriceList('Ingredient,Supplier,Size,Unit,Price').error).toBe('Only a heading row was found');

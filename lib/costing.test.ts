@@ -169,6 +169,25 @@ describe('GST normalisation', () => {
     expect(p(false, true)).toBe('11');
     expect(p(false, false)).toBe('11');
   });
+
+  it('keeps GST in the cost when the venue cannot claim it back', () => {
+    const p = (priceIncludesGst: boolean, gstApplicable: boolean) =>
+      packPriceExGst(price({ ingredientId: 'x', packPrice: '10', priceIncludesGst, gstApplicable }), false)?.toString();
+    expect(p(true, true)).toBe('10');
+    expect(p(false, true)).toBe('11');
+    expect(p(false, false)).toBe('10');
+  });
+
+  it('carries the setting through a recipe cost', () => {
+    const recipe: Recipe = { id: 'r', name: 'R', portions: 1, lines: [{ id: 'l', ingredientId: 'oil', quantity: 1, unit: 'l' }] };
+    const taxed = [price({ ingredientId: 'oil', packUnit: 'l', packPrice: '10', gstApplicable: true })];
+    const cost = (gstRegistered: boolean) => {
+      const result = costRecipe('r', createContext({ ingredients: [oil], recipes: [recipe], prices: taxed, asOf: ASOF, gstRegistered }));
+      return result.status === 'ok' ? result.batchCost.toString() : result.status;
+    };
+    expect(cost(true)).toBe('10');
+    expect(cost(false)).toBe('11');
+  });
 });
 
 describe('a price change flows through', () => {

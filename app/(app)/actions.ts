@@ -6,7 +6,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { db, schema } from '@/db';
-import { convertToBase, wouldCreateCycle, UNITS, type Unit } from '@/lib/costing';
+import { convertToBase, UNITS } from '@/lib/costing';
+import { assertCanStopBeingPrep, assertPrepsUsable, assertUnitCanChange, lockRecipeGraph, openMenuItemsUsing } from '@/lib/kitchen-rules';
 import { todaySydney } from '@/lib/format';
 import { audit, baseUnit, decimal, Invalid, isoDate, mutate, parse, required, text, unit, uuid, type Tx } from '@/lib/action-helpers';
 import { requireRole, type CurrentUser } from '@/lib/session';
@@ -93,13 +94,7 @@ export async function updateIngredient(_prev: ActionResult | null, form: FormDat
       const [before] = await tx.select().from(schema.ingredients).where(eq(schema.ingredients.id, id)).for('update');
       if (!before) throw new Invalid('Ingredient not found');
       if (before.version !== version) throw new Invalid('Someone else changed this ingredient. Reload the page and try again.');
-      if (before.baseUnit !== values.baseUnit) {
-        const [{ count }] = await tx
-          .select({ count: sql<number>`count(*)::int` })
-          .from(schema.recipeLines)
-          .where(eq(schema.recipeLines.ingredientId, id));
-        if (count > 0) throw new Invalid('This ingredient is used in recipes, so how it is measured cannot change. Add a conversion instead.');
-      }
+      if (before.baseUnit !== values.baseUnit) await assertUnitCanChange(tx, before);
       await tx
         .update(schema.ingredients)
         .set({ ...values, updatedAt: new Date(), version: version + 1 })
@@ -144,9 +139,9 @@ export async function addPrice(_prev: ActionResult | null, form: FormData): Prom
     const values = {
       ingredientId: parse(uuid, text(form, 'ingredientId'), 'Ingredient'),
       supplierId: parse(uuid, text(form, 'supplierId'), 'Supplier'),
-      packSize: decimal(text(form, 'packSize'), 'Pack size', { min: 0, minExclusive: true })!,
+      packSize: decimal(text(form, 'packSize'), 'Pack size', { min: 0, minExclusive: true, max: 1_000_000 })!,
       packUnit: parse(unit, text(form, 'packUnit'), 'Pack unit'),
-      packPrice: decimal(text(form, 'packPrice'), 'Pack price', { min: 0 })!,
+      packPrice: decimal(text(form, 'packPrice'), 'Pack price', { min: 0, max: 100_000 })!,
       gstApplicable: form.get('gstApplicable') === 'on',
       priceIncludesGst: form.get('priceIncludesGst') === 'on',
       effectiveDate: parse(isoDate, text(form, 'effectiveDate') || today, 'Date'),
@@ -191,8 +186,9 @@ export async function createRecipe(_prev: ActionResult | null, form: FormData): 
     const values = {
       name: required(text(form, 'name'), 'Name'),
       type,
-      // A prep must say how much it makes; start with a placeholder the chef then corrects.
-      ...(type === 'prep' ? { yieldQuantity: '1', yieldUnit: 'kg' as const } : {}),
+      // A prep must say how much it makes. Start with a placeholder marked as an
+      // estimate, so every dish using it says so until the chef weighs a batch.
+      ...(type === 'prep' ? { yieldQuantity: '1', yieldUnit: 'kg' as const, yieldEstimated: true } : {}),
     };
     return db.transaction(async (tx) => {
       const [row] = await tx.insert(schema.recipes).values(values).returning({ id: schema.recipes.id });
@@ -254,7 +250,10 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
       };
     });
 
+    const usesPreps = lines.some((l) => l.subRecipeId);
     return db.transaction(async (tx) => {
+      // Saves that add preps, or could turn a prep into a dish, change what uses what: one at a time.
+      if (usesPreps || payload.type === 'dish') await lockRecipeGraph(tx);
       const [before] = await tx.select().from(schema.recipes).where(eq(schema.recipes.id, payload.id)).for('update');
       if (!before || before.archivedAt) throw new Invalid('Recipe not found');
       if (before.version !== payload.version) {
@@ -270,33 +269,15 @@ export async function saveRecipe(input: RecipePayload): Promise<ActionResult<{ v
         if (found.length !== ingredientIds.length) throw new Invalid('An ingredient in this recipe no longer exists');
       }
 
-      const subIds = [...new Set(lines.flatMap((l) => (l.subRecipeId ? [l.subRecipeId] : [])))];
-      if (subIds.length > 0) {
-        const all = await tx
-          .select({ recipeId: schema.recipeLines.recipeId, subRecipeId: schema.recipeLines.subRecipeId })
-          .from(schema.recipeLines);
-        const graph = new Map<string, { lines: { id: string; subRecipeId: string | null; quantity: string; unit: Unit }[] }>();
-        for (const edge of all) {
-          if (edge.recipeId === payload.id) continue;
-          const node = graph.get(edge.recipeId) ?? { lines: [] };
-          node.lines.push({ id: '', subRecipeId: edge.subRecipeId, quantity: '1', unit: 'g' });
-          graph.set(edge.recipeId, node);
-        }
-        const subs = await tx
-          .select()
-          .from(schema.recipes)
-          .where(and(inArray(schema.recipes.id, subIds), isNull(schema.recipes.archivedAt)));
-        if (subs.length !== subIds.length) throw new Invalid('A prep in this recipe no longer exists');
-        for (const sub of subs) {
-          if (wouldCreateCycle(graph, payload.id, sub.id)) throw new Invalid(`${sub.name} already contains this recipe, so it cannot go inside it`);
-          if (!sub.yieldUnit) throw new Invalid(`${sub.name} needs a batch yield before it can be used`);
-          for (const line of lines.filter((l) => l.subRecipeId === sub.id)) {
-            if (UNITS[line.unit].base !== UNITS[sub.yieldUnit].base) {
-              throw new Invalid(`${sub.name} is made in ${sub.yieldUnit}, so use a matching unit`);
-            }
-          }
-        }
+      if (usesPreps) {
+        const previous = await tx
+          .select({ subRecipeId: schema.recipeLines.subRecipeId })
+          .from(schema.recipeLines)
+          .where(eq(schema.recipeLines.recipeId, payload.id));
+        const previousSubIds = new Set(previous.flatMap((p) => (p.subRecipeId ? [p.subRecipeId] : [])));
+        await assertPrepsUsable(tx, { id: payload.id, previousSubIds }, lines);
       }
+      if (before.type === 'prep' && payload.type === 'dish') await assertCanStopBeingPrep(tx, payload.id);
 
       // If this recipe is used as a prep, the lines that use it must still match its yield unit.
       if (yieldUnit !== before.yieldUnit || !yieldQuantity) {
@@ -333,11 +314,8 @@ export async function setRecipeArchived(id: string, archived: boolean): Promise<
           .innerJoin(schema.recipes, eq(schema.recipes.id, schema.recipeLines.recipeId))
           .where(and(eq(schema.recipeLines.subRecipeId, id), isNull(schema.recipes.archivedAt)));
         if (usedIn.length > 0) throw new Invalid(`Still used in: ${usedIn.map((r) => r.name).slice(0, 5).join(', ')}`);
-        const onMenu = await tx
-          .select({ name: schema.menuItems.name })
-          .from(schema.menuItems)
-          .where(and(eq(schema.menuItems.recipeId, id), isNull(schema.menuItems.archivedAt)));
-        if (onMenu.length > 0) throw new Invalid(`Still on the menu as: ${onMenu.map((m) => m.name).slice(0, 5).join(', ')}`);
+        const onMenu = await openMenuItemsUsing(tx, id);
+        if (onMenu.length > 0) throw new Invalid(`Still on the menu as: ${onMenu.slice(0, 5).join(', ')}`);
       }
       const updated = await tx
         .update(schema.recipes)

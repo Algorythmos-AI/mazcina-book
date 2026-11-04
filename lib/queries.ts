@@ -88,7 +88,7 @@ export const loadCostingData = cache(async (): Promise<CostingData> => {
 });
 
 export function contextFrom(data: CostingData): CostingContext {
-  return createContext({ ingredients: data.ingredients, recipes: data.recipes, prices: data.prices, asOf: data.asOf });
+  return createContext({ ingredients: data.ingredients, recipes: data.recipes, prices: data.prices, asOf: data.asOf, gstRegistered: data.settings.gstRegistered });
 }
 
 export const loadMenus = cache(async (): Promise<MenuDto[]> => {
