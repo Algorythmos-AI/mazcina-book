@@ -420,3 +420,12 @@ describe('parseMoneyInput', () => {
     );
   });
 });
+
+describe('unfinished lines', () => {
+  it('keeps a recipe uncosted while a line added on screen has no quantity yet', () => {
+    const recipe: Recipe = { id: 'r', name: 'Dressing', portions: 1, pendingLines: 1, lines: [{ id: 'l', ingredientId: 'oil', quantity: 1, unit: 'l' }] };
+    const result = costRecipe('r', createContext({ ingredients: [oil], recipes: [recipe], prices, asOf: ASOF }));
+    expect(result.status).toBe('incomplete');
+    expect(result.status === 'incomplete' && result.issues.map((i) => i.code)).toEqual(['unfinished_line']);
+  });
+});

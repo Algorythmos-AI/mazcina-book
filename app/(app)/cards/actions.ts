@@ -107,7 +107,7 @@ export async function resendCard(cardId: string): Promise<ActionResult> {
     if (card.status !== 'active') throw new GiftCardError('This card has been cancelled, so it cannot be re-sent');
     await queueResend(cardId);
     await log(user, 'resend', cardId);
-    const { failed } = await sendPendingEmails();
+    const { failed } = await sendPendingEmails(20, cardId);
     if (failed > 0) throw new GiftCardError('The email could not be sent just now. It will be retried automatically within 15 minutes.');
   });
   if (result.ok) revalidatePath('/cards', 'layout');

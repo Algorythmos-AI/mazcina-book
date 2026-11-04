@@ -1,5 +1,5 @@
 import 'server-only';
-import { asc, desc, eq, isNull, sql } from 'drizzle-orm';
+import { asc, desc, eq, isNull, ne, sql } from 'drizzle-orm';
 import { cache } from 'react';
 import { db, schema } from '@/db';
 import { createContext, type CostingContext } from './costing';
@@ -142,7 +142,8 @@ export async function loadTeam() {
 }
 
 export async function loadActivity(limit = 100) {
-  return db.select().from(schema.auditLog).orderBy(desc(schema.auditLog.at)).limit(limit);
+  // Sign-in code requests are only kept to enforce the hourly limit; they can come from any address and are not kitchen activity.
+  return db.select().from(schema.auditLog).where(ne(schema.auditLog.action, 'code_requested')).orderBy(desc(schema.auditLog.at)).limit(limit);
 }
 
 export interface StockLevel {

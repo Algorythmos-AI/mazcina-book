@@ -15,11 +15,12 @@ const MAX_ATTEMPTS = 8;
  * compare-and-set on its attempt count, so two runs at once cannot send the
  * same email twice. A failure is recorded and tried again on the next run.
  */
-export async function sendPendingEmails(limit = 20): Promise<{ sent: number; failed: number }> {
+/** Sends what is waiting, oldest first; `cardId` limits it to one card's emails (the owner's "Send again"). */
+export async function sendPendingEmails(limit = 20, cardId?: string): Promise<{ sent: number; failed: number }> {
   const pending = await db
     .select()
     .from(emailOutbox)
-    .where(and(eq(emailOutbox.status, 'pending'), lt(emailOutbox.attempts, MAX_ATTEMPTS)))
+    .where(and(eq(emailOutbox.status, 'pending'), lt(emailOutbox.attempts, MAX_ATTEMPTS), cardId ? eq(emailOutbox.giftCardId, cardId) : undefined))
     .orderBy(asc(emailOutbox.createdAt))
     .limit(limit);
 

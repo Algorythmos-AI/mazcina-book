@@ -95,7 +95,12 @@ export async function createCheckout(input: Record<string, unknown>, returnTo: s
     return { ok: true, url: session.url };
   } catch (error) {
     console.error('[gift-cards] could not start checkout', error);
-    await db.update(giftCardOrders).set({ status: 'failed' }).where(eq(giftCardOrders.id, order.id));
+    // If the database is what failed, marking the order can fail too: the buyer still gets a clean "try later".
+    await db
+      .update(giftCardOrders)
+      .set({ status: 'failed' })
+      .where(eq(giftCardOrders.id, order.id))
+      .catch((markError: unknown) => console.error('[gift-cards] could not mark the order failed', markError));
     return unavailable;
   }
 }

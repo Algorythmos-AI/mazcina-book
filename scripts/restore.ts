@@ -31,6 +31,9 @@ const ORDER = [
   ['giftCardOrders', 'giftCardOrders'],
   ['giftCards', 'giftCards'],
   ['giftCardLedger', 'giftCardLedger'],
+  // Version 2 backups onwards.
+  ['emailOutbox', 'emailOutbox'],
+  ['stripeEvents', 'stripeEvents'],
 ] as const;
 
 type Row = Record<string, unknown>;
@@ -50,7 +53,7 @@ async function main() {
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 
   const backup = JSON.parse(readFileSync(file, 'utf8')) as { format?: string; version?: number; exportedAt?: string; tables?: Record<string, Row[]> };
-  if (backup.format !== 'mazcina-kitchen-export' || backup.version !== 1 || !backup.tables) {
+  if (backup.format !== 'mazcina-kitchen-export' || (backup.version !== 1 && backup.version !== 2) || !backup.tables) {
     throw new Error('Not a Mazcina Kitchen backup file (format or version does not match)');
   }
   const unknown = Object.keys(backup.tables).filter((name) => !ORDER.some(([key]) => key === name));

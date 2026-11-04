@@ -8,28 +8,38 @@ import { db, schema } from '@/db';
  * encrypted form, which is useless without the key held in the environment.
  */
 export async function exportEverything() {
-  const [settings, team, suppliers, ingredients, ingredientPrices, recipes, recipeLines, menus, menuItems, menuCostSnapshots, auditLog, stockMovements, giftCardOrders, giftCards, giftCardLedger] =
-    await Promise.all([
-      db.select().from(schema.settings),
-      db.select().from(schema.allowedUsers),
-      db.select().from(schema.suppliers),
-      db.select().from(schema.ingredients),
-      db.select().from(schema.ingredientPrices),
-      db.select().from(schema.recipes),
-      db.select().from(schema.recipeLines),
-      db.select().from(schema.menus),
-      db.select().from(schema.menuItems),
-      db.select().from(schema.menuCostSnapshots),
-      db.select().from(schema.auditLog),
-      db.select().from(schema.stockMovements),
-      db.select().from(schema.giftCardOrders),
-      db.select().from(schema.giftCards),
-      db.select().from(schema.giftCardLedger),
-    ]);
-  return {
-    format: 'mazcina-kitchen-export',
-    version: 1,
-    exportedAt: new Date().toISOString(),
-    tables: { settings, team, suppliers, ingredients, ingredientPrices, recipes, recipeLines, menus, menuItems, menuCostSnapshots, auditLog, stockMovements, giftCardOrders, giftCards, giftCardLedger },
-  };
+  // One read-only snapshot: every table as it stood at the same instant, so a
+  // gift card redeemed mid-backup cannot leave its ledger and balance disagreeing.
+  return db.transaction(
+    async (tx) => {
+      const settings = await tx.select().from(schema.settings);
+      const team = await tx.select().from(schema.allowedUsers);
+      const suppliers = await tx.select().from(schema.suppliers);
+      const ingredients = await tx.select().from(schema.ingredients);
+      const ingredientPrices = await tx.select().from(schema.ingredientPrices);
+      const recipes = await tx.select().from(schema.recipes);
+      const recipeLines = await tx.select().from(schema.recipeLines);
+      const menus = await tx.select().from(schema.menus);
+      const menuItems = await tx.select().from(schema.menuItems);
+      const menuCostSnapshots = await tx.select().from(schema.menuCostSnapshots);
+      const auditLog = await tx.select().from(schema.auditLog);
+      const stockMovements = await tx.select().from(schema.stockMovements);
+      const giftCardOrders = await tx.select().from(schema.giftCardOrders);
+      const giftCards = await tx.select().from(schema.giftCards);
+      const giftCardLedger = await tx.select().from(schema.giftCardLedger);
+      // Gift card emails still waiting to go out, and which Stripe events were already handled.
+      const emailOutbox = await tx.select().from(schema.emailOutbox);
+      const stripeEvents = await tx.select().from(schema.stripeEvents);
+      return {
+        format: 'mazcina-kitchen-export',
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        tables: {
+          settings, team, suppliers, ingredients, ingredientPrices, recipes, recipeLines, menus, menuItems, menuCostSnapshots,
+          auditLog, stockMovements, giftCardOrders, giftCards, giftCardLedger, emailOutbox, stripeEvents,
+        },
+      };
+    },
+    { isolationLevel: 'repeatable read', accessMode: 'read only' },
+  );
 }
