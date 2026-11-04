@@ -13,7 +13,8 @@ export function ArchiveButton({
   archived,
   redirectTo,
 }: {
-  action: (archived: boolean) => Promise<ActionResult>;
+  /** May return a warning to show after restoring (something it uses is still in the trash). */
+  action: (archived: boolean) => Promise<ActionResult<{ warning?: string } | void>>;
   archived: boolean;
   redirectTo?: string;
 }) {
@@ -33,7 +34,7 @@ export function ArchiveButton({
             setError(null);
             const result = await safely(() => action(!archived));
             if (!result.ok) return setError(result.error);
-            if (archived) toast('Restored');
+            if (archived) toast((result.data && 'warning' in result.data && result.data.warning) || 'Restored');
             else {
               toast('Moved to the trash', {
                 action: {

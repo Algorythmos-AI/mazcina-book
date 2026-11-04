@@ -1,7 +1,8 @@
 'use server';
 
 import DecimalJs from 'decimal.js';
-import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, isNotNull, isNull, or, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -366,10 +367,10 @@ export async function saveRecipe(
   return { ok: true, data: { version: saved.version } };
 }
 
-export async function setRecipeArchived(id: string, archived: boolean): Promise<ActionResult> {
+export async function setRecipeArchived(id: string, archived: boolean): Promise<ActionResult<{ warning?: string }>> {
   const result = await mutate(async (user) => {
     parse(uuid, id, 'Recipe');
-    await db.transaction(async (tx) => {
+    return db.transaction(async (tx) => {
       if (archived) {
         const usedIn = await tx
           .selectDistinct({ name: schema.recipes.name })
@@ -387,6 +388,17 @@ export async function setRecipeArchived(id: string, archived: boolean): Promise<
         .returning({ id: schema.recipes.id });
       if (updated.length === 0) throw new Invalid('Recipe not found');
       await audit(tx, user, archived ? 'archive' : 'restore', 'recipe', id);
+      if (archived) return {};
+      // Brought back, but what it uses may have gone to the trash in the meantime.
+      const sub = alias(schema.recipes, 'sub');
+      const gone = await tx
+        .selectDistinct({ ingredient: schema.ingredients.name, prep: sub.name })
+        .from(schema.recipeLines)
+        .leftJoin(schema.ingredients, eq(schema.ingredients.id, schema.recipeLines.ingredientId))
+        .leftJoin(sub, eq(sub.id, schema.recipeLines.subRecipeId))
+        .where(and(eq(schema.recipeLines.recipeId, id), or(isNotNull(schema.ingredients.archivedAt), isNotNull(sub.archivedAt))));
+      const names = gone.map((g) => g.ingredient ?? g.prep).filter(Boolean);
+      return names.length > 0 ? { warning: `Restored, but it uses ${names.slice(0, 3).join(', ')} from the trash: restore those too, or replace them.` } : {};
     });
   });
   if (result.ok) revalidatePath('/', 'layout');
@@ -532,11 +544,15 @@ export async function cloneMenu(_prev: ActionResult | null, form: FormData): Pro
         .select()
         .from(schema.menuItems)
         .where(and(eq(schema.menuItems.menuId, sourceId), isNull(schema.menuItems.archivedAt)));
+      // A recipe moved to the trash since is not carried over: the item shows as "no recipe linked" instead.
+      const trashed = new Set(
+        (await tx.select({ id: schema.recipes.id }).from(schema.recipes).where(sql`${schema.recipes.archivedAt} IS NOT NULL`)).map((r) => r.id),
+      );
       if (items.length > 0) {
         await tx.insert(schema.menuItems).values(
           items.map((i) => ({
             menuId: menu.id,
-            recipeId: i.recipeId,
+            recipeId: i.recipeId && !trashed.has(i.recipeId) ? i.recipeId : null,
             name: i.name,
             category: i.category,
             sellPriceCents: i.sellPriceCents,

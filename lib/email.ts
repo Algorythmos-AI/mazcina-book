@@ -29,6 +29,7 @@ export async function sendEmail(email: Email): Promise<void> {
   if (env === 'development') {
     const images = email.inline?.length ? `\n[with ${email.inline.map((i) => i.filename).join(', ')}]` : '';
     console.info(`[email:dev] to=${email.to} subject="${email.subject}"\n${email.text}${images}`);
+    await keepForTests(email);
     return;
   }
   let to = email.to;
@@ -52,4 +53,21 @@ export async function sendEmail(email: Email): Promise<void> {
     attachments: email.inline?.map((i) => ({ filename: i.filename, content: i.content, contentId: i.contentId })),
   }, email.idempotencyKey ? { idempotencyKey: email.idempotencyKey } : undefined);
   if (error) throw new Error(`Resend: ${error.name}: ${error.message}`);
+}
+
+/**
+ * Local development only: the last email to each address, written under .next
+ * (never committed), so the browser tests can read a sign-in code the way a
+ * person reads their inbox.
+ */
+async function keepForTests(email: Email): Promise<void> {
+  try {
+    const { mkdir, writeFile } = await import('node:fs/promises');
+    const { join } = await import('node:path');
+    const dir = join(process.cwd(), '.next', 'dev-mail');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, `${email.to.toLowerCase().replace(/[^a-z0-9@.+-]/g, '_')}.json`), JSON.stringify({ subject: email.subject, text: email.text, at: Date.now() }));
+  } catch {
+    /* only a convenience for tests */
+  }
 }

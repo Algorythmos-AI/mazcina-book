@@ -23,7 +23,13 @@ export function SignInForm() {
     const { error } = await authClient.emailOtp.sendVerificationOtp({ email: email.trim(), type: 'sign-in' });
     setBusy(false);
     if (error) {
-      setError(error.status === 429 ? 'Too many tries. Wait a minute and try again.' : 'Could not send a code. Try again.');
+      setError(
+        error.status === 429
+          ? error.message?.startsWith('Too many codes')
+            ? error.message
+            : 'Too many tries. Wait a minute and try again.'
+          : 'Could not send a code. Try again.',
+      );
       return;
     }
     setCode('');

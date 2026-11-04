@@ -21,11 +21,9 @@ export default async function AppLayout({ children }: LayoutProps<'/'>) {
           <span className="truncate text-[13px] font-medium text-mazcina-gold">{user.name ?? user.email}</span>
           {/* On a phone the kitchen team finds these under More in the bottom bar. */}
           <div className={`items-center gap-4 ${user.role === 'staff' ? 'flex' : 'hidden md:flex'}`}>
-            {user.role !== 'staff' && (
-              <Link href="/help" className="flex min-h-11 items-center text-sm font-semibold text-white/85 hover:text-white">
-                How it works
-              </Link>
-            )}
+            <Link href="/help" className="flex min-h-11 items-center text-sm font-semibold text-white/85 hover:text-white">
+              How it works
+            </Link>
             <SignOutButton />
           </div>
         </div>
