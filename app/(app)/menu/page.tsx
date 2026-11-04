@@ -42,8 +42,8 @@ function Costing({ costing }: { costing: ItemCosting }) {
   return (
     <span className="flex flex-col items-end gap-0.5">
       <span className={RATING_BADGE[costing.rating]}>{costing.foodCostPct ? percent(costing.foodCostPct) : 'No price'}</span>
-      {costing.estimates.length > 0 && <span className={`${muted} text-xs`} title={`Estimated yields: ${costing.estimates.join(', ')}`}>estimate</span>}
-      {costing.asNeeded.length > 0 && <span className={`${muted} text-xs`} title={`Not in the cost: ${costing.asNeeded.join(', ')}`}>+ as needed</span>}
+      {costing.estimates.length > 0 && <span className={`${muted} text-xs`}>estimate: {costing.estimates.join(', ')} not weighed yet</span>}
+      {costing.asNeeded.length > 0 && <span className={`${muted} text-xs`}>+ {costing.asNeeded.slice(0, 3).join(', ')} not costed</span>}
       <span className={`${muted} text-xs tabular-nums`}>cost {money(costing.cost)}</span>
     </span>
   );
@@ -185,7 +185,11 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
               }
             />
           )}
-          {menu.status === 'live' && <ActionButton action={setMenuStatus.bind(null, menu.id, 'draft')} label="Back to draft" />}
+          {menu.status === 'live' && <ActionButton
+              action={setMenuStatus.bind(null, menu.id, 'draft')}
+              label="Back to draft"
+              confirm={`Take ${menu.name} off live? It stays as a draft you can edit, and no menu is live until you make one live again.`}
+            />}
           <ActionButton
             action={setMenuStatus.bind(null, menu.id, 'archived')}
             label="Archive"

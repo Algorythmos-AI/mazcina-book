@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ActionForm } from '@/components/action-form';
+import { ListFilter } from '@/components/list-filter';
 import { ArchiveButton } from '@/components/archive-button';
 import { badgeWarn, card, h1, h2, input, label, muted } from '@/components/ui';
 import { costRecipe } from '@/lib/costing';
@@ -25,11 +26,23 @@ export default async function RecipesPage() {
       {recipes.length === 0 ? (
         <p className={`mt-2 ${muted}`}>{empty}</p>
       ) : (
-        <ul className="mt-2 divide-y divide-gray-100">
+        <ListFilter
+          id={`recipes-${title}`}
+          placeholder={`Find a ${title === 'Preps' ? 'prep' : 'dish'}…`}
+          flags={[{ key: 'incomplete', label: 'Not costed yet' }]}
+          sorts={[{ key: 'name', label: 'A to Z' }, { key: 'cost', label: 'Dearest first', descending: true }]}
+        >
+        <ul className="mt-2 flex flex-col divide-y divide-gray-100">
           {recipes.map((r) => {
             const cost = costRecipe(r.id, ctx);
             return (
-              <li key={r.id}>
+              <li
+                key={r.id}
+                data-search={r.name}
+                data-flags={cost.status === 'ok' ? '' : 'incomplete'}
+                data-sort-name={r.name.toLowerCase()}
+                data-sort-cost={cost.status === 'ok' ? cost.costPerPortion.toFixed(4) : ''}
+              >
                 <Link href={`/recipes/${r.id}`} className="flex min-h-14 items-center justify-between gap-3 py-2">
                   <span className="font-semibold">{r.name}</span>
                   {cost.status === 'ok' ? (
@@ -38,13 +51,14 @@ export default async function RecipesPage() {
                       <span className={`block ${muted}`}>{cost.estimates.length > 0 || r.yieldEstimated ? 'estimate, per portion' : 'per portion'}</span>
                     </span>
                   ) : (
-                    <span className={`shrink-0 ${badgeWarn}`}>Incomplete</span>
+                    <span className={`shrink-0 ${badgeWarn}`}>Not costed yet</span>
                   )}
                 </Link>
               </li>
             );
           })}
         </ul>
+        </ListFilter>
       )}
     </section>
   );
@@ -67,6 +81,7 @@ export default async function RecipesPage() {
                 <option value="dish">Dish</option>
                 <option value="prep">Prep (sauce, stock, mix)</option>
               </select>
+              <p className={`mt-1 ${muted}`}>A dish goes on the menu. A prep is made in a batch and used inside dishes, like a sauce or a stock.</p>
             </div>
           </div>
         </ActionForm>

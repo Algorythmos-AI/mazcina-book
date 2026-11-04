@@ -4,7 +4,7 @@ import { ArchiveButton } from '@/components/archive-button';
 import { card, h1, h2, input, label, muted } from '@/components/ui';
 import { loadCostingData } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
-import { createSupplier, setSupplierArchived } from '../actions';
+import { createSupplier, setSupplierArchived, updateSupplier } from '../actions';
 
 export const metadata: Metadata = { title: 'Suppliers' };
 
@@ -41,12 +41,32 @@ export default async function SuppliersPage() {
         ) : (
           <ul className="mt-2 divide-y divide-gray-100">
             {active.map((s) => (
-              <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
-                <div>
-                  <p className="font-semibold">{s.name}</p>
-                  {s.contact && <p className={muted}>{s.contact}</p>}
-                </div>
-                <ArchiveButton action={setSupplierArchived.bind(null, s.id)} archived={false} />
+              <li key={s.id} className="py-3">
+                <details className="group">
+                  <summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-center justify-between gap-3">
+                    <span>
+                      <span className="block font-semibold">{s.name}</span>
+                      {s.contact && <span className={`block ${muted}`}>{s.contact}</span>}
+                    </span>
+                    <span className="text-sm font-semibold text-mazcina-wood group-open:hidden">Edit</span>
+                  </summary>
+                  <ActionForm action={updateSupplier} submitLabel="Save changes" className="mt-3" key={`${s.name}|${s.contact}`}>
+                    <input type="hidden" name="id" value={s.id} />
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <label htmlFor={`supplier-${s.id}-name`} className={label}>Name</label>
+                        <input id={`supplier-${s.id}-name`} name="name" required maxLength={120} defaultValue={s.name} className={input} />
+                      </div>
+                      <div>
+                        <label htmlFor={`supplier-${s.id}-contact`} className={label}>Contact</label>
+                        <input id={`supplier-${s.id}-contact`} name="contact" maxLength={200} defaultValue={s.contact ?? ''} placeholder="Phone, rep, order day" className={input} />
+                      </div>
+                    </div>
+                  </ActionForm>
+                  <div className="mt-3">
+                    <ArchiveButton action={setSupplierArchived.bind(null, s.id)} archived={false} />
+                  </div>
+                </details>
               </li>
             ))}
           </ul>

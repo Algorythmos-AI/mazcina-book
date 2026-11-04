@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ActionForm } from '@/components/action-form';
+import { ListFilter } from '@/components/list-filter';
 import { ArchiveButton } from '@/components/archive-button';
 import { badgeWarn, card, h1, h2, muted, secondary } from '@/components/ui';
 import { ingredientUnitCost } from '@/lib/costing';
@@ -35,11 +36,23 @@ export default async function IngredientsPage() {
         {active.length === 0 ? (
           <p className={`mt-2 ${muted}`}>None yet. Add your first ingredient below.</p>
         ) : (
-          <ul className="mt-2 divide-y divide-gray-100">
+          <ListFilter
+            id="ingredients"
+            placeholder="Find an ingredient…"
+            flags={[{ key: 'noprice', label: 'No price yet' }]}
+            sorts={[{ key: 'name', label: 'A to Z' }, { key: 'category', label: 'By category' }]}
+          >
+          <ul className="mt-2 flex flex-col divide-y divide-gray-100">
             {active.map((i) => {
               const cost = ingredientUnitCost(i.id, ctx);
               return (
-                <li key={i.id}>
+                <li
+                  key={i.id}
+                  data-search={`${i.name} ${i.category ?? ''} ${(i.preferredSupplierId && supplierName.get(i.preferredSupplierId)) || ''}`}
+                  data-flags={cost.ok ? '' : 'noprice'}
+                  data-sort-name={i.name.toLowerCase()}
+                  data-sort-category={`${(i.category ?? 'zzz').toLowerCase()} ${i.name.toLowerCase()}`}
+                >
                   <Link href={`/ingredients/${i.id}`} className="flex min-h-14 items-center justify-between gap-3 py-2">
                     <span>
                       <span className="font-semibold">{i.name}</span>
@@ -57,6 +70,7 @@ export default async function IngredientsPage() {
               );
             })}
           </ul>
+          </ListFilter>
         )}
       </section>
 

@@ -205,7 +205,7 @@ function StocktakeForm({ items, userEmail }: { items: CountItem[]; userEmail: st
         </section>
       ))}
 
-      <div className="sticky bottom-0 -mx-4 border-t border-gray-200 bg-white px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] sm:-mx-6 sm:px-6">
+      <div className="sticky bottom-[calc(3.5rem+env(safe-area-inset-bottom))] -mx-4 md:bottom-0 border-t border-gray-200 bg-white px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] sm:-mx-6 sm:px-6">
         <div className="flex flex-wrap items-center gap-3">
           <button type="button" onClick={save} disabled={pending || !!offered || filled.length === 0 || invalid.length > 0} className={primary}>
             {pending ? 'Saving…' : `Save ${filled.length} count${filled.length === 1 ? '' : 's'}`}

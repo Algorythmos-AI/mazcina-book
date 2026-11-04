@@ -49,3 +49,9 @@ html {
   scrollbar-width: thin;
   scrollbar-color: var(--color-mazcina-sage) #f1f5f9;
 }
+
+/* Keyboard focus is always visible, whatever the element. */
+:where(a, button, summary, [role='button']):focus-visible {
+  outline: 3px solid var(--color-mazcina-wood);
+  outline-offset: 2px;
+}

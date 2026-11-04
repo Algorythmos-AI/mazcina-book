@@ -47,8 +47,8 @@ export default async function KitchenDataPage() {
           ))}
         </ul>
         <p className={`mt-3 ${muted}`}>
-          {pack.recipes.length} recipes ({pack.recipes.filter((r) => r.type === 'prep').length} bases), {pack.ingredients.length} ingredients,{' '}
-          {pack.prices.length} prices. {estimated} bases have an estimated batch yield until a batch is weighed.
+          {pack.recipes.length} recipes ({pack.recipes.filter((r) => r.type === 'prep').length} preps), {pack.ingredients.length} ingredients,{' '}
+          {pack.prices.length} prices. {estimated} preps have an estimated batch yield until a batch is weighed.
         </p>
       </section>
 

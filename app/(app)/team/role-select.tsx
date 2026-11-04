@@ -21,6 +21,8 @@ export function RoleSelect({ id, role, name, disabled }: { id: string; role: Rol
         className={`${input} w-32`}
         onChange={(e) => {
           const next = e.target.value as Role;
+          const what = { owner: 'an owner (can see and change everything)', chef: 'a chef (kitchen only)', staff: 'staff (gift cards only)' }[next];
+          if (!window.confirm(`Make ${name} ${what}?`)) return;
           start(async () => {
             setError(null);
             const result = await safely(() => setTeamRole(id, next));
