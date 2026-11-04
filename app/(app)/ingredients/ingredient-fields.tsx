@@ -9,11 +9,11 @@ export function IngredientFields({ ingredient, suppliers }: { ingredient?: Ingre
     <div className="grid gap-3 sm:grid-cols-2">
       <div>
         <label htmlFor={`${p}-name`} className={label}>Name</label>
-        <input id={`${p}-name`} name="name" required maxLength={120} defaultValue={ingredient?.name} className={input} />
+        <input id={`${p}-name`} name="name" enterKeyHint="next" required maxLength={120} defaultValue={ingredient?.name} className={input} />
       </div>
       <div>
         <label htmlFor={`${p}-category`} className={label}>Category (optional)</label>
-        <input id={`${p}-category`} name="category" maxLength={60} defaultValue={ingredient?.category ?? ''} placeholder="Produce, seafood, dairy…" className={input} />
+        <input id={`${p}-category`} name="category" enterKeyHint="next" maxLength={60} defaultValue={ingredient?.category ?? ''} placeholder="Produce, seafood, dairy…" className={input} />
       </div>
       <div>
         <label htmlFor={`${p}-base`} className={label}>Measured in</label>
@@ -25,7 +25,7 @@ export function IngredientFields({ ingredient, suppliers }: { ingredient?: Ingre
       </div>
       <div>
         <label htmlFor={`${p}-yield`} className={label}>Usable % after trimming</label>
-        <input id={`${p}-yield`} name="yieldPct" inputMode="decimal" defaultValue={plain(ingredient?.yieldPct ?? '100')} className={input} />
+        <input id={`${p}-yield`} name="yieldPct" inputMode="decimal" enterKeyHint="next" defaultValue={plain(ingredient?.yieldPct ?? '100')} className={input} />
         <p className={`mt-1 ${muted}`}>100 if nothing is lost. A whole fish that gives 45% fillet is 45.</p>
       </div>
       <div>

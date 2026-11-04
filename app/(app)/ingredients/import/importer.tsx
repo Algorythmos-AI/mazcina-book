@@ -1,5 +1,6 @@
 'use client';
 
+import { safely } from '@/components/action-form';
 import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { badgeBad, badgeOk, badgeWarn, card, h2, input, label, link, muted, primary, secondary } from '@/components/ui';
@@ -18,7 +19,7 @@ export function PriceImporter({ since }: { since: string }) {
     start(async () => {
       setError(null);
       setSaved(null);
-      const result = await previewPriceImport(text);
+      const result = await safely(() => previewPriceImport(text));
       if (result.ok) setPreview(result.data!);
       else {
         setPreview(null);
@@ -29,7 +30,7 @@ export function PriceImporter({ since }: { since: string }) {
   const save = () =>
     start(async () => {
       setError(null);
-      const result = await applyPriceImport(text);
+      const result = await safely(() => applyPriceImport(text));
       if (!result.ok) return setError(result.error);
       setSaved(result.data!.saved);
       setPreview(null);

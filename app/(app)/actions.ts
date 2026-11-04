@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { db, schema } from '@/db';
 import { convertToBase, UNITS } from '@/lib/costing';
+import { gstFlags } from '@/lib/price-check';
 import { assertCanStopBeingPrep, assertPrepsUsable, assertUnitCanChange, lockRecipeGraph, openMenuItemsUsing } from '@/lib/kitchen-rules';
 import { todaySydney } from '@/lib/format';
 import { audit, baseUnit, decimal, Invalid, isoDate, mutate, parse, required, text, unit, uuid, type Tx } from '@/lib/action-helpers';
@@ -141,9 +142,11 @@ export async function addPrice(_prev: ActionResult | null, form: FormData): Prom
       supplierId: parse(uuid, text(form, 'supplierId'), 'Supplier'),
       packSize: decimal(text(form, 'packSize'), 'Pack size', { min: 0, minExclusive: true, max: 1_000_000 })!,
       packUnit: parse(unit, text(form, 'packUnit'), 'Pack unit'),
-      packPrice: decimal(text(form, 'packPrice'), 'Pack price', { min: 0, max: 100_000 })!,
-      gstApplicable: form.get('gstApplicable') === 'on',
-      priceIncludesGst: form.get('priceIncludesGst') === 'on',
+      packPrice: decimal(text(form, 'packPrice'), 'Pack price', { min: 0, max: 100_000, money: true })!,
+      // One choice ("gst": free / inc / ex); the two older checkboxes still work.
+      ...(text(form, 'gst')
+        ? gstFlags(parse(z.enum(['free', 'inc', 'ex']), text(form, 'gst'), 'GST'))
+        : { gstApplicable: form.get('gstApplicable') === 'on', priceIncludesGst: form.get('priceIncludesGst') === 'on' }),
       effectiveDate: parse(isoDate, text(form, 'effectiveDate') || today, 'Date'),
       createdBy: user.email,
     };
@@ -334,7 +337,11 @@ export async function setRecipeArchived(id: string, archived: boolean): Promise<
 
 function menuItemValues(form: FormData) {
   const recipeId = text(form, 'recipeId');
-  const dollars = decimal(text(form, 'sellPrice'), 'Menu price', { min: 0, max: 100000, places: 2 })!;
+  const dollars = decimal(text(form, 'sellPrice'), 'Menu price', { min: 0, max: 100000, places: 2, money: true })!;
+  // A $0 item reads as "no price" everywhere, so it has to be meant: an add-on or something included.
+  if (new DecimalJs(dollars).isZero() && form.get('free') !== 'on') {
+    throw new Invalid('The menu price is $0. If it really is free or included with another dish, tick "Free or included".');
+  }
   return {
     name: required(text(form, 'name'), 'Name'),
     category: required(text(form, 'category'), 'Section', 60),

@@ -9,6 +9,7 @@ import { db, schema } from '@/db';
 import { audit, decimal, Invalid, mutate, parse, text, unit, uuid, type Tx } from '@/lib/action-helpers';
 import { convertToBase } from '@/lib/costing';
 import { todaySydney } from '@/lib/format';
+import { claimOnce } from '@/lib/idempotency';
 import { formatStock } from '@/lib/stock';
 import { clampCountedAt, saveCount } from '@/lib/stocktake';
 import type { ActionResult } from '@/lib/types';
@@ -22,6 +23,7 @@ const stocktakePayload = z.object({
 });
 const deliveryPayload = z.object({
   supplierId: uuid.nullable(),
+  requestKey: uuid.nullable().optional(),
   lines: z
     .array(quantityLine.extend({ totalPaid: z.string().max(20), gst: z.enum(['', 'free', 'inc', 'ex']).default('') }))
     .min(1)
@@ -100,13 +102,17 @@ export async function recordStocktake(
  * Books a delivery into stock. If a line says what was paid, that also becomes
  * the ingredient's new price from today, so costing and stock stay in step.
  */
-export async function recordDelivery(input: z.infer<typeof deliveryPayload>): Promise<ActionResult<{ received: number; priced: number }>> {
+export async function recordDelivery(
+  input: z.infer<typeof deliveryPayload>,
+): Promise<ActionResult<{ received: number; priced: number; repeat?: boolean }>> {
   const result = await mutate(async (user) => {
     const payload = parse(deliveryPayload, input, 'Delivery');
     const batchId = randomUUID();
     const today = todaySydney();
     let priced = 0;
-    await db.transaction(async (tx) => {
+    const first = await db.transaction(async (tx) => {
+      // Sent again after a dropped connection: it is already booked, so book nothing.
+      if (!(await claimOnce(tx, payload.requestKey, 'delivery'))) return false;
       if (payload.supplierId) {
         const [supplier] = await tx.select().from(suppliers).where(eq(suppliers.id, payload.supplierId));
         if (!supplier || supplier.archivedAt) throw new Invalid('That supplier no longer exists');
@@ -119,7 +125,7 @@ export async function recordDelivery(input: z.infer<typeof deliveryPayload>): Pr
         if (line.totalPaid.trim()) {
           const supplierId = payload.supplierId ?? ingredient.preferredSupplierId;
           if (!supplierId) throw new Invalid(`Choose the supplier to record a price for ${ingredient.name}`);
-          const packPrice = decimal(line.totalPaid.trim().replace(/^\$/, ''), `${ingredient.name} price`, { min: 0, minExclusive: true })!;
+          const packPrice = decimal(line.totalPaid.trim(), `${ingredient.name} price`, { min: 0, minExclusive: true, max: 100_000, money: true })!;
           // Carry the GST treatment over from this ingredient's last price; a first price needs it said.
           const [last] = await tx
             .select({ gstApplicable: ingredientPrices.gstApplicable, priceIncludesGst: ingredientPrices.priceIncludesGst })
@@ -144,8 +150,9 @@ export async function recordDelivery(input: z.infer<typeof deliveryPayload>): Pr
         }
       }
       await audit(tx, user, 'delivery', 'stock', batchId, { after: { name: payload.lines.length === 1 ? '1 item' : `${payload.lines.length} items`, lines: payload.lines.length, priced } });
+      return true;
     });
-    return { received: payload.lines.length, priced };
+    return first ? { received: payload.lines.length, priced } : { received: 0, priced: 0, repeat: true };
   });
   if (result.ok) revalidatePath('/', 'layout');
   return result;

@@ -284,7 +284,7 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
                 <input id="settings-target" name="targetFoodCostPct" inputMode="decimal" required defaultValue={plain(data.settings.targetFoodCostPct)} className={input} />
               </div>
               <label className="flex min-h-11 items-center gap-2 self-end text-sm font-semibold">
-                <input type="checkbox" name="gstRegistered" defaultChecked={data.settings.gstRegistered} className="size-5 accent-mazcina-wood" />
+                <input type="checkbox" name="gstRegistered" defaultChecked={data.settings.gstRegistered} className="size-6 shrink-0 accent-mazcina-wood" />
                 Mazcina is registered for GST
               </label>
             </div>

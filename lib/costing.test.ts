@@ -7,6 +7,7 @@ import {
   menuMetrics,
   packPriceExGst,
   parseDecimalInput,
+  parseMoneyInput,
   selectPrice,
   suggestedSellPriceCents,
   wouldCreateCycle,
@@ -395,5 +396,27 @@ describe('ingredients used as needed', () => {
     );
     expect(withSalt.asNeeded).toEqual(['Frying oil', 'Salt']);
     expect(withSalt.batchCost.toString()).toBe(plain.batchCost.toString());
+  });
+});
+
+describe('parseMoneyInput', () => {
+  it('takes a dollar sign and thousands commas only when cents make it clear', () => {
+    expect(parseMoneyInput('$22.50')).toBe('22.5');
+    expect(parseMoneyInput('$ 1,234.50')).toBe('1234.5');
+    expect(parseMoneyInput('22,50')).toBe('22.5');
+    expect(parseMoneyInput('1,234')).toBeNull();
+    expect(parseMoneyInput('12,345,678.9')).toBe('12345678.9');
+    expect(parseMoneyInput('$')).toBeNull();
+    expect(parseMoneyInput('-5')).toBeNull();
+  });
+
+  it('reads any plain amount the same way the number parser does', () => {
+    fc.assert(
+      fc.property(fc.integer({ min: 0, max: 10_000_000 }), fc.integer({ min: 0, max: 99 }), (dollars, cents) => {
+        const typed = `${dollars}.${String(cents).padStart(2, '0')}`;
+        expect(parseMoneyInput(`$${typed}`)).toBe(parseDecimalInput(typed));
+        expect(parseMoneyInput(`$${dollars.toLocaleString('en-AU')}.${String(cents).padStart(2, '0')}`)).toBe(parseDecimalInput(typed));
+      }),
+    );
   });
 });

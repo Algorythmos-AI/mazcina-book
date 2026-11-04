@@ -1,5 +1,6 @@
 'use client';
 
+import { safely } from '@/components/action-form';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { input } from '@/components/ui';
@@ -22,7 +23,7 @@ export function RoleSelect({ id, role, name, disabled }: { id: string; role: Rol
           const next = e.target.value as Role;
           start(async () => {
             setError(null);
-            const result = await setTeamRole(id, next);
+            const result = await safely(() => setTeamRole(id, next));
             if (!result.ok) setError(result.error);
             router.refresh();
           });

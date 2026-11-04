@@ -9,9 +9,11 @@ import { displayDate, issueText, money, plain, unitPrice, unitsForIngredient } f
 import { contextFrom, loadCostingData, loadMovements, loadStock } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
 import { countUnit, formatStock, stockLine } from '@/lib/stock';
-import { addPrice, setIngredientArchived, updateIngredient } from '../../actions';
+import { setIngredientArchived, updateIngredient } from '../../actions';
 import { recordWaste, setParLevel } from '../../stock/actions';
 import { IngredientFields } from '../ingredient-fields';
+import { lastPrice } from '../last-price';
+import { PriceForm } from '../price-form';
 
 export const metadata: Metadata = { title: 'Ingredient' };
 
@@ -61,52 +63,16 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
               Add a supplier first on the <Link href="/suppliers" className="font-semibold text-mazcina-wood underline">Suppliers</Link> page.
             </p>
           ) : (
-            <ActionForm action={addPrice} submitLabel="Save price" savedLabel="Price saved" resetOnSuccess className="mt-3">
-              <input type="hidden" name="ingredientId" value={ingredient.id} />
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <div className="col-span-2">
-                  <label htmlFor="price-supplier" className={label}>Supplier</label>
-                  <select id="price-supplier" name="supplierId" defaultValue={current?.supplierId ?? ingredient.preferredSupplierId ?? suppliers[0].id} className={input}>
-                    {suppliers.map((s) => (
-                      <option key={s.id} value={s.id}>{s.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="price-size" className={label}>Pack size</label>
-                  <input id="price-size" name="packSize" inputMode="decimal" required defaultValue={plain(current?.packSize)} className={input} />
-                </div>
-                <div>
-                  <label htmlFor="price-unit" className={label}>Unit</label>
-                  <select id="price-unit" name="packUnit" defaultValue={current?.packUnit ?? (ingredient.baseUnit === 'g' ? 'kg' : ingredient.baseUnit === 'ml' ? 'l' : 'each')} className={input}>
-                    {units.map((u) => (
-                      <option key={u} value={u}>{u}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="price-amount" className={label}>Pack price ($)</label>
-                  <input id="price-amount" name="packPrice" inputMode="decimal" required className={input} />
-                </div>
-                <div>
-                  <label htmlFor="price-date" className={label}>From</label>
-                  <input id="price-date" name="effectiveDate" type="date" defaultValue={data.asOf} className={input} />
-                </div>
-                <label className="col-span-2 flex min-h-11 items-center gap-2 text-sm font-semibold">
-                  <input type="checkbox" name="gstApplicable" defaultChecked={current?.gstApplicable ?? false} className="size-5" />
-                  This item has GST
-                </label>
-                <label className="col-span-2 flex min-h-11 items-center gap-2 text-sm font-semibold">
-                  <input type="checkbox" name="priceIncludesGst" defaultChecked={current?.priceIncludesGst ?? false} className="size-5" />
-                  The price I typed includes GST
-                </label>
-                <label className="col-span-2 flex min-h-11 items-center gap-2 text-sm font-semibold">
-                  <input type="checkbox" name="free" className="size-5" />
-                  This costs nothing (only with a $0 price)
-                </label>
-              </div>
-              <p className={`mt-2 ${muted}`}>Fresh produce, meat and fish have no GST. Most packaged goods and drinks do.</p>
-            </ActionForm>
+            <PriceForm
+              ingredient={{ id: ingredient.id, name: ingredient.name, baseUnit: ingredient.baseUnit, gramsPerEach: ingredient.gramsPerEach ?? null, gramsPerMl: ingredient.gramsPerMl ?? null }}
+              suppliers={suppliers}
+              units={units}
+              last={lastPrice(current, supplierName, cost.ok ? cost.value.toString() : null)}
+              defaultSupplierId={ingredient.preferredSupplierId ?? suppliers[0].id}
+              defaultUnit={countUnit(ingredient.baseUnit)}
+              today={data.asOf}
+              gstRegistered={data.settings.gstRegistered}
+            />
           )}
         </section>
       )}
@@ -153,7 +119,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
               <label htmlFor="waste-note" className="sr-only">Reason</label>
               <input id="waste-note" name="note" maxLength={120} placeholder="Reason (optional)" className={`mt-2 ${input}`} />
               <label className="mt-2 flex min-h-11 items-center gap-2 text-sm">
-                <input type="checkbox" name="beyondBooks" className="size-5 accent-mazcina-wood" />
+                <input type="checkbox" name="beyondBooks" className="size-6 shrink-0 accent-mazcina-wood" />
                 Record it even if it is more than the books show
               </label>
             </ActionForm>

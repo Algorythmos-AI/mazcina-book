@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import type { ActionResult } from '@/lib/types';
+import { isConnectionError, OFFLINE_MESSAGE } from './action-form';
 import { secondary } from './ui';
 
 /** A button that runs a server action, with an optional "are you sure" step and the error shown beside it. */
@@ -31,9 +32,14 @@ export function ActionButton({
           if (confirm && !window.confirm(confirm)) return;
           start(async () => {
             setError(null);
-            const result = await action();
-            if (!result.ok) setError(result.error);
-            else router.refresh();
+            try {
+              const result = await action();
+              if (!result.ok) setError(result.error);
+              else router.refresh();
+            } catch (error) {
+              if (!isConnectionError(error)) throw error;
+              setError(OFFLINE_MESSAGE);
+            }
           });
         }}
       >

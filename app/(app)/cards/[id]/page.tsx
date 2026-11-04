@@ -1,8 +1,10 @@
+import { randomUUID } from 'node:crypto';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { asc, desc, eq } from 'drizzle-orm';
 import { ActionButton } from '@/components/action-button';
+import { Affix } from '@/components/affix';
 import { ActionForm } from '@/components/action-form';
 import { badgeBad, badgeOk, badgeWarn, card as cardBox, h1, h2, input, label, muted } from '@/components/ui';
 import { db, schema } from '@/db';
@@ -67,10 +69,14 @@ export default async function CardPage({ params }: PageProps<'/cards/[id]'>) {
           <h2 className={h2}>Take an amount off</h2>
           <ActionForm action={redeemCard} submitLabel="Take it off the card" savedLabel="Done. Now record it in the till." resetOnSuccess className="mt-3">
             <input type="hidden" name="cardId" value={card.id} />
+            {/* New on every page load, the same on every retry: a redeem sent twice is taken off once. */}
+            <input type="hidden" name="requestKey" value={randomUUID()} />
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label htmlFor="redeem-amount" className={label}>Amount ($)</label>
-                <input id="redeem-amount" name="amount" inputMode="decimal" required placeholder={`Up to ${(card.balanceCents / 100).toFixed(2)}`} className={`${input} text-lg`} />
+                <label htmlFor="redeem-amount" className={label}>Amount</label>
+                <Affix prefix="$">
+                  <input id="redeem-amount" name="amount" inputMode="decimal" required placeholder={`up to ${(card.balanceCents / 100).toFixed(2)}`} className={`${input} pl-7 text-lg`} />
+                </Affix>
               </div>
               <div>
                 <label htmlFor="redeem-note" className={label}>Note (optional)</label>

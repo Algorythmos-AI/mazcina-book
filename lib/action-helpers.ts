@@ -2,7 +2,7 @@ import 'server-only';
 import DecimalJs from 'decimal.js';
 import { z } from 'zod';
 import { db, schema } from '@/db';
-import { parseDecimalInput } from '@/lib/costing';
+import { parseDecimalInput, parseMoneyInput } from '@/lib/costing';
 import { Invalid } from '@/lib/invalid';
 import { requireRole, type CurrentUser } from '@/lib/session';
 import type { ActionResult } from '@/lib/types';
@@ -41,20 +41,22 @@ export function parse<T>(schema: z.ZodType<T>, value: unknown, label: string): T
 export function decimal(
   raw: string,
   label: string,
-  opts: { min?: number; max?: number; minExclusive?: boolean; optional?: boolean; places?: number } = {},
+  opts: { min?: number; max?: number; minExclusive?: boolean; optional?: boolean; places?: number; money?: boolean } = {},
 ): string | null {
   if (!raw) {
     if (opts.optional) return null;
     throw new Invalid(`${label} is required`);
   }
-  const parsed = parseDecimalInput(raw);
-  if (parsed === null) throw new Invalid(`${label}: type a number like 1500 or 1.5`);
+  const parsed = opts.money ? parseMoneyInput(raw) : parseDecimalInput(raw);
+  if (parsed === null) throw new Invalid(opts.money ? `${label}: type a price like 22.50` : `${label}: type a number like 1500 or 1.5`);
   const d = new DecimalJs(parsed);
   const min = opts.min ?? 0;
   if (opts.minExclusive ? d.lte(min) : d.lt(min)) {
     throw new Invalid(`${label} must be ${opts.minExclusive ? 'more than' : 'at least'} ${min}`);
   }
-  if (opts.max !== undefined && d.gt(opts.max)) throw new Invalid(`${label} must be at most ${opts.max}`);
+  if (opts.max !== undefined && d.gt(opts.max)) {
+    throw new Invalid(`${label} must be at most ${opts.money ? `$${opts.max.toLocaleString('en-AU')}` : opts.max.toLocaleString('en-AU')}`);
+  }
   if (d.decimalPlaces() > (opts.places ?? 4)) throw new Invalid(`${label} has too many decimal places`);
   if (d.gte(1e9)) throw new Invalid(`${label} is too large`);
   return d.toString();

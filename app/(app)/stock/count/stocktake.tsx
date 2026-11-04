@@ -1,5 +1,6 @@
 'use client';
 
+import { safely } from '@/components/action-form';
 import Link from 'next/link';
 import { useEffect, useMemo, useState, useSyncExternalStore, useTransition } from 'react';
 import { badgeOk, card, h2, input, link, muted, primary, secondary } from '@/components/ui';
@@ -106,9 +107,11 @@ function StocktakeForm({ items, userEmail }: { items: CountItem[]; userEmail: st
   const save = () =>
     start(async () => {
       setError(null);
-      const result = await recordStocktake({
-        lines: filled.map(([ingredientId, e]) => ({ ingredientId, quantity: e.quantity.trim(), unit: e.unit, countedAt: e.countedAt ?? null })),
-      });
+      const result = await safely(() =>
+        recordStocktake({
+          lines: filled.map(([ingredientId, e]) => ({ ingredientId, quantity: e.quantity.trim(), unit: e.unit, countedAt: e.countedAt ?? null })),
+        }),
+      );
       if (!result.ok) return setError(result.error);
       setSaved(result.data!.counted);
       setSkipped(result.data!.skipped);

@@ -7,6 +7,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { db, schema } from '@/db';
 import { todaySydney } from '@/lib/format';
 import { encryptCode, expiryFor, generateCode, hashCode, normaliseCode } from './codes';
+import { claimOnce } from '@/lib/idempotency';
 import { codeKey, GiftCardError } from './config';
 
 const { giftCardLedger, giftCardOrders, giftCards, emailOutbox } = schema;
@@ -87,9 +88,13 @@ export async function findCardByCode(input: string) {
 }
 
 /** Takes value off a card. Refuses if the card is void, expired or does not have enough left. */
-export async function redeem(cardId: string, amountCents: number, actorEmail: string, note: string | null) {
+export async function redeem(cardId: string, amountCents: number, actorEmail: string, note: string | null, requestKey?: string | null) {
   if (!Number.isInteger(amountCents) || amountCents <= 0) throw new GiftCardError('The amount must be more than zero');
   return db.transaction(async (tx) => {
+    // The same tap sent again after a dropped connection must not take the money off twice.
+    if (!(await claimOnce(tx, requestKey, 'gift_card_redeem'))) {
+      throw new GiftCardError('Already taken off: the first tap went through. Check the history below before trying again.');
+    }
     const [card] = await tx.select().from(giftCards).where(eq(giftCards.id, cardId)).for('update');
     if (!card) throw new GiftCardError('Card not found');
     if (card.status !== 'active') throw new GiftCardError('This card has been cancelled');

@@ -6,6 +6,8 @@
 export const input =
   'block w-full min-h-11 rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-mazcina-emerald outline-none focus:border-mazcina-wood focus:ring-2 focus:ring-mazcina-wood/25';
 export const label = 'block text-sm font-semibold';
+/** Checkboxes and radios: big enough to hit with a thumb. */
+export const checkbox = 'size-6 shrink-0 accent-mazcina-wood';
 export const primary =
   'inline-flex min-h-11 items-center justify-center rounded-sm bg-mazcina-wood px-5 py-2 text-sm font-bold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-mazcina-wood-dark disabled:opacity-60';
 export const secondary =

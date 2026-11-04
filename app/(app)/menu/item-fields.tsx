@@ -1,4 +1,5 @@
-import { input, label, muted } from '@/components/ui';
+import { Affix } from '@/components/affix';
+import { checkbox, input, label, muted } from '@/components/ui';
 import { MENU_CATEGORIES, type MenuItemDto, type RecipeDto } from '@/lib/types';
 
 /** Fields of a menu item, shared by the add and edit forms. */
@@ -10,7 +11,7 @@ export function ItemFields({ item, recipes, categories }: { item?: MenuItemDto; 
     <div className="grid gap-3 sm:grid-cols-2">
       <div>
         <label htmlFor={`${p}-name`} className={label}>Name on the menu</label>
-        <input id={`${p}-name`} name="name" required maxLength={120} defaultValue={item?.name} className={input} />
+        <input id={`${p}-name`} name="name" enterKeyHint="next" required maxLength={120} defaultValue={item?.name} className={input} />
       </div>
       <div>
         <label htmlFor={`${p}-category`} className={label}>Section</label>
@@ -21,15 +22,23 @@ export function ItemFields({ item, recipes, categories }: { item?: MenuItemDto; 
         </select>
       </div>
       <div>
-        <label htmlFor={`${p}-price`} className={label}>Menu price ($, as printed)</label>
-        <input
-          id={`${p}-price`}
-          name="sellPrice"
-          inputMode="decimal"
-          required
-          defaultValue={item ? (item.sellPriceCents / 100).toFixed(2) : ''}
-          className={input}
-        />
+        <label htmlFor={`${p}-price`} className={label}>Menu price, as printed</label>
+        <Affix prefix="$">
+          <input
+            id={`${p}-price`}
+            name="sellPrice"
+            inputMode="decimal"
+            enterKeyHint="next"
+            required
+            placeholder="24.00"
+            defaultValue={item ? (item.sellPriceCents / 100).toFixed(2) : ''}
+            className={`${input} pl-7`}
+          />
+        </Affix>
+        <label className="mt-1 flex min-h-11 items-center gap-2 text-sm">
+          <input type="checkbox" name="free" defaultChecked={item?.sellPriceCents === 0} className={checkbox} />
+          Free or included (an add-on, or comes with another dish)
+        </label>
       </div>
       <div>
         <label htmlFor={`${p}-recipe`} className={label}>Recipe</label>

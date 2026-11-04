@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { EnterMovesToNext } from '@/components/enter-next';
 import { Logo } from '@/components/logo';
 import { Nav } from '@/components/nav';
 import { requireRole } from '@/lib/session';
@@ -35,6 +36,7 @@ export default async function AppLayout({ children }: LayoutProps<'/'>) {
         </div>
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">{children}</main>
+      <EnterMovesToNext />
     </>
   );
 }
