@@ -6,6 +6,7 @@ import { db, schema } from '@/db';
 import { audit, Invalid, mutate } from '@/lib/action-helpers';
 import { convertToBase, ingredientUnitCost, packPriceExGst, type Unit } from '@/lib/costing';
 import { todaySydney, unitPrice } from '@/lib/format';
+import { nearMatches } from '@/lib/names';
 import { matchKey, parsePriceList } from '@/lib/price-import';
 import { contextFrom, loadCostingData } from '@/lib/queries';
 import { requireRole } from '@/lib/session';
@@ -60,7 +61,10 @@ async function resolve(text: string): Promise<{ preview: ImportPreview; resolved
   const rows = parsed.rows.map((row): ImportPreviewRow => {
     const errors = [...row.errors];
     const ingredient = row.ingredient ? ingredients.get(matchKey(row.ingredient)) : undefined;
-    if (row.ingredient && !ingredient) errors.push(`No ingredient called "${row.ingredient}". Add it first, or fix the spelling.`);
+    if (row.ingredient && !ingredient) {
+      const [guess] = nearMatches(row.ingredient, [...ingredients.values()].map((i) => i.name));
+      errors.push(guess ? `No ingredient called "${row.ingredient}". Did you mean "${guess}"? Change the name in your list to match.` : `No ingredient called "${row.ingredient}". Add it first, or fix the spelling.`);
+    }
 
     let supplierId: string | null = null;
     if (row.supplier) {

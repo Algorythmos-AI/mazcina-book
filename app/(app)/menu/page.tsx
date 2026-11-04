@@ -22,12 +22,12 @@ function Costing({ costing }: { costing: ItemCosting }) {
     // Name what is really missing, looking inside preps, so "Recipe incomplete" is never the whole story.
     const prices = costing.blockers.filter((b) => b.code === 'no_price');
     const other = costing.blockers.length - prices.length;
-    const named = (prices.length > 0 ? prices : costing.blockers).slice(0, 2);
+    const named = (prices.length > 0 ? prices : costing.blockers).slice(0, 3);
     const more = costing.blockers.length - named.length;
     return (
       <span className="flex flex-col items-end gap-0.5 text-right" title={costing.blockers.map(issueText).join('\n')}>
         <span className={badgeWarn}>
-          {prices.length > 0 ? `Needs ${prices.length} price${prices.length === 1 ? '' : 's'}` : 'Recipe incomplete'}
+          {prices.length > 0 ? `Add ${prices.length} price${prices.length === 1 ? '' : 's'} →` : 'Recipe needs a fix →'}
           {prices.length > 0 && other > 0 ? ' + a fix' : ''}
         </span>
         {named.length > 0 && (
@@ -231,7 +231,7 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
               .filter(Boolean)
               .join(' · ')}
             .{' '}
-            <Link href="/prices-needed" className="underline">See what is missing</Link>
+            <Link href={`/prices-needed?m=${menu.id}`} className="underline">Fill in what is missing</Link>
           </p>
         )}
         {partial > 0 && (
@@ -247,14 +247,20 @@ export default async function MenuPage({ searchParams }: PageProps<'/menu'>) {
           <h2 className={h2}>{category}</h2>
           <ul className="mt-2 divide-y divide-gray-100">
             {group.map(({ item, costing }) => (
-              <li key={item.id}>
-                <Link href={`/menu/${item.id}`} className="flex min-h-14 items-center justify-between gap-3 py-2 hover:text-mazcina-wood">
-                  <span>
-                    <span className="font-semibold">{item.name}</span>
-                    <span className={`block ${muted} tabular-nums`}>{moneyFromCents(item.sellPriceCents)}</span>
-                  </span>
-                  <Costing costing={costing} />
+              <li key={item.id} className="flex min-h-14 items-center justify-between gap-3 py-2">
+                <Link href={`/menu/${item.id}`} className="min-w-0 flex-1 py-1 hover:text-mazcina-wood">
+                  <span className="font-semibold">{item.name}</span>
+                  <span className={`block ${muted} tabular-nums`}>{moneyFromCents(item.sellPriceCents)}</span>
                 </Link>
+                {costing.status === 'incomplete' && menu.status !== 'archived' ? (
+                  <Link href={`/prices-needed?m=${menu.id}&item=${item.id}`} className="rounded-sm hover:opacity-80" aria-label={`Fix the costing for ${item.name}`}>
+                    <Costing costing={costing} />
+                  </Link>
+                ) : (
+                  <Link href={`/menu/${item.id}`} tabIndex={-1} aria-hidden>
+                    <Costing costing={costing} />
+                  </Link>
+                )}
               </li>
             ))}
           </ul>

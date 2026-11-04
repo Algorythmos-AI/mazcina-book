@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { db, schema } from '@/db';
 import { convertToBase, UNITS } from '@/lib/costing';
+import { nearMatches } from '@/lib/names';
 import { gstFlags } from '@/lib/price-check';
 import { assertCanStopBeingPrep, assertPrepsUsable, assertUnitCanChange, lockRecipeGraph, openMenuItemsUsing } from '@/lib/kitchen-rules';
 import { todaySydney } from '@/lib/format';
@@ -76,6 +77,13 @@ export async function createIngredient(_prev: ActionResult | null, form: FormDat
   const result = await mutate(async (user) => {
     const values = ingredientValues(form);
     return db.transaction(async (tx) => {
+      const existing = await tx.select({ name: schema.ingredients.name }).from(schema.ingredients).where(isNull(schema.ingredients.archivedAt));
+      const [twin] = nearMatches(values.name, existing.map((e) => e.name));
+      if (twin) {
+        throw new Invalid(
+          `"${twin}" is already on the list. Use that one so its prices and stock stay together. If this really is something else, add a word that tells them apart (for example "${values.name}, Meyer").`,
+        );
+      }
       const [row] = await tx.insert(schema.ingredients).values(values).returning({ id: schema.ingredients.id });
       await audit(tx, user, 'create', 'ingredient', row.id, { after: values });
       return row.id;

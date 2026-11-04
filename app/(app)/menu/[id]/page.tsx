@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ActionForm } from '@/components/action-form';
 import { ArchiveButton } from '@/components/archive-button';
-import { badgeBad, badgeOk, badgeWarn, card, h1, h2, link, muted } from '@/components/ui';
+import { badgeBad, badgeOk, badgeWarn, card, h1, h2, link, muted, primary } from '@/components/ui';
 import { issueText, money, moneyFromCents, percent, plain } from '@/lib/format';
 import { costMenuItem } from '@/lib/menu';
 import { contextFrom, loadCostingData, loadMenus } from '@/lib/queries';
@@ -50,7 +50,14 @@ export default async function MenuItemPage({ params }: PageProps<'/menu/[id]'>) 
         )}
         {costing.status === 'incomplete' && (
           <div className="mt-2">
-            <p className={badgeWarn}>Recipe incomplete: no cost shown until this is fixed</p>
+            <p className={badgeWarn}>Not costed yet: no cost is shown until these are sorted</p>
+            {costing.blockers.some((b) => b.code === 'no_price') && (
+              <p className="mt-3">
+                <Link href={`/prices-needed?m=${item.menuId}&item=${item.id}`} className={primary}>
+                  Add the missing prices here
+                </Link>
+              </p>
+            )}
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
               {costing.blockers.map((issue) => {
                 const ingredient = issue.subject ? ingredientByName.get(issue.subject) : undefined;

@@ -138,7 +138,7 @@ export function PriceForm({
       }}
       className={compact ? '' : 'mt-3'}
     >
-      <div className={`grid grid-cols-2 gap-3 ${compact ? 'md:grid-cols-6' : 'sm:grid-cols-4'}`}>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="col-span-2">
           <label htmlFor={`${id}-supplier`} className={label}>Supplier</label>
           <select id={`${id}-supplier`} value={supplierId} onChange={(e) => setSupplierId(e.target.value)} className={input}>
