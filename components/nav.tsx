@@ -14,6 +14,7 @@ const MENU = { href: '/menu', label: 'Menu' };
 const TODO = { href: '/prices-needed', label: 'To do' };
 const RECIPES = { href: '/recipes', label: 'Recipes' };
 const INGREDIENTS = { href: '/ingredients', label: 'Ingredients' };
+const PRICES = { href: '/prices', label: 'Price list' };
 const SUPPLIERS = { href: '/suppliers', label: 'Suppliers' };
 const STOCK = { href: '/stock', label: 'Stock' };
 const CARDS = { href: '/cards', label: 'Gift cards' };
@@ -24,7 +25,7 @@ const HELP = { href: '/help', label: 'How it works' };
 function linksFor(role: Role, giftCards: boolean): NavLink[] {
   const cards = giftCards ? [CARDS] : [];
   if (role === 'staff') return cards;
-  const kitchen = [MENU, TODO, RECIPES, INGREDIENTS, SUPPLIERS, STOCK, ...cards];
+  const kitchen = [MENU, TODO, RECIPES, INGREDIENTS, PRICES, SUPPLIERS, STOCK, ...cards];
   return role === 'owner' ? [...kitchen, TEAM, ACTIVITY] : kitchen;
 }
 

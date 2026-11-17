@@ -26,6 +26,7 @@ export default async function IngredientsPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <h1 className={h1}>Ingredients</h1>
         <div className="flex flex-wrap gap-2">
+          <Link href="/prices" className={secondary}>Price list</Link>
           <Link href="/ingredients/import" className={secondary}>Import prices</Link>
           <Link href="/changes" className={secondary}>Price changes</Link>
         </div>
