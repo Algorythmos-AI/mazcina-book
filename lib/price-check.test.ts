@@ -17,6 +17,12 @@ describe('typedUnitCost', () => {
     expect(typedUnitCost(lemon, { packSize: '5', packUnit: 'kg', packPrice: '22,50,1', gst: 'free' }, true)).toBeNull();
     expect(typedUnitCost({ baseUnit: 'g' }, { packSize: '5', packUnit: 'each', packPrice: '5', gst: 'free' }, true)).toBeNull();
   });
+
+  it('prices a bunch once its weight is known', () => {
+    const coriander = { baseUnit: 'g' as const, gramsPerBunch: '80' };
+    expect(typedUnitCost(coriander, { packSize: '1', packUnit: 'bunch', packPrice: '1', gst: 'free' }, true)?.toString()).toBe('0.0125');
+    expect(typedUnitCost({ baseUnit: 'g' }, { packSize: '1', packUnit: 'bunch', packPrice: '1', gst: 'free' }, true)).toBeNull();
+  });
 });
 
 describe('priceWarnings', () => {

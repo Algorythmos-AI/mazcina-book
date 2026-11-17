@@ -17,7 +17,7 @@ import {
 
 export * from './auth-schema';
 
-export const unitEnum = pgEnum('unit', ['g', 'kg', 'ml', 'l', 'each']);
+export const unitEnum = pgEnum('unit', ['g', 'kg', 'ml', 'l', 'each', 'bunch']);
 export const baseUnitEnum = pgEnum('base_unit', ['g', 'ml', 'each']);
 export const roleEnum = pgEnum('role', ['owner', 'chef', 'staff']);
 export const recipeTypeEnum = pgEnum('recipe_type', ['dish', 'prep']);
@@ -91,6 +91,8 @@ export const ingredients = pgTable(
     preferredSupplierId: uuid('preferred_supplier_id').references(() => suppliers.id, { onDelete: 'restrict' }),
     gramsPerEach: quantity('grams_per_each'),
     gramsPerMl: quantity('grams_per_ml'),
+    /** Herbs bought by the bunch: what one bunch weighs, so a bunch price becomes a gram cost. */
+    gramsPerBunch: quantity('grams_per_bunch'),
     /** Reorder point in base units: below this the ingredient shows as low. */
     parLevel: quantity('par_level'),
     ...tracked,
@@ -101,6 +103,7 @@ export const ingredients = pgTable(
     check('ingredients_yield_range', sql`${t.yieldPct} > 0 AND ${t.yieldPct} <= 100`),
     check('ingredients_grams_per_each_positive', sql`${t.gramsPerEach} IS NULL OR ${t.gramsPerEach} > 0`),
     check('ingredients_grams_per_ml_positive', sql`${t.gramsPerMl} IS NULL OR ${t.gramsPerMl} > 0`),
+    check('ingredients_grams_per_bunch_positive', sql`${t.gramsPerBunch} IS NULL OR ${t.gramsPerBunch} > 0`),
     check('ingredients_par_level_valid', sql`${t.parLevel} IS NULL OR ${t.parLevel} >= 0`),
   ],
 );

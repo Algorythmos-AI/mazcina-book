@@ -30,6 +30,8 @@ import {
   UNITS,
   wouldCreateCycle,
   type Unit,
+  type YieldUnit,
+  YIELD_UNITS,
 } from '@/lib/costing';
 import { issueText, money, moneyFromCents, plain, unitName, unitsForDimension, unitsForIngredient } from '@/lib/format';
 import type { CostingData, RecipeDto } from '@/lib/types';
@@ -47,7 +49,7 @@ interface Draft {
   name: string;
   type: 'dish' | 'prep';
   yieldQuantity: string;
-  yieldUnit: Unit;
+  yieldUnit: YieldUnit;
   yieldEstimated: boolean;
   portions: string;
   /** One per line, as typed. */
@@ -85,7 +87,7 @@ function toDraft(recipe: RecipeDto): Draft {
     name: recipe.name,
     type: recipe.type,
     yieldQuantity: plain(recipe.yieldQuantity),
-    yieldUnit: recipe.yieldUnit ?? 'kg',
+    yieldUnit: !recipe.yieldUnit || recipe.yieldUnit === 'bunch' ? 'kg' : recipe.yieldUnit,
     yieldEstimated: recipe.yieldEstimated,
     portions: plain(recipe.portions),
     asNeeded: recipe.asNeeded.join('\n'),
@@ -464,8 +466,8 @@ export function RecipeBuilder({ recipe, data }: { recipe: RecipeDto; data: Costi
             </div>
             <div>
               <label htmlFor="recipe-yield-unit" className={label}>Unit</label>
-              <select id="recipe-yield-unit" value={draft.yieldUnit} onChange={(e) => change((d) => ({ ...d, yieldUnit: e.target.value as Unit }))} className={input}>
-                {(Object.keys(UNITS) as Unit[]).map((u) => (
+              <select id="recipe-yield-unit" value={draft.yieldUnit} onChange={(e) => change((d) => ({ ...d, yieldUnit: e.target.value as YieldUnit }))} className={input}>
+                {YIELD_UNITS.map((u) => (
                   <option key={u} value={u}>{unitName(u)}</option>
                 ))}
               </select>

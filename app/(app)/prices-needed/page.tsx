@@ -74,7 +74,7 @@ export default async function PricesNeededPage({ searchParams }: PageProps<'/pri
     const future = selectPrice(data.prices.filter((p) => p.ingredientId === ingredient.id), ingredient.preferredSupplierId, '9999-12-31');
     return [
       {
-        ingredient: { id: ingredient.id, name: ingredient.name, baseUnit: ingredient.baseUnit, gramsPerEach: ingredient.gramsPerEach, gramsPerMl: ingredient.gramsPerMl },
+        ingredient: { id: ingredient.id, name: ingredient.name, baseUnit: ingredient.baseUnit, gramsPerEach: ingredient.gramsPerEach, gramsPerMl: ingredient.gramsPerMl, gramsPerBunch: ingredient.gramsPerBunch },
         units: unitsForIngredient(ingredient),
         defaultUnit: future?.packUnit ?? countUnit(ingredient.baseUnit),
         defaultSupplierId: ingredient.preferredSupplierId ?? suppliers[0]?.id ?? '',

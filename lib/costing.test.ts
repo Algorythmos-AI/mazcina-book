@@ -130,6 +130,35 @@ describe('convertToBase', () => {
     expect(convertToBase(2, 'each', 'g', { gramsPerEach: 0 })).toBeNull();
     expect(convertToBase(100, 'ml', 'each', { gramsPerMl: 1 })).toBeNull();
   });
+
+  it('turns bunches into grams through the weight of one bunch, never through each', () => {
+    expect(convertToBase('0.5', 'bunch', 'g', { gramsPerBunch: 80 })?.toString()).toBe('40');
+    expect(convertToBase(1, 'bunch', 'g')).toBeNull();
+    expect(convertToBase(1, 'bunch', 'g', { gramsPerEach: 80 })).toBeNull();
+    expect(convertToBase(1, 'bunch', 'each', { gramsPerBunch: 80, gramsPerEach: 20 })?.toString()).toBe('4');
+  });
+});
+
+describe('herbs bought by the bunch', () => {
+  const coriander: Ingredient = { id: 'cor', name: 'Coriander', baseUnit: 'g', yieldPct: 100, gramsPerBunch: 80 };
+  const bunchPrice = price({ ingredientId: 'cor', packSize: 1, packUnit: 'bunch', packPrice: '1.00' });
+  const salad = (quantity: string, unit: 'bunch' | 'g'): Recipe => ({
+    id: 'salad',
+    name: 'Chilena salad',
+    portions: 1,
+    lines: [{ id: 's1', ingredientId: 'cor', quantity, unit }],
+  });
+  const cost = (recipe: Recipe, ingredient = coriander) =>
+    costRecipe('salad', createContext({ ingredients: [ingredient], recipes: [recipe], prices: [bunchPrice], asOf: ASOF }));
+
+  it('costs half a bunch, or the same herbs in grams, from a bunch price', () => {
+    expect(ok(cost(salad('0.5', 'bunch'))).costPerPortion.toString()).toBe('0.5');
+    expect(ok(cost(salad('20', 'g'))).costPerPortion.toString()).toBe('0.25');
+  });
+
+  it('asks for the bunch weight instead of guessing a cost', () => {
+    expect(issueCodes(cost(salad('20', 'g'), { ...coriander, gramsPerBunch: null }))).toEqual(['needs_conversion']);
+  });
 });
 
 describe('selectPrice', () => {

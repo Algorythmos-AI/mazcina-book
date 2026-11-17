@@ -14,7 +14,9 @@ export type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export { Invalid };
 
 export const uuid = z.uuid();
-export const unit = z.enum(['g', 'kg', 'ml', 'l', 'each']);
+export const unit = z.enum(['g', 'kg', 'ml', 'l', 'each', 'bunch']);
+/** A batch is weighed, measured or counted, never "by the bunch". */
+export const yieldUnit = z.enum(['g', 'kg', 'ml', 'l', 'each']);
 export const baseUnit = z.enum(['g', 'ml', 'each']);
 export const isoDate = z.iso.date();
 

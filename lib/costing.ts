@@ -18,15 +18,23 @@ const GST_DIVISOR = GST_RATE.plus(1);
 /** Most recipes in one chain (dish → prep → prep …) that costing will follow. */
 export const MAX_DEPTH = 8;
 
-export type Unit = 'g' | 'kg' | 'ml' | 'l' | 'each';
+export type Unit = 'g' | 'kg' | 'ml' | 'l' | 'each' | 'bunch';
 export type BaseUnit = 'g' | 'ml' | 'each';
+/** Units a batch can be measured in: a prep never comes out "by the bunch". */
+export type YieldUnit = Exclude<Unit, 'bunch'>;
+export const YIELD_UNITS: YieldUnit[] = ['g', 'kg', 'ml', 'l', 'each'];
 
-export const UNITS: Record<Unit, { base: BaseUnit; factor: Decimal }> = {
+/**
+ * A bunch is its own dimension: herbs bought by the bunch are costed through
+ * the ingredient's grams in one bunch, never through "each".
+ */
+export const UNITS: Record<Unit, { base: BaseUnit | 'bunch'; factor: Decimal }> = {
   g: { base: 'g', factor: new D(1) },
   kg: { base: 'g', factor: new D(1000) },
   ml: { base: 'ml', factor: new D(1) },
   l: { base: 'ml', factor: new D(1000) },
   each: { base: 'each', factor: new D(1) },
+  bunch: { base: 'bunch', factor: new D(1) },
 };
 
 export interface Ingredient {
@@ -38,6 +46,8 @@ export interface Ingredient {
   preferredSupplierId?: string | null;
   /** Needed to convert between `each` and weight. */
   gramsPerEach?: Numeric | null;
+  /** Needed to buy or use it by the bunch. */
+  gramsPerBunch?: Numeric | null;
   /** Density, needed to convert between volume and weight. */
   gramsPerMl?: Numeric | null;
   archived?: boolean;
@@ -190,7 +200,7 @@ export function convertToBase(
   quantity: Numeric,
   unit: Unit,
   target: BaseUnit,
-  factors?: Pick<Ingredient, 'gramsPerEach' | 'gramsPerMl'>,
+  factors?: Pick<Ingredient, 'gramsPerEach' | 'gramsPerMl' | 'gramsPerBunch'>,
 ): Decimal | null {
   const qty = dec(quantity);
   if (!qty) return null;
@@ -198,8 +208,9 @@ export function convertToBase(
   const inBase = qty.times(from.factor);
   if (from.base === target) return inBase;
 
-  const perGram = (base: BaseUnit): Decimal | null => {
+  const perGram = (base: BaseUnit | 'bunch'): Decimal | null => {
     if (base === 'g') return new D(1);
+    if (base === 'bunch') return positive(factors?.gramsPerBunch);
     return positive(base === 'each' ? factors?.gramsPerEach : factors?.gramsPerMl);
   };
   const fromGrams = perGram(from.base);
@@ -302,6 +313,8 @@ function costSubRecipeLine(
   const yieldQty = positive(sub.yieldQuantity);
   if (!yieldQty || !sub.yieldUnit) return { ok: false, issue: { code: 'sub_recipe_no_yield', subject } };
   const yieldBase = UNITS[sub.yieldUnit].base;
+  // A batch is never measured in bunches; the server refuses it, this keeps a stray row honest.
+  if (yieldBase === 'bunch') return { ok: false, issue: { code: 'sub_recipe_no_yield', subject } };
   // A prep has no density of its own, so the line must be in the prep's own dimension.
   const qtyInBase = convertToBase(qty, line.unit, yieldBase);
   if (!qtyInBase) return { ok: false, issue: { code: 'needs_conversion', subject } };

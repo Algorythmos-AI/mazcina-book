@@ -6,10 +6,10 @@ import { useId, useMemo, useRef, useState, useTransition } from 'react';
 import { isConnectionError, OFFLINE_MESSAGE } from '@/components/action-form';
 import { Affix } from '@/components/affix';
 import { checkbox, input, label, muted, primary, secondary } from '@/components/ui';
-import { parseMoneyInput, type BaseUnit, type Unit } from '@/lib/costing';
-import { money, unitName, unitPrice } from '@/lib/format';
+import { parseDecimalInput, parseMoneyInput, type BaseUnit, type Unit } from '@/lib/costing';
+import { money, plain, unitName, unitPrice } from '@/lib/format';
 import { priceWarnings, typedUnitCost, type GstMode, type PriceWarning } from '@/lib/price-check';
-import { addPrice } from '../actions';
+import { addPrice, quickAddSupplier } from '../actions';
 
 export interface PriceFormIngredient {
   id: string;
@@ -17,6 +17,7 @@ export interface PriceFormIngredient {
   baseUnit: BaseUnit;
   gramsPerEach: string | null;
   gramsPerMl: string | null;
+  gramsPerBunch: string | null;
 }
 
 export interface LastPrice {
@@ -29,6 +30,9 @@ export interface LastPrice {
   /** Cost per base unit, as a string, for the "is this right?" check. */
   unitCost: string | null;
 }
+
+/** The supplier picker's last option: opens the "new supplier" field instead of choosing one. */
+const NEW_SUPPLIER = '__new';
 
 const GST_CHOICES: { value: GstMode; label: string; hint: string }[] = [
   { value: 'free', label: 'No GST on this item', hint: 'fresh fruit, veg, meat, fish' },
@@ -90,11 +94,42 @@ export function PriceForm({
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  const [bunchWeight, setBunchWeight] = useState('');
+  const [added, setAdded] = useState<{ id: string; name: string }[]>([]);
+  const [newSupplier, setNewSupplier] = useState<string | null>(null);
+  const [supplierError, setSupplierError] = useState<string | null>(null);
+  const [adding, startAdding] = useTransition();
+
+  // Added here, kept until the page's own list catches up after the refresh.
+  const supplierList = [...suppliers, ...added.filter((a) => !suppliers.some((s) => s.id === a.id))];
+  // Anything weighed can be bought by the bunch; the first bunch price asks what one weighs.
+  const unitChoices: Unit[] = ingredient.baseUnit === 'g' && !units.includes('bunch') ? [...units, 'bunch'] : units;
+  const needsBunchWeight = packUnit === 'bunch' && !ingredient.gramsPerBunch;
+  const gramsInBunch = packUnit === 'bunch' ? (needsBunchWeight ? parseDecimalInput(bunchWeight) : ingredient.gramsPerBunch) : null;
 
   const next = useMemo(
-    () => typedUnitCost(ingredient, { packSize, packUnit, packPrice, gst }, gstRegistered),
-    [ingredient, packSize, packUnit, packPrice, gst, gstRegistered],
+    () => typedUnitCost({ ...ingredient, gramsPerBunch: gramsInBunch }, { packSize, packUnit, packPrice, gst }, gstRegistered),
+    [ingredient, gramsInBunch, packSize, packUnit, packPrice, gst, gstRegistered],
   );
+  const perBunch = next && gramsInBunch ? next.times(gramsInBunch) : null;
+
+  const addSupplier = () => {
+    if (newSupplier === null) return;
+    setSupplierError(null);
+    startAdding(async () => {
+      try {
+        const result = await quickAddSupplier(newSupplier);
+        if (!result.ok) return setSupplierError(result.error);
+        setAdded((list) => [...list, result.data!]);
+        setSupplierId(result.data!.id);
+        setNewSupplier(null);
+        router.refresh();
+      } catch (error) {
+        if (!isConnectionError(error)) throw error;
+        setSupplierError(OFFLINE_MESSAGE);
+      }
+    });
+  };
   const lastCost = last?.unitCost ? new DecimalJs(last.unitCost) : null;
   // Said while typing, not after Save: "1,234" could be 1234 or 1.234.
   const unclearPrice = packPrice.trim() !== '' && parseMoneyInput(packPrice) === null;
@@ -115,6 +150,7 @@ export function PriceForm({
     form.set('packPrice', packPrice);
     form.set('gst', gst);
     form.set('effectiveDate', compact ? today : date);
+    if (needsBunchWeight) form.set('gramsPerBunch', bunchWeight);
     if (free) form.set('free', 'on');
     start(async () => {
       try {
@@ -143,11 +179,55 @@ export function PriceForm({
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="col-span-2">
           <label htmlFor={`${id}-supplier`} className={label}>Supplier</label>
-          <select id={`${id}-supplier`} value={supplierId} onChange={(e) => setSupplierId(e.target.value)} className={input}>
-            {suppliers.map((s) => (
+          <select
+            id={`${id}-supplier`}
+            value={supplierId}
+            onChange={(e) => (e.target.value === NEW_SUPPLIER ? setNewSupplier('') : setSupplierId(e.target.value))}
+            className={input}
+          >
+            {supplierList.map((s) => (
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
+            <option value={NEW_SUPPLIER}>+ New supplier…</option>
           </select>
+          {newSupplier !== null && (
+            <div className="mt-2">
+              <div className="flex gap-2">
+                <input
+                  aria-label="New supplier's name"
+                  autoFocus
+                  enterKeyHint="done"
+                  placeholder="Name"
+                  value={newSupplier}
+                  onChange={(e) => setNewSupplier(e.target.value)}
+                  onKeyDown={(e) => {
+                    // Enter adds the supplier; it must not save the price as well.
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      addSupplier();
+                    }
+                  }}
+                  className={`${input} min-w-0 flex-1`}
+                />
+                <button type="button" onClick={addSupplier} disabled={adding} className={primary}>
+                  {adding ? 'Adding…' : 'Add'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNewSupplier(null);
+                    setSupplierError(null);
+                  }}
+                  className={secondary}
+                >
+                  Cancel
+                </button>
+              </div>
+              {supplierError && (
+                <p role="alert" className="mt-1 text-sm font-semibold text-red-700">{supplierError}</p>
+              )}
+            </div>
+          )}
         </div>
         <div>
           <label htmlFor={`${id}-size`} className={label}>Pack size</label>
@@ -165,11 +245,35 @@ export function PriceForm({
         <div>
           <label htmlFor={`${id}-unit`} className={label}>Unit</label>
           <select id={`${id}-unit`} value={packUnit} onChange={(e) => setPackUnit(e.target.value as Unit)} className={input}>
-            {units.map((u) => (
+            {unitChoices.map((u) => (
               <option key={u} value={u}>{unitName(u)}</option>
             ))}
           </select>
         </div>
+        {packUnit === 'bunch' &&
+          (needsBunchWeight ? (
+            <div className="col-span-2">
+              <label htmlFor={`${id}-bunch`} className={label}>One bunch weighs</label>
+              <Affix suffix="g">
+                <input
+                  id={`${id}-bunch`}
+                  inputMode="decimal"
+                  enterKeyHint="next"
+                  required
+                  placeholder="e.g. 80"
+                  value={bunchWeight}
+                  onChange={(e) => setBunchWeight(e.target.value)}
+                  aria-describedby={`${id}-bunch-hint`}
+                  className={`${input} pr-12`}
+                />
+              </Affix>
+              <p id={`${id}-bunch-hint`} className={`mt-1 text-sm ${muted}`}>
+                Weigh one bunch once. Recipes can then use grams or part of a bunch.
+              </p>
+            </div>
+          ) : (
+            <p className={`col-span-2 self-end pb-2 text-sm ${muted}`}>1 bunch weighs {plain(ingredient.gramsPerBunch)} g</p>
+          ))}
         <div className={compact ? 'col-span-2' : ''}>
           <label htmlFor={`${id}-price`} className={label}>Pack price</label>
           <Affix prefix="$">
@@ -199,7 +303,7 @@ export function PriceForm({
         {unclearPrice ? (
           <span className="text-amber-800">Type the price like 22.50 or 1234.50</span>
         ) : next ? (
-          `= ${unitPrice(next, ingredient.baseUnit)}${gstRegistered && gst !== 'free' ? ' before GST' : ''}`
+          `= ${unitPrice(next, ingredient.baseUnit)}${perBunch ? `, ${money(perBunch)} a bunch` : ''}${gstRegistered && gst !== 'free' ? ' before GST' : ''}`
         ) : (
           ''
         )}

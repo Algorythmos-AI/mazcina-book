@@ -12,7 +12,7 @@ import { nearMatches } from '@/lib/names';
 import { gstFlags } from '@/lib/price-check';
 import { assertCanStopBeingPrep, assertPrepsUsable, assertUnitCanChange, lockRecipeGraph, openMenuItemsUsing } from '@/lib/kitchen-rules';
 import { todaySydney } from '@/lib/format';
-import { audit, baseUnit, decimal, Invalid, isoDate, mutate, parse, required, text, unit, uuid, type Tx } from '@/lib/action-helpers';
+import { audit, baseUnit, decimal, Invalid, isoDate, mutate, parse, required, text, unit, uuid, yieldUnit as yieldUnitSchema, type Tx } from '@/lib/action-helpers';
 import { requireRole, type CurrentUser } from '@/lib/session';
 import type { ActionResult } from '@/lib/types';
 
@@ -27,6 +27,20 @@ export async function createSupplier(_prev: ActionResult | null, form: FormData)
     await db.transaction(async (tx) => {
       const [row] = await tx.insert(schema.suppliers).values(values).returning({ id: schema.suppliers.id });
       await audit(tx, user, 'create', 'supplier', row.id, { after: values });
+    });
+  });
+  if (result.ok) revalidatePath('/', 'layout');
+  return result;
+}
+
+/** A supplier added straight from a price form: the new one comes back so the form can pick it. */
+export async function quickAddSupplier(name: string): Promise<ActionResult<{ id: string; name: string }>> {
+  const result = await mutate(async (user) => {
+    const values = { name: required(typeof name === 'string' ? name : '', 'Supplier name'), contact: null };
+    return db.transaction(async (tx) => {
+      const [row] = await tx.insert(schema.suppliers).values(values).returning({ id: schema.suppliers.id, name: schema.suppliers.name });
+      await audit(tx, user, 'create', 'supplier', row.id, { after: values });
+      return row;
     });
   });
   if (result.ok) revalidatePath('/', 'layout');
@@ -92,6 +106,7 @@ function ingredientValues(form: FormData) {
     preferredSupplierId: preferred ? parse(uuid, preferred, 'Preferred supplier') : null,
     gramsPerEach: decimal(text(form, 'gramsPerEach'), 'Grams per each', { min: 0, minExclusive: true, optional: true }),
     gramsPerMl: decimal(text(form, 'gramsPerMl'), 'Grams per ml', { min: 0, minExclusive: true, optional: true }),
+    gramsPerBunch: decimal(text(form, 'gramsPerBunch'), 'Grams in one bunch', { min: 0, minExclusive: true, optional: true }),
   };
 }
 
@@ -187,24 +202,36 @@ export async function addPrice(_prev: ActionResult | null, form: FormData): Prom
     if (values.priceIncludesGst && !values.gstApplicable) {
       throw new Invalid('You ticked that the price includes GST but not that the item has GST. Tick both, or neither.');
     }
+    // Bought by the bunch for the first time: what one bunch weighs comes with the price.
+    const bunchWeight =
+      values.packUnit === 'bunch'
+        ? decimal(text(form, 'gramsPerBunch'), 'Weight of one bunch', { min: 0, minExclusive: true, max: 100_000, optional: true })
+        : null;
     await db.transaction(async (tx) => {
-      const [ingredient] = await tx.select().from(schema.ingredients).where(eq(schema.ingredients.id, values.ingredientId));
+      const [ingredient] = await tx.select().from(schema.ingredients).where(eq(schema.ingredients.id, values.ingredientId)).for('update');
       if (!ingredient || ingredient.archivedAt) throw new Invalid('Ingredient not found');
       const [supplier] = await tx.select().from(schema.suppliers).where(eq(schema.suppliers.id, values.supplierId));
       if (!supplier || supplier.archivedAt) throw new Invalid('Supplier not found');
-      if (convertToBase(values.packSize, values.packUnit, ingredient.baseUnit, ingredient) === null) {
+      const changes: Partial<typeof schema.ingredients.$inferInsert> = {};
+      if (values.packUnit === 'bunch' && !ingredient.gramsPerBunch) {
+        if (ingredient.baseUnit !== 'g') throw new Invalid(`${ingredient.name} is counted, not weighed. Price it per each instead.`);
+        if (!bunchWeight) throw new Invalid(`Weigh one bunch of ${ingredient.name} and type its weight in grams.`);
+        changes.gramsPerBunch = bunchWeight;
+      }
+      if (!ingredient.preferredSupplierId) changes.preferredSupplierId = values.supplierId;
+      if (convertToBase(values.packSize, values.packUnit, ingredient.baseUnit, { ...ingredient, ...changes }) === null) {
         throw new Invalid(
           `${ingredient.name} is measured in ${ingredient.baseUnit}. To price it per ${values.packUnit}, first add its conversion (grams per each / per ml).`,
         );
       }
       const [row] = await tx.insert(schema.ingredientPrices).values(values).returning({ id: schema.ingredientPrices.id });
-      if (!ingredient.preferredSupplierId) {
+      if (Object.keys(changes).length > 0) {
         await tx
           .update(schema.ingredients)
-          .set({ preferredSupplierId: values.supplierId, updatedAt: new Date(), version: ingredient.version + 1 })
+          .set({ ...changes, updatedAt: new Date(), version: ingredient.version + 1 })
           .where(eq(schema.ingredients.id, ingredient.id));
       }
-      await audit(tx, user, 'price', 'ingredient', ingredient.id, { after: { ...values, priceId: row.id } });
+      await audit(tx, user, 'price', 'ingredient', ingredient.id, { after: { ...values, priceId: row.id, ...(changes.gramsPerBunch ? { gramsPerBunch: changes.gramsPerBunch } : {}) } });
     });
   });
   if (result.ok) revalidatePath('/', 'layout');
@@ -240,7 +267,7 @@ const recipePayload = z.object({
   name: z.string(),
   type: z.enum(['dish', 'prep']),
   yieldQuantity: z.string(),
-  yieldUnit: unit.nullable(),
+  yieldUnit: yieldUnitSchema.nullable(),
   yieldEstimated: z.boolean(),
   portions: z.string(),
   asNeeded: z.array(z.string().max(120)).max(40),

@@ -7,9 +7,9 @@ const data: CostingData = {
   settings: { gstRegistered: true, targetFoodCostPct: '30' },
   suppliers: [{ id: 's', name: 'S', contact: null, archived: false }],
   ingredients: [
-    { id: 'oil', name: 'Oil', category: null, baseUnit: 'ml', yieldPct: '100', preferredSupplierId: 's', gramsPerEach: null, gramsPerMl: null, parLevel: null, version: 1, archived: false },
-    { id: 'salt', name: 'Salt', category: null, baseUnit: 'g', yieldPct: '100', preferredSupplierId: 's', gramsPerEach: null, gramsPerMl: null, parLevel: null, version: 1, archived: false },
-    { id: 'new', name: 'New', category: null, baseUnit: 'g', yieldPct: '100', preferredSupplierId: 's', gramsPerEach: null, gramsPerMl: null, parLevel: null, version: 1, archived: false },
+    { id: 'oil', name: 'Oil', category: null, baseUnit: 'ml', yieldPct: '100', preferredSupplierId: 's', gramsPerEach: null, gramsPerMl: null, gramsPerBunch: null, parLevel: null, version: 1, archived: false },
+    { id: 'salt', name: 'Salt', category: null, baseUnit: 'g', yieldPct: '100', preferredSupplierId: 's', gramsPerEach: null, gramsPerMl: null, gramsPerBunch: null, parLevel: null, version: 1, archived: false },
+    { id: 'new', name: 'New', category: null, baseUnit: 'g', yieldPct: '100', preferredSupplierId: 's', gramsPerEach: null, gramsPerMl: null, gramsPerBunch: null, parLevel: null, version: 1, archived: false },
   ],
   prices: [
     { id: 'p1', ingredientId: 'oil', supplierId: 's', packSize: '1', packUnit: 'l', packPrice: '10', priceIncludesGst: false, gstApplicable: false, effectiveDate: '2026-01-01', createdBy: null },
