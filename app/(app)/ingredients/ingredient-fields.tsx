@@ -48,6 +48,10 @@ export function IngredientFields({ ingredient, suppliers }: { ingredient?: Ingre
             <label htmlFor={`${p}-gpm`} className={muted}>Grams in one ml</label>
             <input id={`${p}-gpm`} name="gramsPerMl" inputMode="decimal" defaultValue={plain(ingredient?.gramsPerMl)} placeholder="e.g. 0.92 for olive oil" className={input} />
           </div>
+          <div>
+            <label htmlFor={`${p}-gpb`} className={muted}>Grams in one bunch</label>
+            <input id={`${p}-gpb`} name="gramsPerBunch" inputMode="decimal" defaultValue={plain(ingredient?.gramsPerBunch)} placeholder="e.g. 80 for coriander" className={input} />
+          </div>
         </div>
       </fieldset>
     </div>

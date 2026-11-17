@@ -23,7 +23,7 @@ export const BACKDATE_DAYS = 30;
 
 /** Cost of one base unit (g, ml or each) from what was typed, or null while it is incomplete or unreadable. */
 export function typedUnitCost(
-  ingredient: Pick<Ingredient, 'baseUnit' | 'gramsPerEach' | 'gramsPerMl'>,
+  ingredient: Pick<Ingredient, 'baseUnit' | 'gramsPerEach' | 'gramsPerMl' | 'gramsPerBunch'>,
   typed: { packSize: string; packUnit: Unit; packPrice: string; gst: GstMode },
   gstRegistered: boolean,
 ): DecimalJs | null {

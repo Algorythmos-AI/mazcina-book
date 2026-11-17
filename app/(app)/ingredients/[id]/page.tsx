@@ -68,7 +68,7 @@ export default async function IngredientPage({ params }: PageProps<'/ingredients
             </p>
           ) : (
             <PriceForm
-              ingredient={{ id: ingredient.id, name: ingredient.name, baseUnit: ingredient.baseUnit, gramsPerEach: ingredient.gramsPerEach ?? null, gramsPerMl: ingredient.gramsPerMl ?? null }}
+              ingredient={{ id: ingredient.id, name: ingredient.name, baseUnit: ingredient.baseUnit, gramsPerEach: ingredient.gramsPerEach ?? null, gramsPerMl: ingredient.gramsPerMl ?? null, gramsPerBunch: ingredient.gramsPerBunch ?? null }}
               suppliers={suppliers}
               units={units}
               last={lastPrice(current, supplierName, cost.ok ? cost.value.toString() : null)}

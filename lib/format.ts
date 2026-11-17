@@ -31,7 +31,7 @@ export function unitPrice(costPerBaseUnit: Numeric, baseUnit: BaseUnit): string 
 }
 
 /** Units a quantity of this ingredient can be entered in, given the conversions it has. */
-export function unitsForIngredient(ingredient: Pick<Ingredient, 'baseUnit' | 'gramsPerEach' | 'gramsPerMl'>): Unit[] {
+export function unitsForIngredient(ingredient: Pick<Ingredient, 'baseUnit' | 'gramsPerEach' | 'gramsPerMl' | 'gramsPerBunch'>): Unit[] {
   return (Object.keys(UNITS) as Unit[]).filter(
     (unit) => convertToBase(1, unit, ingredient.baseUnit, ingredient) !== null,
   );

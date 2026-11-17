@@ -54,6 +54,7 @@ export const loadCostingData = cache(async (): Promise<CostingData> => {
       preferredSupplierId: i.preferredSupplierId,
       gramsPerEach: i.gramsPerEach,
       gramsPerMl: i.gramsPerMl,
+      gramsPerBunch: i.gramsPerBunch,
       parLevel: i.parLevel,
       version: i.version,
       archived: !!i.archivedAt,
