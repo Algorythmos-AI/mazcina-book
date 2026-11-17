@@ -21,7 +21,7 @@ const KITCHEN: Task[] = [
       <>Open <Link href="/prices-needed" className={link}>To do</Link>. It lists every ingredient with no price, the ones holding back the most dishes first.</>,
       <>Type the pack size and the pack price from the invoice or the supplier&apos;s list, for example 5 kg for $22.50. You can type the $ sign. A new supplier? Pick <strong>+ New supplier…</strong> at the bottom of the list.</>,
       <>Herbs bought by the bunch: choose <strong>bunch</strong> as the unit. The first time, weigh one bunch and type its weight; recipes can then use grams or part of a bunch.</>,
-      <>Under the price you see what it works out to per kg, litre or each. Check it looks right.</>,
+      <>You type the whole pack price; the app works out the rest. The green line under the price shows what it comes to per kg, litre or each. Check it looks right.</>,
       <>Choose the GST option that matches the invoice, then press Save (or Enter). The next ingredient is ready to type into.</>,
       <>Got a whole price list? Use <Link href="/ingredients/import" className={link}>Import prices</Link> and paste it in.</>,
     ],
