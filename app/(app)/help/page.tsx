@@ -27,6 +27,15 @@ const KITCHEN: Task[] = [
     ],
   },
   {
+    id: 'price-list',
+    title: 'Update prices from an invoice',
+    steps: [
+      <>Open the <Link href="/prices" className={link}>Price list</Link> (under More on a phone). It shows every price in use, grouped by supplier.</>,
+      <>Tap the supplier on the invoice to see only their items, or search for one by name.</>,
+      <>Tap <strong>Change</strong>, type the new pack price and press Save (or Enter). Every recipe that uses it is re-costed straight away.</>,
+    ],
+  },
+  {
     id: 'recipe',
     title: 'Build a recipe',
     steps: [
