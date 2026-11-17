@@ -187,7 +187,7 @@ export async function addPrice(_prev: ActionResult | null, form: FormData): Prom
       supplierId: parse(uuid, text(form, 'supplierId'), 'Supplier'),
       packSize: decimal(text(form, 'packSize'), 'Pack size', { min: 0, minExclusive: true, max: 1_000_000 })!,
       packUnit: parse(unit, text(form, 'packUnit'), 'Pack unit'),
-      packPrice: decimal(text(form, 'packPrice'), 'Pack price', { min: 0, max: 100_000, money: true })!,
+      packPrice: decimal(text(form, 'packPrice'), 'Price', { min: 0, max: 100_000, money: true })!,
       // One choice ("gst": free / inc / ex); the two older checkboxes still work.
       ...(text(form, 'gst')
         ? gstFlags(parse(z.enum(['free', 'inc', 'ex']), text(form, 'gst'), 'GST'))

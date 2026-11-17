@@ -17,9 +17,9 @@ test('a missing price is typed straight from the menu', async ({ page }) => {
 
   const row = page.locator('ol > li').first();
   await row.getByLabel('Pack size').fill('1');
-  await row.getByLabel('Pack price').fill('$12.50');
-  await expect(row.getByText(/^= \$/)).toBeVisible();
-  await row.getByLabel('Pack price').press('Enter');
+  await row.getByLabel('Price for the whole pack').fill('$12.50');
+  await expect(row.getByText(/^Works out to \$/)).toBeVisible();
+  await row.getByLabel('Price for the whole pack').press('Enter');
   await expect(page.getByText('1 price saved')).toBeVisible();
 
   await page.goto('/menu');
@@ -68,7 +68,7 @@ test('a price typed with no connection is kept, with a clear message', async ({ 
   await page.goto('/ingredients');
   await page.getByRole('link').filter({ hasText: /\$|No price/ }).first().click();
   await page.route('**/*', (route) => (route.request().method() === 'POST' ? route.abort('internetdisconnected') : route.continue()));
-  const price = page.getByLabel('Pack price');
+  const price = page.getByLabel('Price for the whole pack');
   await page.getByLabel('Pack size').fill('2');
   await price.fill('9.90');
   await page.getByRole('button', { name: 'Save price' }).click();

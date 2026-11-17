@@ -176,6 +176,9 @@ export function PriceForm({
       }}
       className={compact ? '' : 'mt-3'}
     >
+      <p id={`${id}-how`} className={`mb-3 ${muted}`}>
+        Type what you pay for the whole pack, as on the invoice: for example 5 kg for $22.50. We work out the cost per gram.
+      </p>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="col-span-2">
           <label htmlFor={`${id}-supplier`} className={label}>Supplier</label>
@@ -275,7 +278,7 @@ export function PriceForm({
             <p className={`col-span-2 self-end pb-2 text-sm ${muted}`}>1 bunch weighs {plain(ingredient.gramsPerBunch)} g</p>
           ))}
         <div className={compact ? 'col-span-2' : ''}>
-          <label htmlFor={`${id}-price`} className={label}>Pack price</label>
+          <label htmlFor={`${id}-price`} className={label}>Price for the whole pack</label>
           <Affix prefix="$">
             <input
               ref={priceRef}
@@ -286,7 +289,7 @@ export function PriceForm({
               placeholder={last ? undefined : 'e.g. 22.50'}
               value={packPrice}
               onChange={(e) => setPackPrice(e.target.value)}
-              aria-describedby={`${id}-preview`}
+              aria-describedby={`${id}-how ${id}-preview`}
               className={`${input} pl-7`}
             />
           </Affix>
@@ -299,16 +302,18 @@ export function PriceForm({
         )}
       </div>
 
-      <p id={`${id}-preview`} className="mt-2 min-h-6 text-base font-semibold tabular-nums" aria-live="polite">
+      <p id={`${id}-preview`} className="mt-3 min-h-6 tabular-nums" aria-live="polite">
         {unclearPrice ? (
-          <span className="text-amber-800">Type the price like 22.50 or 1234.50</span>
+          <span className="block font-semibold text-amber-800">Type the price like 22.50 or 1234.50</span>
         ) : next ? (
-          `= ${unitPrice(next, ingredient.baseUnit)}${perBunch ? `, ${money(perBunch)} a bunch` : ''}${gstRegistered && gst !== 'free' ? ' before GST' : ''}`
-        ) : (
-          ''
-        )}
+          <span className="block rounded-md border-l-4 border-emerald-600 bg-emerald-50 px-3 py-2 text-lg font-bold text-emerald-900">
+            Works out to {unitPrice(next, ingredient.baseUnit)}
+            {perBunch ? `, ${money(perBunch)} a bunch` : ''}
+            {gstRegistered && gst !== 'free' ? ' before GST' : ''}
+          </span>
+        ) : null}
         {last && (
-          <span className={`ml-2 font-normal ${muted}`}>
+          <span className={`mt-1 block ${muted}`}>
             last {money(last.packPrice)} for {last.packSize} {last.packUnit} from {last.supplierName}
             {last.unitCost ? ` (${unitPrice(last.unitCost, ingredient.baseUnit)})` : ''}
           </span>
