@@ -177,7 +177,8 @@ already holds data, so it cannot overwrite anything.
 
 Login sessions are not in a backup, so everyone signs in again with a new
 code. Gift card codes are stored encrypted and need the same `GIFT_CODE_KEY`.
-Payment webhook history and queued emails are not backed up.
+Backups since 4 Nov 2026 (export format version 2) also include queued emails
+and Stripe event history; `scripts/restore.ts` reads versions 1 and 2.
 
 Rehearsed on 2026-10-14 with an export of the test database (15 tables, 144
 rows) into a scratch database: every table matched.
